@@ -2,6 +2,7 @@ import '@fontsource/comfortaa/700.css'
 import '@fontsource/open-sans/700.css'
 
 import * as React from "react"
+import { Routes, Route } from 'react-router-dom';
 import {
   ChakraProvider,
   Box,
@@ -16,6 +17,8 @@ import StartPage from "./pages/StartPage";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <StartPage/>
+    <Routes>
+        <Route path="/" element={<StartPage />}/>
+    </Routes>
   </ChakraProvider>
 )
