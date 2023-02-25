@@ -1,3 +1,6 @@
+import '@fontsource/comfortaa/700.css'
+import '@fontsource/open-sans/700.css'
+
 import * as React from "react"
 import {
   ChakraProvider,
@@ -7,34 +10,12 @@ import {
   VStack,
   Code,
   Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
-import { PlayerName } from "./PlayerName"
+} from "@chakra-ui/react";
+import theme from './theme';
+import StartPage from "./pages/StartPage";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-          <PlayerName />
-        </VStack>
-      </Grid>
-    </Box>
+    <StartPage/>
   </ChakraProvider>
 )
