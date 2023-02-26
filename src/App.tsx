@@ -11,6 +11,7 @@ import theme from './theme';
 import StartPage from "./pages/StartPage";
 import JoinPage from './pages/JoinPage';
 import QuestionPage from './pages/QuestionPage';
+import LeaderboardPage from './pages/LeaderboardPage';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -18,6 +19,7 @@ export const App = () => (
        <Route path="/" element={<StartPage />}/>
        <Route path='/join' element={<JoinPage />}/>
       <Route path="/question" element={<QuestionPage />} />
+      <Route path="/leaderboard" element={<LeaderboardPage />} />
     </Routes>
   </ChakraProvider>
 )
