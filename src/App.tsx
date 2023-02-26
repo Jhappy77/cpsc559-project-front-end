@@ -9,12 +9,14 @@ import {
 import theme from './theme';
 import StartPage from "./pages/StartPage";
 import QuestionPage from './pages/QuestionPage';
+import LeaderboardPage from './pages/LeaderboardPage';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Routes>
       <Route path="/" element={<StartPage />} />
       <Route path="/question" element={<QuestionPage />} />
+      <Route path="/leaderboard" element={<LeaderboardPage />} />
     </Routes>
   </ChakraProvider>
 )
