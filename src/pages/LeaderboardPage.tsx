@@ -7,17 +7,17 @@ export default function LeaderboardPage(){
     return (
         <Flex backgroundImage='linear-gradient(to bottom right, green, yellow)' width='100%' height='calc(100vh)' alignItems='center' textAlign='center' justifyContent='center'>
             <Flex alignItems='center' maxW="md">
-                <VStack>
+                <VStack margin="4">
                     <Logo size={["32px", "50px"]} />
-                    <Card>
-                        <VStack>
+                    <Card padding="10px 0 10px 0">
+                        <VStack padding="10,10,10,10">
                             <Box textAlign='center'>
                                 <Text fontFamily={`'Comfortaa', sans-serif`} fontSize={["20px", "35px"]}>
                                     Leaderboard
                                 </Text>
                             </Box>
-                            <TableContainer>
-                                <Table width="md" variant="striped" colorScheme="green" size="sm">
+                            <TableContainer width={["sm", "md"]} margin="10">
+                                <Table width={["sm", "md"]} variant="striped" colorScheme="green" size="sm">
                                     <TableCaption>Thanks for playing Bahoot!</TableCaption>
                                     <Thead>
                                         <Tr>
@@ -38,7 +38,7 @@ export default function LeaderboardPage(){
                         </VStack>
                     </Card>
                     <Link to="/" >
-                        <Button color='white' padding={8} fontSize={["large", '3xl']} colorScheme='whiteAlpha'>Done</Button>
+                        <Button color='white' padding={4} fontSize={["sm", "md"]} colorScheme='whiteAlpha'>Done</Button>
                     </Link>
                 </VStack>
             </Flex>
