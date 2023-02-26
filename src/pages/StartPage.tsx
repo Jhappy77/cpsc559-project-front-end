@@ -7,8 +7,8 @@ export default function StartPage(){
             <Flex alignItems='center'>
                 <VStack>
                     <Logo size={["64px", "100px" ]} />
-                    <Button color='white' padding={8} fontSize={["large", '4xl']} colorScheme='whiteAlpha'>CREATE A NEW GAME</Button>
-                    <Button color='white' padding={8} fontSize={["large", '4xl']} colorScheme='whiteAlpha'>JOIN A GAME</Button>
+                    <Button color='white' padding={8} fontSize={["large", '2xl']} colorScheme='whiteAlpha'>CREATE A NEW GAME</Button>
+                    <Button color='white' padding={8} fontSize={["large", '2xl']} colorScheme='whiteAlpha'>JOIN A GAME</Button>
                 </VStack>
             </Flex>
         </Flex>
