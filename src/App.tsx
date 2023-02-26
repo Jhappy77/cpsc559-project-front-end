@@ -1,4 +1,5 @@
 import '@fontsource/comfortaa/700.css'
+import '@fontsource/open-sans/400.css'
 import '@fontsource/open-sans/700.css'
 
 import * as React from "react"
@@ -14,11 +15,13 @@ import {
 } from "@chakra-ui/react";
 import theme from './theme';
 import StartPage from "./pages/StartPage";
+import JoinPage from './pages/JoinPage';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Routes>
         <Route path="/" element={<StartPage />}/>
+        <Route path='/join' element={<JoinPage />}/>
     </Routes>
   </ChakraProvider>
 )
