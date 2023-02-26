@@ -3,13 +3,16 @@ import  Logo from '../components/Logo';
 import { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../state/reduxHooks';
+import { setPlayerName } from '../state/playerSlice';
 
 const MAX_NAME_LENGTH = 15;
 
 export default function CreatePage(){
 
     const navigate = useNavigate();
-    const [playerName, setPlayerName] = useState("");
+    const dispatch = useAppDispatch();
+    const [name, setName] = useState('');
     const [displayName, setDisplayName] = useState("flex")
     const [gameCode, setGameCode] = useState("");
     const [displayGameCode, setDisplayGameCode] = useState("none");
@@ -25,6 +28,7 @@ export default function CreatePage(){
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        dispatch(setPlayerName(name));
         getGameCode();
         setDisplayName("none");
         setDisplayGameCode("flex");
@@ -41,7 +45,7 @@ export default function CreatePage(){
                         <form onSubmit={(e) => {onSubmit(e);}}>
                             <FormControl textAlign="center" marginTop={4} width="100%">
                                 <Text fontSize={["lg", "xl"]}>Enter your name:</Text>
-                                <Input fontWeight="bold" m={2} width="90%" fontSize={["lg", "xl"]} maxLength={MAX_NAME_LENGTH} border="4px" focusBorderColor="yellow" value={playerName} onChange={handleChange}></Input>
+                                <Input fontWeight="bold" m={2} width="90%" fontSize={["lg", "xl"]} maxLength={MAX_NAME_LENGTH} border="4px" focusBorderColor="yellow" value={name} onChange={handleChange}></Input>
                                 <Button backgroundColor="white" color="black" _hover={{backgroundColor: "", color: "black"}} type="submit" margin={2} >Create Game</Button>
                             </FormControl>
                         </form>
