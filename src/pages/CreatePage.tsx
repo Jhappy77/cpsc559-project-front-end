@@ -5,6 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../state/reduxHooks';
 import { setPlayerName } from '../state/playerSlice';
+import { setCode } from '../state/codeSlice';
 
 const MAX_NAME_LENGTH = 15;
 
@@ -20,6 +21,7 @@ export default function CreatePage(){
     const getGameCode = () => {
         // call api to get game code
         setGameCode("1234567890");
+        dispatch(setCode("12345678890"));
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
