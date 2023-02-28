@@ -25,7 +25,7 @@ export default function CreatePage(){
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPlayerName(event.target.value)
+        setName(event.target.value)
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
