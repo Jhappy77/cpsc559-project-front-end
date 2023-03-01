@@ -19,12 +19,7 @@ export default function StartPage() {
       <Flex alignItems="center">
         <VStack>
           <Logo size={["64px", "100px"]} />
-          <Button
-            color="white"
-            padding={8}
-            fontSize={["large", "2xl"]}
-            colorScheme="whiteAlpha"
-          >
+          <Button color="white" padding={8} fontSize={["large", "2xl"]} colorScheme="whiteAlpha">
             CREATE A NEW GAME
           </Button>
           <Button
