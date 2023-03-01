@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // A slice is an independent part of the state that h
 
@@ -8,7 +8,7 @@ export interface PlayerState {
 }
 
 export const defaultPlayerState: PlayerState = {
-  name: `The Champion (a.k.a. Joel)`
+  name: `The Champion (a.k.a. Joel)`,
 };
 
 const playerStateSlice = createSlice({
@@ -26,6 +26,6 @@ const playerStateSlice = createSlice({
   },
 });
 
-export const { setPlayerName, /*setPlayerScore*/ } = playerStateSlice.actions;
+export const { setPlayerName /*setPlayerScore*/ } = playerStateSlice.actions;
 
 export const playerSliceReducer = playerStateSlice.reducer;
