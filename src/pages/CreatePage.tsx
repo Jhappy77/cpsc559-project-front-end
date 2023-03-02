@@ -5,7 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../state/reduxHooks';
 import { setPlayerName } from '../state/playerSlice';
-import { setCode } from '../state/codeSlice';
+import { setCode } from '../state/gameSlice';
 
 const MAX_NAME_LENGTH = 15;
 

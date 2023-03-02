@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { defaultPlayerState, playerSliceReducer, PlayerState } from './playerSlice';
+import { defaultGameState, gameSliceReducer, GameState } from './gameSlice';
 
 // See what's inside here live in your browser! Search "Redux dev tools" in the extension store
 
@@ -7,17 +8,20 @@ import { defaultPlayerState, playerSliceReducer, PlayerState } from './playerSli
 // of state in another segment
 export interface StoreState {
   player: PlayerState;
+  game: GameState
   // questions: QuestionsState; // example
   // ui: UiState; // example 2
 }
 
 const defaultStoreState: StoreState = {
   player: defaultPlayerState,
+  game: defaultGameState
   // questions: defaultQuestions // example
 };
 
 const reducer = {
   player: playerSliceReducer,
+  game: gameSliceReducer
   // questions: questionsSliceReducer // example
 };
 
