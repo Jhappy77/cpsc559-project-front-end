@@ -1,9 +1,18 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack, Button } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
 
 export default function QuestionPage() {
+
+  const submitAnswer = () => {
+    // Submit answer to backend
+  };
+
+  const setAnswer = () => {
+    // Set answer state
+  }
+
   return (
     <Flex
       backgroundImage="linear-gradient(to bottom right, green, yellow)"
@@ -21,10 +30,11 @@ export default function QuestionPage() {
             title="Question #1"
             text="Da minion or da bob fo today? Some will say da minion, others will tell you that it is da bob. But who can really say?"
           />
-          <Answer id="1" background="red" text="1. da minion" />
-          <Answer id="2" background="blue" text="2. or da bob" />
-          <Answer id="3" background="green" text="3. or da minion again" />
-          <Answer id="4" background="orange" text="4. or da bob again" />
+          <Answer setAnswer={setAnswer} id="1" background="red" text="1. da minion" />
+          <Answer setAnswer={setAnswer} id="2" background="blue" text="2. or da bob" />
+          <Answer setAnswer={setAnswer} id="3" background="green" text="3. or da minion again" />
+          <Answer setAnswer={setAnswer} id="4" background="orange" text="4. or da bob again" />
+          <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
         </VStack>
       </Flex>
     </Flex>
