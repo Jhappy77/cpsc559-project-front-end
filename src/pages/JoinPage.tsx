@@ -32,6 +32,13 @@ export default function JoinPage() {
       return;
     }
     // send code using api endpoint
+
+    // this flag should be set when name is sent to the endpoint and is already taken 
+    const name_taken = false; 
+    if (name_taken){
+      alert("Sorry, name has already been taken. Please enter another one.");
+      return;
+    }
     setCode("");
     setDisplayForm("none");
     setDisplayLoading("flex");
