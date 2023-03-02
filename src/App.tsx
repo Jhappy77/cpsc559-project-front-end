@@ -7,7 +7,8 @@ import { Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
 import StartPage from "./pages/StartPage";
-import JoinPage from "./pages/JoinPage";
+import JoinPage from './pages/JoinPage';
+import CreatePage from './pages/CreatePage';
 import QuestionPage from "./pages/QuestionPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 
@@ -16,6 +17,7 @@ export const App = () => (
     <Routes>
       <Route path="/" element={<StartPage />} />
       <Route path="/join" element={<JoinPage />} />
+      <Route path='/create' element={<CreatePage />}/>
       <Route path="/question" element={<QuestionPage />} />
       <Route path="/leaderboard" element={<LeaderboardPage />} />
     </Routes>
