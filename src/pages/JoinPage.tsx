@@ -3,6 +3,7 @@ import Logo from "../components/Logo";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useSocketJoinGameRoom } from "../hooks/useSocketJoinGameRoom";
 
 const CODE_LENGTH = 10;
 
@@ -11,6 +12,7 @@ export default function JoinPage() {
   const [displayForm, setDisplayForm] = useState("flex");
   const [displayLoading, setDisplayLoading] = useState("none");
   const navigate = useNavigate();
+  useSocketJoinGameRoom();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // handling after user submits code

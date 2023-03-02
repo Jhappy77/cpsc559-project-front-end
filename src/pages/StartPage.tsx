@@ -1,11 +1,9 @@
 import { Button, Flex, VStack } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
-import { useSocket } from "../hooks/useSocket";
 
 export default function StartPage() {
   const navigate = useNavigate();
-  useSocket();
 
   return (
     <Flex

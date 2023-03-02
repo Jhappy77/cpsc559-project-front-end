@@ -1,14 +1,15 @@
-import { Socket } from "socket.io-client";
 import { useEffect } from "react";
-import { useAppSelector } from "../state/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
+import { joinGameRoomAction } from "../state/socketActions/joinGameRoomAction";
 
-export function useSocketJoinGameRoom(socket: Socket) {
-  const { isConnected } = useAppSelector(state => state.socket);
+export function useSocketJoinGameRoom() {
+  const dispatch = useAppDispatch();
   const { code } = useAppSelector(state => state.game);
+  const { name } = useAppSelector(state => state.player);
   useEffect(() => {
-    if (code && isConnected) {
+    if (code) {
       console.log("Joining room!");
-      socket.emit("join-game-room", code);
+      dispatch(joinGameRoomAction(code, name));
     }
-  }, [socket, isConnected, code]);
+  }, [dispatch, code]);
 }

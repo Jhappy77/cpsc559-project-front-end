@@ -21,3 +21,14 @@ const socketStateSlice = createSlice({
 export const { setIsConnected } = socketStateSlice.actions;
 
 export const socketSliceReducer = socketStateSlice.reducer;
+
+// Action creator with received function:
+// export function subscribeConversation() {
+//     return dispatch => dispatch({
+//       event: 'message',
+//       handle: data => dispatch({
+//         type: NEW_MESSAGE,
+//         payload: data.message,
+//       }),
+//     });
+//   }

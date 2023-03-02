@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { defaultGameState, gameSliceReducer, GameState } from "./gameSlice";
 import { defaultPlayerState, playerSliceReducer, PlayerState } from "./playerSlice";
+import socketMiddleware from "./socketMiddleware";
 import { defaultSocketState, socketSliceReducer, SocketState } from "./socketSlice";
 
 // See what's inside here live in your browser! Search "Redux dev tools" in the extension store
@@ -29,7 +30,7 @@ const reducer = {
   // questions: questionsSliceReducer // example
 };
 
-export const store = configureStore({ reducer, preloadedState: defaultStoreState });
+export const store = configureStore({ reducer, preloadedState: defaultStoreState, middleware: [socketMiddleware()] });
 
 // // From https://react-redux.js.org/using-react-redux/usage-with-typescript
 // // Infer the `RootState` and `AppDispatch` types from the store itself
