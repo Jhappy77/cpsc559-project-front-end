@@ -25,7 +25,7 @@ const reducer = {
   // questions: questionsSliceReducer // example
 };
 
-export const store = configureStore({reducer, preloadedState: defaultStoreState});
+export const store = configureStore({ reducer, preloadedState: defaultStoreState });
 
 // // From https://react-redux.js.org/using-react-redux/usage-with-typescript
 // // Infer the `RootState` and `AppDispatch` types from the store itself
