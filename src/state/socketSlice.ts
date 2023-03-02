@@ -12,10 +12,7 @@ const socketStateSlice = createSlice({
   name: `socketSlice`,
   initialState: defaultSocketState,
   reducers: {
-    setIsConnected: (
-      state: SocketState,
-      action: PayloadAction<boolean>
-    ): void => {
+    setIsConnected: (state: SocketState, action: PayloadAction<boolean>): void => {
       state.isConnected = action.payload;
     },
   },
