@@ -3,9 +3,10 @@ import Logo from "../components/Logo";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../state/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
-import { setCode } from "../state/gameSlice";
+import { createGame } from "../state/gameSlice";
+import { useCreateGame } from "../hooks/useCreateGame";
 
 const MAX_NAME_LENGTH = 15;
 
@@ -14,14 +15,10 @@ export default function CreatePage() {
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [displayName, setDisplayName] = useState("flex");
-  const [gameCode, setGameCode] = useState("");
   const [displayGameCode, setDisplayGameCode] = useState("none");
 
-  const getGameCode = () => {
-    // call api to get game code
-    setGameCode("1234567890");
-    dispatch(setCode("12345678890"));
-  };
+  useCreateGame();
+  const { code } = useAppSelector(state => state.game);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -30,7 +27,7 @@ export default function CreatePage() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setPlayerName(name));
-    getGameCode();
+    dispatch(createGame());
     setDisplayName("none");
     setDisplayGameCode("flex");
   };
@@ -93,7 +90,7 @@ export default function CreatePage() {
             <VStack>
               <Text fontSize={["lg", "xl"]}>Generated Game Code:</Text>
               <Text fontSize={["xl", "2xl"]} fontWeight="bold">
-                {gameCode}
+                {code}
               </Text>
               <Text fontSize={["lg", "xl"]}>Enter this game code to join!</Text>
               <Button

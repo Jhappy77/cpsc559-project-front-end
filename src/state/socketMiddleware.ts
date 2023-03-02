@@ -1,8 +1,9 @@
 import { Middleware } from "redux";
 import io from "socket.io-client";
+import { SOCKET_URL } from "../settings";
 
 export default function socketMiddleware(): Middleware {
-  const socket = io("http://localhost:8008");
+  const socket = io(SOCKET_URL);
 
   return ({ dispatch }) =>
     next =>
