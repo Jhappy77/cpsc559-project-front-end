@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { defaultGameState, gameSliceReducer, GameState } from "./gameSlice";
 import { defaultPlayerState, playerSliceReducer, PlayerState } from "./playerSlice";
 import socketMiddleware from "./socketMiddleware";
-import { defaultSocketState, socketSliceReducer, SocketState } from "./socketSlice";
 
 // See what's inside here live in your browser! Search "Redux dev tools" in the extension store
 
@@ -10,7 +9,6 @@ import { defaultSocketState, socketSliceReducer, SocketState } from "./socketSli
 // of state in another segment
 export interface StoreState {
   player: PlayerState;
-  socket: SocketState;
   game: GameState;
   // questions: QuestionsState; // example
   // ui: UiState; // example 2
@@ -18,14 +16,12 @@ export interface StoreState {
 
 const defaultStoreState: StoreState = {
   player: defaultPlayerState,
-  socket: defaultSocketState,
   game: defaultGameState,
   // questions: defaultQuestions // example
 };
 
 const reducer = {
   player: playerSliceReducer,
-  socket: socketSliceReducer,
   game: gameSliceReducer,
   // questions: questionsSliceReducer // example
 };
