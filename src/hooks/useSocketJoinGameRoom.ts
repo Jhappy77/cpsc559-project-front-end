@@ -8,7 +8,6 @@ export function useSocketJoinGameRoom() {
   const { name } = useAppSelector(state => state.player);
   useEffect(() => {
     if (code) {
-      console.log("Joining room!");
       dispatch(joinGameRoomAction(code, name));
     }
   }, [dispatch, code]);

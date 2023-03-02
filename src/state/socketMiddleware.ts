@@ -14,8 +14,6 @@ export default function socketMiddleware(): Middleware {
 
       const { socketEvent, leave, emit, emitPayload, handle } = action;
 
-      console.log(action);
-      console.log("SocketEvent!");
       if (!socketEvent) {
         return next(action);
       }

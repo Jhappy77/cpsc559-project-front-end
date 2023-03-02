@@ -13,8 +13,6 @@ export function useCreateGame() {
     axios
       .post(`${API_URL}/games`)
       .then(response => {
-        console.log("Game code Response!");
-        console.log(response.data);
         const code = response.data.joinCode;
         if (code) {
           dispatch(setCode(code));
