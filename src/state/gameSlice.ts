@@ -3,6 +3,7 @@ import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface GameState {
   code?: string;
   gameCreationCallTs?: number;
+  questionStartCallTs?: number;
 }
 
 export const defaultGameState: GameState = {};
@@ -17,6 +18,11 @@ const gameStateSlice = createSlice({
     createGame: (state: GameState, action: Action): void => {
       // Updating this timestamp tells useCreateGame to perform API call
       state.gameCreationCallTs = Date.now();
+    },
+    // dispatch createQuestion when you press start game button
+    createQuestion: (state: GameState, action: Action): void => {
+      // Updating this timestamp tells useCreateGame to perform API call
+      state.questionStartCallTs = Date.now();
     },
   },
 });
