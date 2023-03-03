@@ -17,6 +17,7 @@ export function useCreateGame() {
         if (code) {
           dispatch(setCode(code));
           dispatch(joinGameRoomAsHostAction(code));
+          console.log("Joined game!");
         } else throw new Error("No game code recieved");
       })
       .catch(reason => {

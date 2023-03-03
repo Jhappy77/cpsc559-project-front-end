@@ -22,7 +22,7 @@ export default function JoinPage() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // handling after user submits code
     e.preventDefault();
-    if (name.length == 0){
+    if (name.length == 0) {
       alert("Please enter a name.");
       return;
     }
@@ -32,10 +32,11 @@ export default function JoinPage() {
       return;
     }
     // send code using api endpoint
+    dispatch(setPlayerName(name));
 
     // this flag should be set when name is sent to the endpoint and is already taken 
-    const name_taken = false; 
-    if (name_taken){
+    const name_taken = false;
+    if (name_taken) {
       alert("Sorry, name has already been taken. Please enter another one.");
       return;
     }
