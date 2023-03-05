@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
-import { setCode } from "../state/gameSlice";
+import { setGameCode } from "../state/gameSlice";
 import { joinGameRoomAsHostAction } from "../state/socketActions/joinGameRoomAction";
 
 export function useCreateGame() {
@@ -15,7 +15,7 @@ export function useCreateGame() {
       .then(response => {
         const code = response.data.joinCode;
         if (code) {
-          dispatch(setCode(code));
+          dispatch(setGameCode(code));
           dispatch(joinGameRoomAsHostAction(code));
           console.log("Joined game!");
         } else throw new Error("No game code recieved");

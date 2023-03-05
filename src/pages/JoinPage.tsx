@@ -4,8 +4,10 @@ import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useSocketJoinGameRoom } from "../hooks/useSocketJoinGameRoom";
+import { useCreatePlayer } from "../hooks/useCreatePlayer";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
+import { setGameCode } from "../state/gameSlice";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
@@ -17,6 +19,7 @@ export default function JoinPage() {
   const [displayLoading, setDisplayLoading] = useState("none");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  useCreatePlayer();
   useSocketJoinGameRoom();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,6 +36,7 @@ export default function JoinPage() {
     }
     // send code using api endpoint
     dispatch(setPlayerName(name));
+    dispatch(setGameCode(code));
 
     // this flag should be set when name is sent to the endpoint and is already taken 
     const name_taken = false;

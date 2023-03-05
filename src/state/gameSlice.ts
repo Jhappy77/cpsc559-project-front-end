@@ -11,7 +11,7 @@ const gameStateSlice = createSlice({
   name: "codeSlice",
   initialState: defaultGameState,
   reducers: {
-    setCode: (state: GameState, action: PayloadAction<string>): void => {
+    setGameCode: (state: GameState, action: PayloadAction<string>): void => {
       state.code = action.payload;
     },
     createGame: (state: GameState, action: Action): void => {
@@ -21,6 +21,6 @@ const gameStateSlice = createSlice({
   },
 });
 
-export const { setCode, createGame } = gameStateSlice.actions;
+export const { setGameCode, createGame } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;
