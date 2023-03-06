@@ -4,44 +4,41 @@ import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useSocketJoinGameRoom } from "../hooks/useSocketJoinGameRoom";
+import { useCreatePlayer } from "../hooks/useCreatePlayer";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
+import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
 
 export default function JoinPage() {
-  const [code, setCode] = useState("");
+  const [gameCode, setCode] = useState("");
   const [name, setName] = useState("");
   const [displayForm, setDisplayForm] = useState("flex");
   const [displayLoading, setDisplayLoading] = useState("none");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  useCreatePlayer();
   useSocketJoinGameRoom();
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // handling after user submits code
-    e.preventDefault();
-    if (name.length == 0){
+  const { hasJoinedGame } = useAppSelector(state => state.game);
+
+  const handleSubmit = () => {
+
+    if (name.length == 0) {
       alert("Please enter a name.");
       return;
     }
 
-    if (code.length < CODE_LENGTH) {
+    if (gameCode.length < CODE_LENGTH) {
       alert("Please enter a valid code.");
       return;
     }
-    // send code using api endpoint
 
-    // this flag should be set when name is sent to the endpoint and is already taken 
-    const name_taken = false; 
-    if (name_taken){
-      alert("Sorry, name has already been taken. Please enter another one.");
-      return;
-    }
-    setCode("");
-    setDisplayForm("none");
-    setDisplayLoading("flex");
+    // send code using api endpoint
+    dispatch(setPlayerName(name));
+    dispatch(setGameCode(gameCode));
   };
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +47,13 @@ export default function JoinPage() {
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
+  };
+
+  const handleBack = () => {
+    // In the future this should probably dispatch a "player left game" event,
+    // for now lets just clear this field
+    dispatch(setHasJoinedGame(false));
+    navigate("/");
   };
 
   return (
@@ -64,15 +68,10 @@ export default function JoinPage() {
       <Flex alignItems="center" justifyContent="center">
         <VStack>
           <Logo size={["64px", "100px"]} />
-          <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")}>
+          <Button leftIcon={<FaArrowLeft />} onClick={handleBack}>
             Back
           </Button>
-          <form
-            onSubmit={e => {
-              onSubmit(e);
-            }}
-          >
-            <Flex alignItems="center" justifyContent="center" display={displayForm}>
+            <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
               <FormControl>
                 <Input
                   fontWeight={"bold"}
@@ -94,7 +93,7 @@ export default function JoinPage() {
                 <Input
                   fontWeight={"bold"}
                   variant="filled"
-                  value={code}
+                  value={gameCode}
                   onChange={handleCodeChange}
                   maxLength={CODE_LENGTH}
                   border="2px"
@@ -108,7 +107,8 @@ export default function JoinPage() {
                   width={["90%", "100%"]}
                   colorScheme="whiteAlpha"
                 />
-                <Button
+              <Button
+                  onClick={handleSubmit}
                   backgroundColor="white"
                   type="submit"
                   color="black"
@@ -122,8 +122,7 @@ export default function JoinPage() {
                 </Button>
               </FormControl>
             </Flex>
-          </form>
-          <VStack display={displayLoading} width="100%">
+          <VStack display={hasJoinedGame ? "flex" : "none"} width="100%">
             <Text fontFamily={`'Open Sans', sans-serif`} fontSize="2xl">
               Waiting for host to start the game...
             </Text>
