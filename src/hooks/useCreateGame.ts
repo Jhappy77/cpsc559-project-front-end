@@ -13,10 +13,10 @@ export function useCreateGame() {
     axios
       .post(`${API_URL}/games`)
       .then(response => {
-        const code = response.data.joinCode;
-        if (code) {
-          dispatch(setGameCode(code));
-          dispatch(joinGameRoomAsHostAction(code));
+        const gameCode = response.data.joinCode;
+        if (gameCode) {
+          dispatch(setGameCode(gameCode));
+          dispatch(joinGameRoomAsHostAction(gameCode));
           console.log("Joined game!");
         } else throw new Error("No game code recieved");
       })
