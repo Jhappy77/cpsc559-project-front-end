@@ -3,12 +3,11 @@ import Logo from "../components/Logo";
 import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useSocketJoinGameRoom } from "../hooks/useSocketJoinGameRoom";
 import { useCreatePlayer } from "../hooks/useCreatePlayer";
 import { useGetGame } from "../hooks/useGetGame";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
-import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
+import { setGameCode, setHasJoinedGame, setPollGetGameCount } from "../state/gameSlice";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
@@ -16,15 +15,29 @@ const MAX_NAME_LENGTH = 15;
 export default function JoinPage() {
   const [gameCode, setCode] = useState("");
   const [name, setName] = useState("");
-  const [displayForm, setDisplayForm] = useState("flex");
-  const [displayLoading, setDisplayLoading] = useState("none");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  useCreatePlayer();
-  // useSocketJoinGameRoom();
 
   const { hasJoinedGame, gameStarted } = useAppSelector(state => state.game);
+  let pollGetGameCount = 0;
   let pollStartGameTimeout: ReturnType<typeof setTimeout>;
+
+  useCreatePlayer();
+  useGetGame();
+
+  useEffect(() => {
+    if (hasJoinedGame) {
+      // Start polling for game started on server
+      pollStartGame();
+    }
+  }, [hasJoinedGame]);
+
+  useEffect(() => {
+    if (gameStarted) {
+      console.log("The game has been started");
+      navigate("/question");
+    }
+  }, [gameStarted]);
 
   const handleSubmit = () => {
     console.log("submit");
@@ -52,41 +65,29 @@ export default function JoinPage() {
   };
 
   const handleBack = () => {
-    // In the future this should probably dispatch a "player left game" event,
-    // for now lets just clear this field
-    dispatch(setHasJoinedGame(false));
-
     // Reset the state when we leave the page
+    dispatch(setHasJoinedGame(false));
     setCode("");
     setGameCode("");
     dispatch(setPlayerName(""));
     dispatch(setGameCode(""));
+
+    // Go back to home
     navigate("/");
   };
 
   const pollStartGame = () => {
-    // Call API to get game
-    useGetGame();
+    // This change will call the API to get game
+    dispatch(setPollGetGameCount(pollGetGameCount++));
 
     if (gameStarted) {
+      // Stop polling for startGame
       clearTimeout(pollStartGameTimeout);
-      console.log("The game has been started");
     } else {
       // Keep polling for startGame
       pollStartGameTimeout = setTimeout(pollStartGame, 3000);
     }
   }
-
-  useEffect(() => {
-    if (hasJoinedGame) {
-      console.log("User has joined a game");
-      pollStartGameTimeout = setTimeout(pollStartGame, 3000);
-    }
-  }, [hasJoinedGame]);
-
-  useEffect(() => {
-    if (gameStarted) navigate("/question");
-  }, [gameStarted]);
 
   return (
     <Flex

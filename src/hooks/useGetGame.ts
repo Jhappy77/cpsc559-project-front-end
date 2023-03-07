@@ -5,10 +5,9 @@ import { API_URL } from "../settings";
 import { setGameStarted } from "../state/gameSlice"
 
 export function useGetGame() {
-    const { hasJoinedGame, gameCode } = useAppSelector(state => state.game);
+    const { hasJoinedGame, gameCode, pollGetGameCount } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
     useEffect(() => {
-        console.log("in get game hook");
         if (!hasJoinedGame || !gameCode) return;
         axios
             .get(`${API_URL}/games/${gameCode}`)
@@ -17,12 +16,11 @@ export function useGetGame() {
                 if (status === 200) {
                     dispatch(setGameStarted(data.started));
                 }
-                console.log(status);
+                console.log(`API Call to: /games/${gameCode}, response: ${status}`);
             })
             .catch(reason => {
-                console.error("Unhandled error in useCreatePlayer");
+                console.error("Unhandled error in useGetGame");
                 console.error(reason);
-                alert("A user with this name already exists, please try again with a new name!");
             });
-    }, [hasJoinedGame, dispatch]);
+    }, [pollGetGameCount]);
 }

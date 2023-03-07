@@ -20,7 +20,7 @@ export function useCreatePlayer() {
                 })
             .then(response => {
                 response.status === 201 ? dispatch(setHasJoinedGame(true)) : dispatch(setHasJoinedGame(false));
-                console.log(response.status);
+                console.log(`API Call to: /players, response: ${response.status}`);
             })
             .catch(reason => {
                 console.error("Unhandled error in useCreatePlayer");
