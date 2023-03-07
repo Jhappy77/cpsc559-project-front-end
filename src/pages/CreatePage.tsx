@@ -18,7 +18,7 @@ export default function CreatePage() {
   const [displayGameCode, setDisplayGameCode] = useState("none");
 
   useCreateGame();
-  const { code } = useAppSelector(state => state.game);
+  const { gameCode } = useAppSelector(state => state.game);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -90,7 +90,7 @@ export default function CreatePage() {
             <VStack>
               <Text fontSize={["lg", "xl"]}>Generated Game Code:</Text>
               <Text fontSize={["xl", "2xl"]} fontWeight="bold">
-                {code}
+                {gameCode}
               </Text>
               <Text fontSize={["lg", "xl"]}>Enter this game code to join!</Text>
               <Button

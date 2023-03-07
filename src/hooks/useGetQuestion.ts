@@ -5,13 +5,13 @@ import { API_URL } from "../settings";
 import { submitQuestion } from "../state/questionSlice";
 
 export function useGetQuestion() {
-  const { code, questionStartCallTs } = useAppSelector(state => state.game);
+  const { gameCode, gameCreationCallTs } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (!code) return;
-    if (questionStartCallTs === undefined) return; 
+    if (!gameCode) return;
+    if (gameCreationCallTs === undefined) return; 
     axios
-      .get(`${API_URL}/games/question/${code}`)
+      .get(`${API_URL}/games/question/${gameCode}`)
       .then(response => {
         console.log(response);
         const question = response.data;
@@ -24,5 +24,5 @@ export function useGetQuestion() {
         console.error("Unhandled error in useGetQuestion");
         console.error(reason);
       });
-  }, [questionStartCallTs, dispatch]);
+  }, [gameCreationCallTs, dispatch]);
 }

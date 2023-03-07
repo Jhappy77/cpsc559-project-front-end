@@ -4,11 +4,11 @@ import { joinGameRoomAction } from "../state/socketActions/joinGameRoomAction";
 
 export function useSocketJoinGameRoom() {
   const dispatch = useAppDispatch();
-  const { code } = useAppSelector(state => state.game);
+  const { gameCode } = useAppSelector(state => state.game);
   const { name } = useAppSelector(state => state.player);
   useEffect(() => {
-    if (code) {
-      dispatch(joinGameRoomAction(code, name));
+    if (gameCode) {
+      dispatch(joinGameRoomAction(gameCode, name));
     }
-  }, [dispatch, code]);
+  }, [dispatch, gameCode]);
 }
