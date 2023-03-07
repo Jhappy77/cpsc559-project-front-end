@@ -1,6 +1,6 @@
 import { Button, Flex, VStack, Input, Progress, Text, FormControl } from "@chakra-ui/react";
 import Logo from "../components/Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useSocketJoinGameRoom } from "../hooks/useSocketJoinGameRoom";
@@ -20,11 +20,11 @@ export default function JoinPage() {
   const [displayLoading, setDisplayLoading] = useState("none");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // useCreatePlayer();
+  useCreatePlayer();
   // useSocketJoinGameRoom();
 
   const { hasJoinedGame, gameStarted } = useAppSelector(state => state.game);
-  // let pollStartGameTimeout: ReturnType<typeof setTimeout>;
+  let pollStartGameTimeout: ReturnType<typeof setTimeout>;
 
   const handleSubmit = () => {
     console.log("submit");
@@ -55,32 +55,38 @@ export default function JoinPage() {
     // In the future this should probably dispatch a "player left game" event,
     // for now lets just clear this field
     dispatch(setHasJoinedGame(false));
+
+    // Reset the state when we leave the page
+    setCode("");
+    setGameCode("");
+    dispatch(setPlayerName(""));
+    dispatch(setGameCode(""));
     navigate("/");
   };
 
-  // const pollStartGame = () => {
-  //   // Call API to get game
-  //   useGetGame();
+  const pollStartGame = () => {
+    // Call API to get game
+    useGetGame();
 
-  //   if (gameStarted) {
-  //     clearTimeout(pollStartGameTimeout);
-  //     console.log("The game has been started");
-  //   } else {
-  //     // Keep polling for startGame
-  //     pollStartGameTimeout = setTimeout(pollStartGame, 3000);
-  //   }
-  // }
+    if (gameStarted) {
+      clearTimeout(pollStartGameTimeout);
+      console.log("The game has been started");
+    } else {
+      // Keep polling for startGame
+      pollStartGameTimeout = setTimeout(pollStartGame, 3000);
+    }
+  }
 
-  // useEffect(() => {
-  //   if (hasJoinedGame) {
-  //     console.log("User has joined a game");
-  //     pollStartGameTimeout = setTimeout(pollStartGame, 3000);
-  //   }
-  // }, [hasJoinedGame]);
+  useEffect(() => {
+    if (hasJoinedGame) {
+      console.log("User has joined a game");
+      pollStartGameTimeout = setTimeout(pollStartGame, 3000);
+    }
+  }, [hasJoinedGame]);
 
-  // useEffect(() => {
-  //   if (gameStarted) navigate("/question");
-  // }, [gameStarted]);
+  useEffect(() => {
+    if (gameStarted) navigate("/question");
+  }, [gameStarted]);
 
   return (
     <Flex

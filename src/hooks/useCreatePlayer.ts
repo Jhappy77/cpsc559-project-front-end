@@ -8,9 +8,10 @@ export function useCreatePlayer() {
     const { name } = useAppSelector(state => state.player);
     const { gameCode } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
+    console.log(" Before In create player use effect");
     useEffect(() => {
         console.log("In create player use effect");
-        if (!name || !gameCode) return;
+        if (!name || !gameCode || name === "" || gameCode === "") return;
         axios
             .post(`${API_URL}/players`,
                 {
@@ -26,5 +27,5 @@ export function useCreatePlayer() {
                 console.error(reason);
                 alert("A user with this name already exists, please try again with a new name!");
             });
-    }, [name, dispatch]);
+    }, [name]);
 }
