@@ -4,6 +4,7 @@ export interface GameState {
   gameCode?: string;
   gameCreationCallTs?: number;
   hasJoinedGame?: boolean;
+  gameStarted?: boolean;
 }
 
 export const defaultGameState: GameState = {};
@@ -22,9 +23,12 @@ const gameStateSlice = createSlice({
     setHasJoinedGame: (state: GameState, action: PayloadAction<boolean>): void => {
       state.hasJoinedGame = action.payload;
     },
+    setGameStarted: (state: GameState, action: PayloadAction<boolean>): void => {
+      state.gameStarted = action.payload;
+    },
   },
 });
 
-export const { setGameCode, createGame, setHasJoinedGame } = gameStateSlice.actions;
+export const { setGameCode, createGame, setHasJoinedGame, setGameStarted } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;

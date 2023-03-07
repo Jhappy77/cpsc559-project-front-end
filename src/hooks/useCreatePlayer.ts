@@ -9,6 +9,7 @@ export function useCreatePlayer() {
     const { gameCode } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
     useEffect(() => {
+        console.log("In create player use effect");
         if (!name || !gameCode) return;
         axios
             .post(`${API_URL}/players`,

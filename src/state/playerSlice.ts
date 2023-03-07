@@ -17,6 +17,7 @@ const playerStateSlice = createSlice({
   reducers: {
     setPlayerName: (state: PlayerState, action: PayloadAction<string>): void => {
       state.name = action.payload;
+      console.log(`setting playername: ${state.name}`);
     },
     // Example:
     // setScore: (state: PlayerState, action: PayloadAction<string>): void => {
