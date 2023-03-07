@@ -20,13 +20,13 @@ const gameStateSlice = createSlice({
       state.gameCreationCallTs = Date.now();
     },
     // dispatch createQuestion when you press start game button
-    createQuestion: (state: GameState, action: Action): void => {
+    fetchQuestion: (state: GameState, action: Action): void => {
       // Updating this timestamp tells useCreateGame to perform API call
       state.questionStartCallTs = Date.now();
     },
   },
 });
 
-export const { setCode, createGame } = gameStateSlice.actions;
+export const { setCode, createGame, fetchQuestion } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;

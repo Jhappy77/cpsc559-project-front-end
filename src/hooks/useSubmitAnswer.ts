@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
-import { setCode } from "../state/questionSlice";
+import { submitQuestion } from "../state/questionSlice";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
 // need to validate their answer
@@ -16,10 +16,6 @@ export function useSubmitAnswer() {
       .put(`${API_URL}/players/${name}`, {"correctAnswer": submittedAnswerTrue})
       .then(response => {
         console.log(response);
-        const code = response.data.playerNames;
-        if (code) {
-          dispatch(setCode(code));
-        } else throw new Error("No question answer recieved");
       })
       .catch(reason => {
         // TODO: Handle errors better
