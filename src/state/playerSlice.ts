@@ -18,9 +18,7 @@ const playerStateSlice = createSlice({
     setPlayerName: (state: PlayerState, action: PayloadAction<string>): void => {
       if (state.name !== action.payload) {
         state.name = action.payload;
-        console.log(`setting playername: ${state.name}`);
       }
-      // console.log(`setting playername: ${state.name}`);
     },
     // Example:
     // setScore: (state: PlayerState, action: PayloadAction<string>): void => {

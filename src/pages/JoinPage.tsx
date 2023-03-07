@@ -40,7 +40,6 @@ export default function JoinPage() {
   }, [gameStarted]);
 
   const handleSubmit = () => {
-    console.log("submit");
     if (name.length == 0) {
       alert("Please enter a name.");
       return;
