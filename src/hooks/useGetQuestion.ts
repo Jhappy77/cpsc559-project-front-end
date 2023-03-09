@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
-import { submitQuestion } from "../state/questionSlice";
 
 export function useGetQuestion() {
   const { gameCode, gameCreationCallTs } = useAppSelector(state => state.game);
@@ -16,7 +15,8 @@ export function useGetQuestion() {
         console.log(response);
         const question = response.data;
         if (question) {
-          dispatch(submitQuestion(question));
+          // TODO
+          console.log("Got question!");
         } else throw new Error("No question data recieved");
       })
       .catch(reason => {

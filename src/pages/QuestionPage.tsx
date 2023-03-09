@@ -2,12 +2,16 @@ import { Flex, VStack, Button } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
+import { useGetQuestion } from "../hooks/useGetQuestion";
 
 export default function QuestionPage() {
 
+  useGetQuestion();
+
   const submitAnswer = () => {
     // Submit answer to backend
-  };
+
+  }
 
   const setAnswer = () => {
     // Set answer state
