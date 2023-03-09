@@ -1,12 +1,15 @@
 import { Button, Flex, VStack, Input, Text, FormControl, Card } from "@chakra-ui/react";
 import Logo from "../components/Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
 import { createGame } from "../state/gameSlice";
 import { useCreateGame } from "../hooks/useCreateGame";
+import { setGameStarted } from "../state/gameSlice";
+import axios from "axios";
+import { API_URL } from "../settings";
 
 const MAX_NAME_LENGTH = 15;
 
@@ -14,11 +17,12 @@ export default function CreatePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
+  const [startGame, setStartGame] = useState(false);
   const [displayName, setDisplayName] = useState("flex");
   const [displayGameCode, setDisplayGameCode] = useState("none");
 
   useCreateGame();
-  const { gameCode } = useAppSelector(state => state.game);
+  const { gameCode, gameStarted } = useAppSelector(state => state.game);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -31,6 +35,34 @@ export default function CreatePage() {
     setDisplayName("none");
     setDisplayGameCode("flex");
   };
+
+  const onStartGame = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (gameCode) {
+      setStartGame(true);
+    }
+  };
+
+  useEffect(() => {
+    if (startGame) {
+      const start_game_endpoint = `${API_URL}/games/${gameCode}`;
+
+      console.log(`Calling ${start_game_endpoint}`);
+      axios.put(start_game_endpoint).then(response => {
+        const status_code = response.status;
+        console.log(`Call to ${start_game_endpoint} response:`);
+        console.log(response);
+        if (status_code === 200) {
+          dispatch(setGameStarted(true));
+        }
+      });
+    }
+  }, [startGame]);
+
+  useEffect(() => {
+    if (gameStarted){
+      navigate("/question");
+    }
+  }, [gameStarted])
 
   return (
     <Flex
@@ -99,6 +131,9 @@ export default function CreatePage() {
                 bg="black"
                 color="white"
                 _hover={{ color: "black", backgroundColor: "grey" }}
+                onClick={e => {
+                  onStartGame(e);
+                }}
               >
                 Start Game
               </Button>
