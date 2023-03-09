@@ -1,13 +1,13 @@
 import { Button, Flex, VStack, Input, Progress, Text, FormControl } from "@chakra-ui/react";
 import Logo from "../components/Logo";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useCreatePlayer } from "../hooks/useCreatePlayer";
-import { useGetGame } from "../hooks/useGetGame";
+import { usePollForGameStart } from "../hooks/usePollForGameStart";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
-import { setGameCode, setHasJoinedGame, setPollGetGameCount } from "../state/gameSlice";
+import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
@@ -18,26 +18,10 @@ export default function JoinPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { hasJoinedGame, gameStarted } = useAppSelector(state => state.game);
-  let pollGetGameCount = 0;
-  let pollStartGameTimeout: ReturnType<typeof setTimeout>;
+  const { hasJoinedGame } = useAppSelector(state => state.game);
 
   useCreatePlayer();
-  useGetGame();
-
-  useEffect(() => {
-    if (hasJoinedGame) {
-      // Start polling for game started on server
-      pollStartGame();
-    }
-  }, [hasJoinedGame]);
-
-  useEffect(() => {
-    if (gameStarted) {
-      console.log("The game has been started");
-      navigate("/question");
-    }
-  }, [gameStarted]);
+  usePollForGameStart();
 
   const handleSubmit = () => {
     if (name?.length == 0) {
@@ -74,19 +58,6 @@ export default function JoinPage() {
     // Go back to home
     navigate("/");
   };
-
-  const pollStartGame = () => {
-    // This change will call the API to get game
-    dispatch(setPollGetGameCount(pollGetGameCount++));
-
-    if (gameStarted) {
-      // Stop polling for startGame
-      clearTimeout(pollStartGameTimeout);
-    } else {
-      // Keep polling for startGame
-      pollStartGameTimeout = setTimeout(pollStartGame, 3000);
-    }
-  }
 
   return (
     <Flex
