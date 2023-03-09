@@ -1,4 +1,4 @@
-import { Button, Flex, VStack, Input, Text, FormControl, Card } from "@chakra-ui/react";
+import { Button, Flex, VStack, Input, Text, FormControl, Card, Progress} from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
@@ -89,22 +89,32 @@ export default function CreatePage() {
             padding={4}
             margin={4}
           >
-            <VStack>
-              <Text fontSize={["lg", "xl"]}>Generated Game Code:</Text>
-              <Text fontSize={["xl", "2xl"]} fontWeight="bold">
-                {gameCode}
-              </Text>
-              <Text fontSize={["lg", "xl"]}>Enter this game code to join!</Text>
-              <Button
-                fontSize={["lg", "xl"]}
-                margin={8}
-                bg="black"
-                color="white"
-                _hover={{ color: "black", backgroundColor: "grey" }}
-              >
-                Start Game
-              </Button>
-            </VStack>
+              { gameCode? 
+                <VStack>
+                  <Text fontSize={["lg", "xl"]}>Generated Game Code:</Text>
+                  <Text fontSize={["xl", "2xl"]} fontWeight="bold">
+                    { gameCode }
+                  </Text>
+                  <Text fontSize={["lg", "xl"]}>Enter this game code to join!</Text>
+                  <Button
+                    fontSize={["lg", "xl"]}
+                    margin={8}
+                    bg="black"
+                    color="white"
+                    _hover={{ color: "black", backgroundColor: "grey" }}
+                  >
+                    Start Game
+                  </Button>
+                </VStack>
+                 :
+                <VStack>
+                  <Text fontSize={["sm", "md"]} margin={1} fontStyle="italic">
+                    Waiting for game code...
+                  </Text>
+                  <Progress height="20px" width="100%" colorScheme="green" isIndeterminate />
+                </VStack>
+                
+              }
           </Card>
         </VStack>
       </Flex>
