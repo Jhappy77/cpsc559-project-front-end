@@ -68,36 +68,36 @@ export default function JoinPage() {
       <Flex alignItems="center" justifyContent="center">
         <VStack>
           <Logo size={["64px", "100px"]} />
-          <Button leftIcon={<FaArrowLeft />} onClick={handleBack}>
+          <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8} colorScheme="whiteAlpha" color="white">
             Back
           </Button>
             <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
               <FormControl>
                 <Input
                   fontWeight={"bold"}
-                  variant="filled"
                   value={name}
                   onChange={handleNameChange}
                   maxLength={MAX_NAME_LENGTH}
                   border="2px"
-                  focusBorderColor="yellow"
+                  borderColor="white"
+                  focusBorderColor="white"
                   placeholder="Enter your name here"
                   _placeholder={{ color: "white" }}
+                  color="white"
                   fontSize={["lg", "2xl"]}
                   padding={6}
                   my={2}
                   mx={3}
                   width={["90%", "100%"]}
-                  colorScheme="whiteAlpha"
                 />
                 <Input
                   fontWeight={"bold"}
-                  variant="filled"
                   value={gameCode}
                   onChange={handleCodeChange}
                   maxLength={CODE_LENGTH}
                   border="2px"
-                  focusBorderColor="yellow"
+                  borderColor="white"
+                  focusBorderColor="white"
                   placeholder="Enter code here"
                   _placeholder={{ color: "white" }}
                   fontSize={["lg", "2xl"]}
@@ -105,15 +105,15 @@ export default function JoinPage() {
                   my={2}
                   mx={3}
                   width={["90%", "100%"]}
-                  colorScheme="whiteAlpha"
                 />
               <Button
                   onClick={handleSubmit}
-                  backgroundColor="white"
+                  colorScheme="whiteAlpha"
+                  borderColor="white"
                   type="submit"
-                  color="black"
+                  color="white"
                   fontSize={["lg", "2xl"]}
-                  _hover={{ backgroundColor: "", color: "black" }}
+                  _hover={{ backgroundColor: "white", color: "black" }}
                   my={2}
                   mx={1}
                   padding={6}

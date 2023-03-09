@@ -44,7 +44,7 @@ export default function CreatePage() {
       <Flex alignItems="center" justifyContent="center">
         <VStack>
           <Logo size={["64px", "100px"]} />
-          <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8}>
+          <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8} colorScheme="whiteAlpha" color="white">
             Back
           </Button>
           <Flex justifyContent="center" textAlign="center" display={displayName}>
@@ -54,7 +54,7 @@ export default function CreatePage() {
               }}
             >
               <FormControl textAlign="center" marginTop={4} width="100%">
-                <Text fontSize={["lg", "xl"]}>Enter your name:</Text>
+                <Text fontSize={["lg", "xl"]} color="white" >Enter your name:</Text>
                 <Input
                   fontWeight="bold"
                   m={2}
@@ -62,14 +62,16 @@ export default function CreatePage() {
                   fontSize={["lg", "xl"]}
                   maxLength={MAX_NAME_LENGTH}
                   border="4px"
-                  focusBorderColor="yellow"
+                  borderColor="white"
+                  focusBorderColor="white"
                   value={name}
                   onChange={handleChange}
                 ></Input>
                 <Button
-                  backgroundColor="white"
-                  color="black"
-                  _hover={{ backgroundColor: "", color: "black" }}
+                  colorScheme="whiteAlpha"
+                  color="white"
+                  _hover={{ backgroundColor: "white", color: "black" }}
+                  borderColor="white"
                   type="submit"
                   margin={2}
                 >
