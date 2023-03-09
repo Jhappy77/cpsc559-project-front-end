@@ -10,13 +10,15 @@ export interface GameState {
 
 export const defaultGameState: GameState = {
   pollGetGameCount: 0,
+  hasJoinedGame: false,
+  gameStarted: false
 };
 
 const gameStateSlice = createSlice({
   name: "gameSlice",
   initialState: defaultGameState,
   reducers: {
-    setGameCode: (state: GameState, action: PayloadAction<string>): void => {
+    setGameCode: (state: GameState, action: PayloadAction<string | undefined>): void => {
       state.gameCode = action.payload;
     },
     createGame: (state: GameState, action: Action): void => {

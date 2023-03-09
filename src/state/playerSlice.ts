@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // A slice is an independent part of the state that h
 
 export interface PlayerState {
-  name: string;
+  name?: string;
   // score: number; // example
 }
 
@@ -15,7 +15,7 @@ const playerStateSlice = createSlice({
   name: `playerSlice`,
   initialState: defaultPlayerState,
   reducers: {
-    setPlayerName: (state: PlayerState, action: PayloadAction<string>): void => {
+    setPlayerName: (state: PlayerState, action: PayloadAction<string | undefined>): void => {
       if (state.name !== action.payload) {
         state.name = action.payload;
       }

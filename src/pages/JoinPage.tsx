@@ -65,11 +65,11 @@ export default function JoinPage() {
 
   const handleBack = () => {
     // Reset the state when we leave the page
-    dispatch(setHasJoinedGame(false));
     setCode("");
-    setGameCode("");
-    dispatch(setPlayerName(""));
-    dispatch(setGameCode(""));
+    setName("");
+    dispatch(setHasJoinedGame(false));
+    dispatch(setPlayerName(undefined));
+    dispatch(setGameCode(undefined));
 
     // Go back to home
     navigate("/");
