@@ -3,8 +3,8 @@ import Logo from "../components/Logo";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useSocketJoinGameRoom } from "../hooks/useSocketJoinGameRoom";
 import { useCreatePlayer } from "../hooks/useCreatePlayer";
+import { usePollForGameStart } from "../hooks/usePollForGameStart";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
 import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
@@ -13,25 +13,23 @@ const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
 
 export default function JoinPage() {
-  const [gameCode, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [displayForm, setDisplayForm] = useState("flex");
-  const [displayLoading, setDisplayLoading] = useState("none");
+  const [gameCode, setCode] = useState<string | undefined>(undefined);
+  const [name, setName] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  useCreatePlayer();
-  useSocketJoinGameRoom();
 
   const { hasJoinedGame } = useAppSelector(state => state.game);
 
-  const handleSubmit = () => {
+  useCreatePlayer();
+  usePollForGameStart();
 
-    if (name.length == 0) {
+  const handleSubmit = () => {
+    if (name?.length == 0) {
       alert("Please enter a name.");
       return;
     }
 
-    if (gameCode.length < CODE_LENGTH) {
+    if (gameCode && gameCode.length < CODE_LENGTH) {
       alert("Please enter a valid code.");
       return;
     }
@@ -50,9 +48,14 @@ export default function JoinPage() {
   };
 
   const handleBack = () => {
-    // In the future this should probably dispatch a "player left game" event,
-    // for now lets just clear this field
+    // Reset the state when we leave the page
+    setCode("");
+    setName("");
     dispatch(setHasJoinedGame(false));
+    dispatch(setPlayerName(undefined));
+    dispatch(setGameCode(undefined));
+
+    // Go back to home
     navigate("/");
   };
 
@@ -71,57 +74,57 @@ export default function JoinPage() {
           <Button leftIcon={<FaArrowLeft />} onClick={handleBack}>
             Back
           </Button>
-            <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
-              <FormControl>
-                <Input
-                  fontWeight={"bold"}
-                  variant="filled"
-                  value={name}
-                  onChange={handleNameChange}
-                  maxLength={MAX_NAME_LENGTH}
-                  border="2px"
-                  focusBorderColor="yellow"
-                  placeholder="Enter your name here"
-                  _placeholder={{ color: "white" }}
-                  fontSize={["lg", "2xl"]}
-                  padding={6}
-                  my={2}
-                  mx={3}
-                  width={["90%", "100%"]}
-                  colorScheme="whiteAlpha"
-                />
-                <Input
-                  fontWeight={"bold"}
-                  variant="filled"
-                  value={gameCode}
-                  onChange={handleCodeChange}
-                  maxLength={CODE_LENGTH}
-                  border="2px"
-                  focusBorderColor="yellow"
-                  placeholder="Enter code here"
-                  _placeholder={{ color: "white" }}
-                  fontSize={["lg", "2xl"]}
-                  padding={6}
-                  my={2}
-                  mx={3}
-                  width={["90%", "100%"]}
-                  colorScheme="whiteAlpha"
-                />
+          <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
+            <FormControl>
+              <Input
+                fontWeight={"bold"}
+                variant="filled"
+                value={name}
+                onChange={handleNameChange}
+                maxLength={MAX_NAME_LENGTH}
+                border="2px"
+                focusBorderColor="yellow"
+                placeholder="Enter your name here"
+                _placeholder={{ color: "white" }}
+                fontSize={["lg", "2xl"]}
+                padding={6}
+                my={2}
+                mx={3}
+                width={["90%", "100%"]}
+                colorScheme="whiteAlpha"
+              />
+              <Input
+                fontWeight={"bold"}
+                variant="filled"
+                value={gameCode}
+                onChange={handleCodeChange}
+                maxLength={CODE_LENGTH}
+                border="2px"
+                focusBorderColor="yellow"
+                placeholder="Enter code here"
+                _placeholder={{ color: "white" }}
+                fontSize={["lg", "2xl"]}
+                padding={6}
+                my={2}
+                mx={3}
+                width={["90%", "100%"]}
+                colorScheme="whiteAlpha"
+              />
               <Button
-                  onClick={handleSubmit}
-                  backgroundColor="white"
-                  type="submit"
-                  color="black"
-                  fontSize={["lg", "2xl"]}
-                  _hover={{ backgroundColor: "", color: "black" }}
-                  my={2}
-                  mx={1}
-                  padding={6}
-                >
-                  Submit
-                </Button>
-              </FormControl>
-            </Flex>
+                onClick={handleSubmit}
+                backgroundColor="white"
+                type="submit"
+                color="black"
+                fontSize={["lg", "2xl"]}
+                _hover={{ backgroundColor: "", color: "black" }}
+                my={2}
+                mx={1}
+                padding={6}
+              >
+                Submit
+              </Button>
+            </FormControl>
+          </Flex>
           <VStack display={hasJoinedGame ? "flex" : "none"} width="100%">
             <Text fontFamily={`'Open Sans', sans-serif`} fontSize="2xl">
               Waiting for host to start the game...

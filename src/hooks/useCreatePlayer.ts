@@ -9,7 +9,7 @@ export function useCreatePlayer() {
     const { gameCode } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
     useEffect(() => {
-        if (!name || !gameCode) return;
+        if (!name || !gameCode || name === "" || gameCode === "") return;
         axios
             .post(`${API_URL}/players`,
                 {
@@ -18,12 +18,12 @@ export function useCreatePlayer() {
                 })
             .then(response => {
                 response.status === 201 ? dispatch(setHasJoinedGame(true)) : dispatch(setHasJoinedGame(false));
-                console.log(response.status);
+                console.log(`API Call to: /players, response: ${response.status}`);
             })
             .catch(reason => {
                 console.error("Unhandled error in useCreatePlayer");
                 console.error(reason);
                 alert("A user with this name already exists, please try again with a new name!");
             });
-    }, [name, dispatch]);
+    }, [name]);
 }
