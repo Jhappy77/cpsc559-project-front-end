@@ -4,8 +4,8 @@ export interface GameState {
   gameCode?: string;
   gameCreationCallTs?: number;
   hasJoinedGame?: boolean;
-  gameStarted?: boolean;
-  pollGetGameCount?: number;
+  gameStarted: boolean;
+  pollGetGameCount: number;
 }
 
 export const defaultGameState: GameState = {

@@ -13,8 +13,8 @@ const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
 
 export default function JoinPage() {
-  const [gameCode, setCode] = useState("");
-  const [name, setName] = useState("");
+  const [gameCode, setCode] = useState<string | undefined>(undefined);
+  const [name, setName] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -40,12 +40,12 @@ export default function JoinPage() {
   }, [gameStarted]);
 
   const handleSubmit = () => {
-    if (name.length == 0) {
+    if (name?.length == 0) {
       alert("Please enter a name.");
       return;
     }
 
-    if (gameCode.length < CODE_LENGTH) {
+    if (gameCode && gameCode.length < CODE_LENGTH) {
       alert("Please enter a valid code.");
       return;
     }
