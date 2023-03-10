@@ -4,6 +4,8 @@ export interface QuestionState {
   submittedAnswerTrue?: boolean;
   answer?: number;
   correctAnswer?: number;
+  prompt?: number;
+  answers?: Array<string>
 }
 
 export const defaultQuestionState: QuestionState = {};
@@ -22,9 +24,14 @@ const questionStateSlice = createSlice({
         state.submittedAnswerTrue = true;
       }
     },
+    setQuestion: (state: QuestionState, action: PayloadAction<any>): void => {
+      state.prompt = action.payload.prompt;
+      state.correctAnswer = action.payload.correctAnswerIndex;
+      state.answers = action.payload.answers;
+    }
   },
 })
 
-export const { submitQuestion } = questionStateSlice.actions;
+export const { submitQuestion, setQuestion } = questionStateSlice.actions;
 
 export const questionSliceReducer = questionStateSlice.reducer;

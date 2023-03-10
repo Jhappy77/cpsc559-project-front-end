@@ -3,9 +3,12 @@ import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
 import { useGetQuestion } from "../hooks/useGetQuestion";
+import { useAppSelector } from "../state/reduxHooks";
 
 export default function QuestionPage() {
 
+  const {question} = useAppSelector(state => state.game);
+  
   useGetQuestion();
 
   const submitAnswer = () => {
