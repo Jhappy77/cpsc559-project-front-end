@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
+import { setQuestion } from "../state/questionSlice";
 
 export function useGetQuestion() {
   const { gameCode, gameCreationCallTs } = useAppSelector(state => state.game);
@@ -13,14 +14,13 @@ export function useGetQuestion() {
       .get(`${API_URL}/games/question/${gameCode}`)
       .then(response => {
         console.log(response);
-        const question = response.data;
-        if (question) {
-          // TODO
+        const questionResponse = response.data;
+        if (questionResponse) {
+          dispatch(setQuestion(questionResponse));
           console.log("Got question!");
         } else throw new Error("No question data recieved");
       })
       .catch(reason => {
-        // TODO: Handle errors better
         console.error("Unhandled error in useGetQuestion");
         console.error(reason);
       });
