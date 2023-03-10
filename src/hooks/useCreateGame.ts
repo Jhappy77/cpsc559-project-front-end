@@ -21,7 +21,6 @@ export function useCreateGame() {
         } else throw new Error("No game code recieved");
       })
       .catch(reason => {
-        // TODO: Handle errors better
         console.error("Unhandled error in useCreateGame");
         console.error(reason);
       });
