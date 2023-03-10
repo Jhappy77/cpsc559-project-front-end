@@ -5,15 +5,21 @@ export interface GameState {
   gameCreationCallTs?: number;
   hasJoinedGame?: boolean;
   question?: string;
+  gameStarted: boolean;
+  pollGetGameCount: number;
 }
 
-export const defaultGameState: GameState = {};
+export const defaultGameState: GameState = {
+  pollGetGameCount: 0,
+  hasJoinedGame: false,
+  gameStarted: false
+};
 
 const gameStateSlice = createSlice({
   name: "gameSlice",
   initialState: defaultGameState,
   reducers: {
-    setGameCode: (state: GameState, action: PayloadAction<string>): void => {
+    setGameCode: (state: GameState, action: PayloadAction<string | undefined>): void => {
       state.gameCode = action.payload;
     },
     createGame: (state: GameState, action: Action): void => {
@@ -28,9 +34,15 @@ const gameStateSlice = createSlice({
     setHasJoinedGame: (state: GameState, action: PayloadAction<boolean>): void => {
       state.hasJoinedGame = action.payload;
     },
+    setGameStarted: (state: GameState, action: PayloadAction<boolean>): void => {
+      state.gameStarted = action.payload;
+    },
+    incrementPollGetGameCount: (state: GameState, action: PayloadAction<number>): void => {
+      state.pollGetGameCount = state.pollGetGameCount + action.payload;
+    }
   },
 });
 
-export const { setGameCode, createGame, fetchQuestion, setHasJoinedGame } = gameStateSlice.actions;
+export const { setGameCode, createGame, setHasJoinedGame, fetchQuestion, setGameStarted, incrementPollGetGameCount } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;
