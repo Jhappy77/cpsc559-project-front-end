@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { defaultGameState, gameSliceReducer, GameState } from "./gameSlice";
 import { defaultPlayerState, playerSliceReducer, PlayerState } from "./playerSlice";
+import { defaultQuestionState, questionSliceReducer, QuestionState } from "./questionSlice";
 import socketMiddleware from "./socketMiddleware";
 
 // See what's inside here live in your browser! Search "Redux dev tools" in the extension store
@@ -10,20 +11,20 @@ import socketMiddleware from "./socketMiddleware";
 export interface StoreState {
   player: PlayerState;
   game: GameState;
-  // questions: QuestionsState; // example
+  question: QuestionState;
   // ui: UiState; // example 2
 }
 
 const defaultStoreState: StoreState = {
   player: defaultPlayerState,
   game: defaultGameState,
-  // questions: defaultQuestions // example
+  question: defaultQuestionState // example
 };
 
 const reducer = {
   player: playerSliceReducer,
   game: gameSliceReducer,
-  // questions: questionsSliceReducer // example
+  question: questionSliceReducer // example
 };
 
 export const store = configureStore({ reducer, preloadedState: defaultStoreState, middleware: [socketMiddleware()] });
