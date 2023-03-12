@@ -22,6 +22,7 @@ export function usePollForGameStart() {
             clearTimeout(pollStartGameTimeout);
         } else {
             // Keep polling for startGame
+            console.log("Polling for game start");
             pollStartGameTimeout = setTimeout(pollStartGame, 3000);
         }
     }

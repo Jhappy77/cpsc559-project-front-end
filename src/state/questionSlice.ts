@@ -4,7 +4,7 @@ export interface QuestionState {
   submittedAnswerTrue?: boolean;
   answer?: number;
   correctAnswer?: number;
-  prompt?: number;
+  prompt?: string;
   answers?: Array<string>
 }
 

@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/react";
 import { MouseEventHandler } from "react";
 
-export default function Answer(props: { id: string; background: string; text: string, setAnswer: MouseEventHandler }) {
+export default function Answer(props: { id: string; background: string; text: string | undefined, setAnswer: React.MouseEventHandler<HTMLButtonElement> }) {
 
   return (
     <Button onClick={props.setAnswer}
