@@ -5,8 +5,9 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
-import { createGame } from "../state/gameSlice";
+import { createGame, setStartGameButtonPressed } from "../state/gameSlice";
 import { useCreateGame } from "../hooks/useCreateGame";
+import { useStartGame } from "../hooks/useStartGame";
 
 const MAX_NAME_LENGTH = 15;
 
@@ -18,6 +19,7 @@ export default function CreatePage() {
   const [displayGameCode, setDisplayGameCode] = useState("none");
 
   useCreateGame();
+  useStartGame();
   const { gameCode } = useAppSelector(state => state.game);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +32,12 @@ export default function CreatePage() {
     dispatch(createGame());
     setDisplayName("none");
     setDisplayGameCode("flex");
+  };
+
+  const onStartGame = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (gameCode) {
+      dispatch(setStartGameButtonPressed(true));
+    }
   };
 
   return (
@@ -102,7 +110,10 @@ export default function CreatePage() {
                     bg="black"
                     color="white"
                     _hover={{ color: "black", backgroundColor: "grey" }}
-                  >
+                    onClick={e => {
+                  onStartGame(e);
+                }}
+              >
                     Start Game
                   </Button>
                 </VStack>

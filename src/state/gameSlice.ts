@@ -6,12 +6,14 @@ export interface GameState {
   hasJoinedGame?: boolean;
   gameStarted: boolean;
   pollGetGameCount: number;
+  startGameButtonPressed: boolean;
 }
 
 export const defaultGameState: GameState = {
   pollGetGameCount: 0,
   hasJoinedGame: false,
-  gameStarted: false
+  gameStarted: false,
+  startGameButtonPressed: false
 };
 
 const gameStateSlice = createSlice({
@@ -33,10 +35,13 @@ const gameStateSlice = createSlice({
     },
     incrementPollGetGameCount: (state: GameState, action: PayloadAction<number>): void => {
       state.pollGetGameCount = state.pollGetGameCount + action.payload;
+    },
+    setStartGameButtonPressed: (state: GameState, action: PayloadAction<boolean>): void => {
+      state.startGameButtonPressed = action.payload;
     }
   },
 });
 
-export const { setGameCode, createGame, setHasJoinedGame, setGameStarted, incrementPollGetGameCount } = gameStateSlice.actions;
+export const { setGameCode, createGame, setHasJoinedGame, setGameStarted, incrementPollGetGameCount, setStartGameButtonPressed } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;
