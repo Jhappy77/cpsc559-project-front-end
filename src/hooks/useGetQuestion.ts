@@ -10,7 +10,7 @@ export function useGetQuestion() {
   useEffect(() => {
     if (!gameCode) return;
     console.log(gameCreationCallTs);
-    //if (gameCreationCallTs === undefined) return; 
+    if (gameCreationCallTs === undefined) return; 
     axios
       .get(`${API_URL}/games/question/${gameCode}`)
       .then(response => {
