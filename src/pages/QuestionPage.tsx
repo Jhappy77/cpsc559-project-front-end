@@ -3,7 +3,7 @@ import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
 import { useEffect, useState } from "react";
-import { useGetQuestion } from "../hooks/useGetQuestion";
+import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppSelector } from "../state/reduxHooks";
 
 export default function QuestionPage() {
@@ -11,7 +11,7 @@ export default function QuestionPage() {
   const { prompt, answers } = useAppSelector(state => state.question);
   const [answer, setAnswer] = useState<string | undefined>(undefined);
   
-  useGetQuestion();
+  usePollForGetQuestion();
 
   const submitAnswer = () => {
     // Submit answer to backend

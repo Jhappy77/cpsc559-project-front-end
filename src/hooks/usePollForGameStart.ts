@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../settings";
 import { setGameStarted, incrementPollGetGameCount } from "../state/gameSlice"
@@ -15,14 +15,13 @@ export function usePollForGameStart() {
     const pollStartGame = () => {
         // This change will call the API to get game
         dispatch(incrementPollGetGameCount(1));
-
         if (gameStarted) {
             // Stop polling for startGame
             console.log("clearing timeout");
             clearTimeout(pollStartGameTimeout);
         } else {
             // Keep polling for startGame
-            console.log("Polling for game start");
+            console.log("Polling for game start...");
             pollStartGameTimeout = setTimeout(pollStartGame, 3000);
         }
     }

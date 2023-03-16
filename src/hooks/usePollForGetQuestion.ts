@@ -5,25 +5,23 @@ import { API_URL } from "../settings";
 import { setQuestion } from "../state/questionSlice";
 import { setGotQuestion, incrementPollGetQuestionCount} from "../state/gameSlice"
 
-export function useGetQuestion() {
+export function usePollForGetQuestion() {
   const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount } = useAppSelector(state => state.game);
   let hasGotQuestion = gotQuestion;
   const dispatch = useAppDispatch();
 
   let pollGetQuestionTimeout: ReturnType<typeof setTimeout>;
 
-  const pollGetQuestion = async () => {
+  const pollGetQuestion = () => {
       // This change will call the API to get game
-    await dispatch(incrementPollGetQuestionCount(1));
-    console.log(`IN pollGetQuestion, pollGetQuestionCount: ${pollGetQuestionCount}, gotQuestion: ${gotQuestion}`);
-    // const { gotQuestion } = useAppSelector(state => state.game);
+      dispatch(incrementPollGetQuestionCount(1));
       if (hasGotQuestion) {
           // Stop polling for startGame
           console.log("Clearing getQuestion timeout");
           clearTimeout(pollGetQuestionTimeout);
       } else {
           // Keep polling for startGame
-          console.log("CONTINUE POLLING GOT QUESTION");
+          console.log("Polling for question...");
           pollGetQuestionTimeout = setTimeout(pollGetQuestion, 3000);
       }
   }
@@ -38,7 +36,7 @@ export function useGetQuestion() {
           dispatch(setGotQuestion(true));
           dispatch(setQuestion(data));
           hasGotQuestion = true;
-          console.log("Got question!");
+          console.log(`Got question data:\n${data.toString()}`);
         } else {
           throw new Error("No question data recieved");
         }
@@ -51,10 +49,8 @@ export function useGetQuestion() {
   }, [pollGetQuestionCount]);
 
   useEffect(() => {
-        console.log("IN gotQuestion useEffect");
         if (!gotQuestion && hasJoinedGame && gameStarted) {
             // Start polling for game started on server
-            console.log("IN gotQuestion useEffect not true");
             pollGetQuestion();
         }
     }, [gotQuestion]);
