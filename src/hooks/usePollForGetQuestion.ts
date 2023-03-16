@@ -18,11 +18,9 @@ export function usePollForGetQuestion() {
     dispatch(incrementPollGetQuestionCount(1));
     if (gotQuestion) {
       // Stop polling for startGame
-      console.log("Clearing getQuestion timeout");
       clearTimeout(pollGetQuestionTimeout);
     } else {
       // Keep polling for startGame
-      console.log("Polling for question...");
       pollGetQuestionTimeout = setTimeout(togglePollTrigger, 1000);
     }
   }, [pollTrigger, gotQuestion]);

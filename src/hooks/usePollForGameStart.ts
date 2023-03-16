@@ -17,13 +17,10 @@ export function usePollForGameStart() {
         dispatch(incrementPollGetGameCount(1));
         if (gameStarted) {
             // Stop polling for startGame
-            console.log("Clearing get game started timeout");
             clearTimeout(pollStartGameTimeout);
-            console.log("The game has been started");
             navigate("/question");
         } else {
             // Keep polling for startGame
-            console.log("Polling for game start...");
             clearTimeout(pollStartGameTimeout);
             pollStartGameTimeout = setTimeout(togglePollTrigger, 3000);
         }
