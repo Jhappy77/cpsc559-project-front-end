@@ -1,31 +1,32 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { API_URL } from "../settings";
 import { setQuestion } from "../state/questionSlice";
-import { setGotQuestion, incrementPollGetQuestionCount} from "../state/gameSlice"
+import { setGotQuestion, incrementPollGetQuestionCount } from "../state/gameSlice"
 
 export function usePollForGetQuestion() {
   const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount } = useAppSelector(state => state.game);
   let hasGotQuestion = gotQuestion;
   const dispatch = useAppDispatch();
-
+  const [pollTrigger, setPollTrigger] = useState(false);
   let pollGetQuestionTimeout: ReturnType<typeof setTimeout>;
 
-  const pollGetQuestion = () => {
-      // This change will call the API to get game
-      dispatch(incrementPollGetQuestionCount(1));
-      if (hasGotQuestion) {
-          // Stop polling for startGame
-          console.log("Clearing getQuestion timeout");
-          clearTimeout(pollGetQuestionTimeout);
-      } else {
-          // Keep polling for startGame
-          console.log("Polling for question...");
-          pollGetQuestionTimeout = setTimeout(pollGetQuestion, 3000);
-      }
-  }
-  
+  const togglePollTrigger = () => { setPollTrigger(!pollTrigger) }
+
+  useEffect(() => {
+    dispatch(incrementPollGetQuestionCount(1));
+    if (gotQuestion) {
+      // Stop polling for startGame
+      console.log("Clearing getQuestion timeout");
+      clearTimeout(pollGetQuestionTimeout);
+    } else {
+      // Keep polling for startGame
+      console.log("Polling for question...");
+      pollGetQuestionTimeout = setTimeout(togglePollTrigger, 1000);
+    }
+  }, [pollTrigger, gotQuestion]);
+
   useEffect(() => {
     if (!gameCode || !gameStarted || !hasJoinedGame) return;
     axios
@@ -49,9 +50,9 @@ export function usePollForGetQuestion() {
   }, [pollGetQuestionCount]);
 
   useEffect(() => {
-        if (!gotQuestion && hasJoinedGame && gameStarted) {
-            // Start polling for game started on server
-            pollGetQuestion();
-        }
-    }, [gotQuestion]);
+    if (!gotQuestion && hasJoinedGame && gameStarted) {
+      // Start polling for game started on server
+      togglePollTrigger();
+    }
+  }, [gotQuestion]);
 }

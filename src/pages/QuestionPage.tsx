@@ -10,7 +10,7 @@ export default function QuestionPage() {
 
   const { prompt, answers, index } = useAppSelector(state => state.question);
   const [answer, setAnswer] = useState<string | undefined>(undefined);
-  
+
   usePollForGetQuestion();
 
   const submitAnswer = () => {
@@ -19,6 +19,7 @@ export default function QuestionPage() {
 
   const handleSetAnswer = (event: React.MouseEvent) => {
     // Set answer state
+    console.log("Settting answer");
     console.log(event);
     console.log((event.target as HTMLButtonElement).getAttribute('id'));
     // setAnswer(event.currentTarget.getAttribute("id"));
@@ -39,7 +40,7 @@ export default function QuestionPage() {
           <Question
             id="1"
             title={`Question ${index ? `#${index}` : ""}`}
-            text={prompt ? prompt: ""}
+            text={prompt ? prompt : ""}
           />
           <Answer setAnswer={handleSetAnswer} id="1" background="red" text={answers?.at(0)} />
           <Answer setAnswer={handleSetAnswer} id="2" background="blue" text={answers?.at(1)} />
