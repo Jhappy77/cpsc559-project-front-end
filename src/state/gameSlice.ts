@@ -30,6 +30,7 @@ const gameStateSlice = createSlice({
     },
     createGame: (state: GameState, action: Action): void => {
       // Updating this timestamp tells useCreateGame to perform API call
+      console.log("game creation call started");
       state.gameCreationCallTs = Date.now();
     },
     // dispatch createQuestion when you press start game button
