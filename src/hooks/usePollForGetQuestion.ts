@@ -36,7 +36,7 @@ export function usePollForGetQuestion() {
           dispatch(setGotQuestion(true));
           dispatch(setQuestion(data));
           hasGotQuestion = true;
-          console.log(`Got question data:\n${data.toString()}`);
+          console.log(`Got question data`);
         } else {
           throw new Error("No question data recieved");
         }

@@ -8,7 +8,7 @@ import { useAppSelector } from "../state/reduxHooks";
 
 export default function QuestionPage() {
 
-  const { prompt, answers } = useAppSelector(state => state.question);
+  const { prompt, answers, index } = useAppSelector(state => state.question);
   const [answer, setAnswer] = useState<string | undefined>(undefined);
   
   usePollForGetQuestion();
@@ -19,7 +19,6 @@ export default function QuestionPage() {
 
   const handleSetAnswer = (event: React.MouseEvent) => {
     // Set answer state
-    console.log("hello");
     console.log(event);
     console.log((event.target as HTMLButtonElement).getAttribute('id'));
     // setAnswer(event.currentTarget.getAttribute("id"));
@@ -39,7 +38,7 @@ export default function QuestionPage() {
           <Logo size={["32px", "50px"]} />
           <Question
             id="1"
-            title="Question #1"
+            title={`Question ${index ? `#${index}` : ""}`}
             text={prompt ? prompt: ""}
           />
           <Answer setAnswer={handleSetAnswer} id="1" background="red" text={answers?.at(0)} />

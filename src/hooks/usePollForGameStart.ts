@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../settings";
 import { setGameStarted, incrementPollGetGameCount } from "../state/gameSlice"
