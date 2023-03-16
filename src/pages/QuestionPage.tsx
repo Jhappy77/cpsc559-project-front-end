@@ -1,4 +1,4 @@
-import { Flex, VStack, Button } from "@chakra-ui/react";
+import { Flex, VStack, Button, Text, Progress } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
@@ -35,19 +35,28 @@ export default function QuestionPage() {
       justifyContent="center"
     >
       <Flex alignItems="center" maxW="md" margin="4">
-        <VStack>
-          <Logo size={["32px", "50px"]} />
-          <Question
-            id="1"
-            title={`Question ${index ? `#${index}` : ""}`}
-            text={prompt ? prompt : ""}
-          />
-          <Answer setAnswer={handleSetAnswer} id="1" background="red" text={answers?.at(0)} />
-          <Answer setAnswer={handleSetAnswer} id="2" background="blue" text={answers?.at(1)} />
-          <Answer setAnswer={handleSetAnswer} id="3" background="green" text={answers?.at(2)} />
-          <Answer setAnswer={handleSetAnswer} id="4" background="orange" text={answers?.at(3)} />
-          <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
-        </VStack>
+        {prompt && answers && index ?
+          <VStack>
+            <Logo size={["32px", "50px"]} />
+            <Question
+              id="1"
+              title={`Question ${index ? `#${index}` : ""}`}
+              text={prompt ? prompt : ""}
+            />
+            <Answer setAnswer={handleSetAnswer} id="1" background="red" text={answers?.at(0)} />
+            <Answer setAnswer={handleSetAnswer} id="2" background="blue" text={answers?.at(1)} />
+            <Answer setAnswer={handleSetAnswer} id="3" background="green" text={answers?.at(2)} />
+            <Answer setAnswer={handleSetAnswer} id="4" background="orange" text={answers?.at(3)} />
+            <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
+          </VStack>
+          :
+          <VStack>
+            <Text fontSize={["sm", "md"]} margin={1} fontStyle="italic">
+              Waiting for question...
+            </Text>
+            <Progress height="20px" width="100%" colorScheme="green" isIndeterminate />
+          </VStack>
+        }
       </Flex>
     </Flex>
   );
