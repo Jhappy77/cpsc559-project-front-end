@@ -4,11 +4,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface PlayerState {
   name?: string;
+  isHost: boolean;
   // score: number; // example
 }
 
 export const defaultPlayerState: PlayerState = {
   name: `The Champion (a.k.a. Joel)`,
+  isHost: false,
 };
 
 const playerStateSlice = createSlice({
@@ -20,6 +22,9 @@ const playerStateSlice = createSlice({
         state.name = action.payload;
       }
     },
+    setIsHost: (state: PlayerState, action: PayloadAction<boolean>): void => {
+      state.isHost = action.payload;
+    },
     // Example:
     // setScore: (state: PlayerState, action: PayloadAction<string>): void => {
     //     state.name = action.payload;
@@ -28,6 +33,6 @@ const playerStateSlice = createSlice({
   },
 });
 
-export const { setPlayerName /*setPlayerScore*/ } = playerStateSlice.actions;
+export const { setPlayerName, setIsHost /*setPlayerScore*/ } = playerStateSlice.actions;
 
 export const playerSliceReducer = playerStateSlice.reducer;
