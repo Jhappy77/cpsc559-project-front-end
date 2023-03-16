@@ -25,6 +25,7 @@ const gameStateSlice = createSlice({
     },
     createGame: (state: GameState, action: Action): void => {
       // Updating this timestamp tells useCreateGame to perform API call
+      console.log("game creation call started");
       state.gameCreationCallTs = Date.now();
     },
     setHasJoinedGame: (state: GameState, action: PayloadAction<boolean>): void => {
