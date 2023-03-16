@@ -4,8 +4,9 @@ export interface QuestionState {
   submittedAnswerTrue?: boolean;
   answer?: number;
   correctAnswer?: number;
-  prompt?: number;
-  answers?: Array<string>
+  prompt?: string;
+  answers?: Array<string>;
+  index?: number;
 }
 
 export const defaultQuestionState: QuestionState = {};
@@ -28,6 +29,7 @@ const questionStateSlice = createSlice({
       state.prompt = action.payload.prompt;
       state.correctAnswer = action.payload.correctAnswerIndex;
       state.answers = action.payload.answers;
+      state.index = action.payload.index + 1;
     }
   },
 })
