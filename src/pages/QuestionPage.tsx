@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { submitQuestion, setQuestionAnswer, incrementQuestionIndex } from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
+import { useNextQuestion } from "../hooks/useNextQuestion"
 
 export default function QuestionPage() {
 
@@ -20,6 +21,7 @@ export default function QuestionPage() {
 
   usePollForGetQuestion();
   useSubmitAnswer();
+  useNextQuestion();
 
   const submitAnswer = (event:React.MouseEvent) => {
     // Submit answer to backend
