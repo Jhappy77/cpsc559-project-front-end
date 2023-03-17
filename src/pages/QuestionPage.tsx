@@ -28,6 +28,7 @@ export default function QuestionPage() {
     console.log("Player submitted answer");
     dispatch(setQuestionAnswer(answer));
     dispatch(submitQuestion());
+    dispatch(setRequestNextQuestion(true));
     // setGotQuestion(false);
     // setHasCurrentQuestion(false);
   }
