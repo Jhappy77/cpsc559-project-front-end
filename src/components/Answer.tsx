@@ -5,6 +5,7 @@ export default function Answer(props: { id: string; background: string; text: st
 
   return (
     <Button onClick={props.setAnswer}
+      _focus={{ background: "lightgrey", color: "black" }}
       background={props.background}
       id={props.id}
       color="white"
