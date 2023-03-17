@@ -5,8 +5,8 @@ import Answer from "../components/Answer";
 import { useEffect, useState } from "react";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import { submitQuestion, setQuestionAnswer, incrementQuestionIndex } from "../state/questionSlice";
-import { setGotQuestion } from "../state/gameSlice";
+import { submitQuestion, setQuestionAnswer } from "../state/questionSlice";
+import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion"
 
@@ -35,7 +35,8 @@ export default function QuestionPage() {
   const nextQuestion = (event:React.MouseEvent) => {
     // Submit answer to backend
     console.log("Next question button pressed");
-    dispatch(incrementQuestionIndex(1));
+    // dispatch(incrementQuestionIndex(1));
+    dispatch(setRequestNextQuestion(true));
     // setGotQuestion(false);
     // setHasCurrentQuestion(false);
   }
