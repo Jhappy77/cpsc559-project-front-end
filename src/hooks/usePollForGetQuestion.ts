@@ -50,6 +50,7 @@ export function usePollForGetQuestion() {
   useEffect(() => {
     if (!gotQuestion && hasJoinedGame && gameStarted) {
       // Start polling for game started on server
+      console.log("hello bozo");
       togglePollTrigger();
     }
   }, [gotQuestion]);

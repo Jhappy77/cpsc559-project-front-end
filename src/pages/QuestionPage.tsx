@@ -6,20 +6,35 @@ import { useEffect, useState } from "react";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { submitQuestion, setQuestionAnswer } from "../state/questionSlice";
+import { setGotQuestion } from "../state/gameSlice";
+import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 
 export default function QuestionPage() {
 
   const { prompt, answers, index } = useAppSelector(state => state.question);
+  const { gotQuestion } = useAppSelector(state => state.game);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
+  const [hasCurrentQuestion, setHasCurrentQuestion] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   usePollForGetQuestion();
+  useSubmitAnswer();
+
+  // useEffect(() => {
+  //   if (gotQuestion) {
+  //     setHasCurrentQuestion(true);
+  //   } else {
+  //     setHasCurrentQuestion(false);
+  //   }
+  // }, [gotQuestion]);
 
   const submitAnswer = (event:React.MouseEvent) => {
     // Submit answer to backend
     console.log("Player submitted answer");
     dispatch(setQuestionAnswer(answer));
     dispatch(submitQuestion());
+    // setGotQuestion(false);
+    // setHasCurrentQuestion(false);
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
@@ -40,7 +55,7 @@ export default function QuestionPage() {
       justifyContent="center"
     >
       <Flex alignItems="center" maxW="md" margin="4">
-        {prompt && answers && index ?
+        {gotQuestion && prompt && answers && index ?
           <VStack>
             <Logo size={["32px", "50px"]} />
             <Question
@@ -57,7 +72,7 @@ export default function QuestionPage() {
           :
           <VStack>
             <Text fontSize={["sm", "md"]} margin={1} fontStyle="italic">
-              Waiting for question...
+              Waiting for next question...
             </Text>
             <Progress height="20px" width="100%" colorScheme="green" isIndeterminate />
           </VStack>

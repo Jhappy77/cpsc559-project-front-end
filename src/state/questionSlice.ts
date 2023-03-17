@@ -17,7 +17,8 @@ const questionStateSlice = createSlice({
   reducers: {
     submitQuestion: (state: QuestionState, action: Action): void => {
       // Updating this timestamp tells useSubmitAnswer if
-      if(state.answer === undefined) {
+      console.log(`in submitQuestion slice, ${state.answer}`);
+      if (state.answer === undefined) {
         return;
       }
       state.submittedAnswerTrue = false;
