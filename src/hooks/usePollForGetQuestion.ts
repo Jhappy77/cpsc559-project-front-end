@@ -7,7 +7,6 @@ import { setGotQuestion, incrementPollGetQuestionCount } from "../state/gameSlic
 
 export function usePollForGetQuestion() {
   const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount } = useAppSelector(state => state.game);
-  let hasGotQuestion = gotQuestion;
   const dispatch = useAppDispatch();
   const [pollTrigger, setPollTrigger] = useState(false);
   let pollGetQuestionTimeout: ReturnType<typeof setTimeout>;
@@ -34,7 +33,6 @@ export function usePollForGetQuestion() {
         if (status === 200) {
           dispatch(setGotQuestion(true));
           dispatch(setQuestion(data));
-          hasGotQuestion = true;
           console.log(`Got question data`);
         } else {
           throw new Error("No question data recieved");

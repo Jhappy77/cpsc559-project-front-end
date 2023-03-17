@@ -8,13 +8,13 @@ import { setGotQuestion } from "../state/gameSlice";
 // when someone submits an answer, dispatch an action that triggers a timestamp
 // need to validate their answer
 export function useNextQuestion() {
-  const { gameCode } = useAppSelector(state => state.game);
+  const { gameCode, gotQuestion } = useAppSelector(state => state.game);
   const { index } = useAppSelector(state => state.question);
-  const { name } = useAppSelector(state => state.player);
+  const { name, isHost } = useAppSelector(state => state.player);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    console.log("in useSubmitAnswer useEffect");
-    if (gameCode === undefined) return;
+    console.log("in useNextQuestion useEffect");
+    if (gameCode === undefined || isHost || gotQuestion) return;
     axios
       .put(`${API_URL}/question/${gameCode}`)
       .then(response => {
