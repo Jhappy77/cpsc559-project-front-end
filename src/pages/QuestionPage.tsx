@@ -4,25 +4,30 @@ import Question from "../components/Question";
 import Answer from "../components/Answer";
 import { useEffect, useState } from "react";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
-import { useAppSelector } from "../state/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
+import { submitQuestion, setQuestionAnswer } from "../state/questionSlice";
 
 export default function QuestionPage() {
 
   const { prompt, answers, index } = useAppSelector(state => state.question);
-  const [answer, setAnswer] = useState<string | undefined>(undefined);
+  const [answer, setAnswer] = useState<number | undefined>(undefined);
+  const dispatch = useAppDispatch();
 
   usePollForGetQuestion();
 
-  const submitAnswer = () => {
+  const submitAnswer = (event:React.MouseEvent) => {
     // Submit answer to backend
+    console.log("Player submitted answer");
+    dispatch(setQuestionAnswer(answer));
+    dispatch(submitQuestion());
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
     // Set answer state
     console.log("Settting answer");
-    console.log(event);
-    console.log((event.target as HTMLButtonElement).getAttribute('id'));
-    // setAnswer(event.currentTarget.getAttribute("id"));
+    console.log(event.currentTarget.id);
+    //console.log((event.target as HTMLButtonElement).getAttribute('id'));
+    setAnswer(Number(event.currentTarget.id));
   }
 
   return (
@@ -43,10 +48,10 @@ export default function QuestionPage() {
               title={`Question ${index ? `#${index}` : ""}`}
               text={prompt ? prompt : ""}
             />
-            <Answer setAnswer={handleSetAnswer} id="1" background="red" text={answers?.at(0)} />
-            <Answer setAnswer={handleSetAnswer} id="2" background="blue" text={answers?.at(1)} />
-            <Answer setAnswer={handleSetAnswer} id="3" background="green" text={answers?.at(2)} />
-            <Answer setAnswer={handleSetAnswer} id="4" background="orange" text={answers?.at(3)} />
+            <Answer setAnswer={handleSetAnswer} id="0" background="red" text={answers?.at(0)} />
+            <Answer setAnswer={handleSetAnswer} id="1" background="blue" text={answers?.at(1)} />
+            <Answer setAnswer={handleSetAnswer} id="2" background="green" text={answers?.at(2)} />
+            <Answer setAnswer={handleSetAnswer} id="3" background="orange" text={answers?.at(3)} />
             <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
           </VStack>
           :

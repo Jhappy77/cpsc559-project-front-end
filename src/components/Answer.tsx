@@ -6,6 +6,7 @@ export default function Answer(props: { id: string; background: string; text: st
   return (
     <Button onClick={props.setAnswer}
       background={props.background}
+      id={props.id}
       color="white"
       width="100%"
       justifyContent="flex-start"
