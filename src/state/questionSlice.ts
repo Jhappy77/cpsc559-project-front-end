@@ -34,10 +34,15 @@ const questionStateSlice = createSlice({
     },
     setQuestionAnswer:(state: QuestionState, action: PayloadAction<number | undefined>): void => {
       state.answer = action.payload;
+    },
+    incrementQuestionIndex:(state: QuestionState, action: PayloadAction<number>): void => {
+      if (state.index !== undefined) {
+        state.index = state.index + action.payload;
+      }
     }
   },
 })
 
-export const { submitQuestion, setQuestion, setQuestionAnswer } = questionStateSlice.actions;
+export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex } = questionStateSlice.actions;
 
 export const questionSliceReducer = questionStateSlice.reducer;

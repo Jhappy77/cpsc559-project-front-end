@@ -5,7 +5,7 @@ import Answer from "../components/Answer";
 import { useEffect, useState } from "react";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import { submitQuestion, setQuestionAnswer } from "../state/questionSlice";
+import { submitQuestion, setQuestionAnswer, incrementQuestionIndex } from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 
@@ -13,6 +13,7 @@ export default function QuestionPage() {
 
   const { prompt, answers, index } = useAppSelector(state => state.question);
   const { gotQuestion } = useAppSelector(state => state.game);
+  const { isHost } = useAppSelector(state => state.player);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [hasCurrentQuestion, setHasCurrentQuestion] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -20,19 +21,19 @@ export default function QuestionPage() {
   usePollForGetQuestion();
   useSubmitAnswer();
 
-  // useEffect(() => {
-  //   if (gotQuestion) {
-  //     setHasCurrentQuestion(true);
-  //   } else {
-  //     setHasCurrentQuestion(false);
-  //   }
-  // }, [gotQuestion]);
-
   const submitAnswer = (event:React.MouseEvent) => {
     // Submit answer to backend
     console.log("Player submitted answer");
     dispatch(setQuestionAnswer(answer));
     dispatch(submitQuestion());
+    // setGotQuestion(false);
+    // setHasCurrentQuestion(false);
+  }
+
+  const nextQuestion = (event:React.MouseEvent) => {
+    // Submit answer to backend
+    console.log("Next question button pressed");
+    dispatch(incrementQuestionIndex(1));
     // setGotQuestion(false);
     // setHasCurrentQuestion(false);
   }
@@ -67,7 +68,11 @@ export default function QuestionPage() {
             <Answer setAnswer={handleSetAnswer} id="1" background="blue" text={answers?.at(1)} />
             <Answer setAnswer={handleSetAnswer} id="2" background="green" text={answers?.at(2)} />
             <Answer setAnswer={handleSetAnswer} id="3" background="orange" text={answers?.at(3)} />
-            <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
+            {isHost ?
+              <Button onClick={nextQuestion} alignSelf="end">Next Question</Button>
+            :
+              <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
+             }
           </VStack>
           :
           <VStack>
