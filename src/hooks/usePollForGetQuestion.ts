@@ -32,6 +32,7 @@ export function usePollForGetQuestion() {
       .then(response => {
         const { status, data } = response;
         if (status === 200) {
+          console.log("status 200 on usePollForGetQuestion");
           if (requestNextQuestion && index && (index - 1) === data.index) {
             console.log("Already answered this question");
             return;
@@ -48,7 +49,7 @@ export function usePollForGetQuestion() {
         console.log(`API Call to: /games/question/${gameCode}, response: ${status}`);
       })
       .catch(reason => {
-        console.error("Unhandled error in useGetQuestion");
+        console.error("Unhandled error in usePollForGetQuestion");
         console.error(reason);
       });
   }, [pollGetQuestionCount]);
