@@ -46,7 +46,6 @@ export default function QuestionPage() {
     console.log(event.currentTarget.id);
     //console.log((event.target as HTMLButtonElement).getAttribute('id'));
     setAnswer(Number(event.currentTarget.id));
-    event.currentTarget.
   }
 
   return (
