@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
-import { submitQuestion } from "../state/questionSlice";
+import { setSubmittedAnswerTrue } from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
@@ -24,6 +24,7 @@ export function useSubmitAnswer() {
         if (status === 200) {
           console.log("Answer submitted successfully");
           dispatch(setGotQuestion(false));
+          dispatch(setSubmittedAnswerTrue(undefined));
         } else {
           throw new Error("Answer not submitted");
         }

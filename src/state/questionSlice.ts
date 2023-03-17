@@ -9,7 +9,9 @@ export interface QuestionState {
   index?: number;
 }
 
-export const defaultQuestionState: QuestionState = {};
+export const defaultQuestionState: QuestionState = {
+  submittedAnswerTrue: undefined
+};
 
 const questionStateSlice = createSlice({
   name: "codeSlice",
@@ -39,10 +41,13 @@ const questionStateSlice = createSlice({
       if (state.index !== undefined) {
         state.index = state.index + action.payload;
       }
+    },
+    setSubmittedAnswerTrue: (state: QuestionState, action: PayloadAction<boolean | undefined>): void => {
+      state.submittedAnswerTrue = action.payload;
     }
   },
 })
 
-export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex } = questionStateSlice.actions;
+export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex, setSubmittedAnswerTrue } = questionStateSlice.actions;
 
 export const questionSliceReducer = questionStateSlice.reducer;
