@@ -86,10 +86,26 @@ export default function QuestionPage() {
               title={`Question ${index ? `#${index}` : ""}`}
               text={prompt ? prompt : ""}
             />
-            <Answer setAnswer={handleSetAnswer} id="0" background="red" text={answers?.at(0)} />
-            <Answer setAnswer={handleSetAnswer} id="1" background="blue" text={answers?.at(1)} />
-            <Answer setAnswer={handleSetAnswer} id="2" background="green" text={answers?.at(2)} />
-            <Answer setAnswer={handleSetAnswer} id="3" background="orange" text={answers?.at(3)} />
+            <Answer setAnswer={handleSetAnswer}
+              id="0"
+              background="red"
+              opacity={answer === 0 ? "100%" : "50%"}
+              text={answers?.at(0)} />
+            <Answer setAnswer={handleSetAnswer}
+              id="1"
+              background="blue"
+              opacity={answer === 1 ? "100%" : "50%"}
+              text={answers?.at(1)} />
+            <Answer setAnswer={handleSetAnswer}
+              id="2"
+              background="green"
+              opacity={answer === 2 ? "100%" : "50%"}
+              text={answers?.at(2)} />
+            <Answer setAnswer={handleSetAnswer}
+              id="3"
+              background="orange"
+              opacity={answer === 3 ? "100%" : "50%"}
+              text={answers?.at(3)} />
             {isHost ?
               <Button onClick={nextQuestion} alignSelf="end" fontWeight="extrabold" shadow="lg" border="4px">Next Question</Button>
             :
