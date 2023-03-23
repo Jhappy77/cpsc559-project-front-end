@@ -21,6 +21,7 @@ export function usePollForGetQuestion() {
       clearTimeout(pollGetQuestionTimeout);
     } else {
       // Keep polling for startGame
+      clearTimeout(pollGetQuestionTimeout);
       pollGetQuestionTimeout = setTimeout(togglePollTrigger, 1000);
     }
   }, [pollTrigger, gotQuestion]);
