@@ -24,13 +24,16 @@ export default function QuestionPage() {
   useNextQuestion();
 
   const submitAnswer = (event:React.MouseEvent) => {
-    // Submit answer to backend
-    console.log("Player submitted answer");
-    dispatch(setQuestionAnswer(answer));
-    dispatch(submitQuestion());
-    dispatch(setRequestNextQuestion(true));
-    // setGotQuestion(false);
-    // setHasCurrentQuestion(false);
+    if (answer) {
+      // Submit answer to backend
+      console.log("Player submitted answer");
+      dispatch(setQuestionAnswer(answer));
+      dispatch(submitQuestion());
+      dispatch(setRequestNextQuestion(true));
+      setAnswer(undefined);
+    } else {
+      console.log("No selected answer to submit");
+    }
   }
 
   const nextQuestion = (event:React.MouseEvent) => {
@@ -48,6 +51,21 @@ export default function QuestionPage() {
     console.log(event.currentTarget.id);
     //console.log((event.target as HTMLButtonElement).getAttribute('id'));
     setAnswer(Number(event.currentTarget.id));
+  }
+
+  const getAnswerColor = () => {
+    switch (answer) {
+      case 0:
+        return "red";
+      case 1:
+        return "blue";
+      case 2:
+        return "green";
+      case 3:
+        return "orange"
+      default:
+        return "white"
+    }
   }
 
   return (
@@ -73,9 +91,20 @@ export default function QuestionPage() {
             <Answer setAnswer={handleSetAnswer} id="2" background="green" text={answers?.at(2)} />
             <Answer setAnswer={handleSetAnswer} id="3" background="orange" text={answers?.at(3)} />
             {isHost ?
-              <Button onClick={nextQuestion} alignSelf="end">Next Question</Button>
+              <Button onClick={nextQuestion} alignSelf="end" fontWeight="extrabold" shadow="lg" border="4px">Next Question</Button>
             :
-              <Button onClick={submitAnswer} alignSelf="end">Submit</Button>
+              <Button onClick={submitAnswer}
+                isDisabled={answer === undefined}
+                alignSelf="end"
+                fontWeight="extrabold"
+                fontSize="xl"
+                color={getAnswerColor()}
+                shadow="lg"
+                border={answer !== undefined ? "4px" : "0px"}
+                borderColor={getAnswerColor()}
+              >
+                Submit
+              </Button>
              }
           </VStack>
           :
