@@ -2,6 +2,7 @@ import { Flex, VStack, Button, Text, Progress } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
+import GameCode from "../components/GameCode";
 import { useEffect, useState } from "react";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
@@ -13,7 +14,7 @@ import { useNextQuestion } from "../hooks/useNextQuestion"
 export default function QuestionPage() {
 
   const { prompt, answers, index } = useAppSelector(state => state.question);
-  const { gotQuestion } = useAppSelector(state => state.game);
+  const { gotQuestion, gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [hasCurrentQuestion, setHasCurrentQuestion] = useState<boolean>(false);
@@ -63,6 +64,11 @@ export default function QuestionPage() {
         {gotQuestion && prompt && answers && index ?
           <VStack>
             <Logo size={["32px", "50px"]} />
+            {isHost ?
+              <GameCode id={gameCode}></GameCode>
+            :
+              null
+             }
             <Question
               id="1"
               title={`Question ${index ? `#${index}` : ""}`}
