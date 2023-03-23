@@ -1,4 +1,4 @@
-import { Card, CardHeader, Heading, CardBody, Text } from "@chakra-ui/react";
+import { Card, CardBody, Text } from "@chakra-ui/react";
 
 export default function GameCode(props: { id: string | undefined; }) {
   return (
