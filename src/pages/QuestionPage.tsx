@@ -138,7 +138,7 @@ export default function QuestionPage() {
   }
 
   const selectedAnswer = (answer: number | undefined, index: number) => {
-    if (index === answer){
+    if (index === answer && !isHost){
       return true;
     }
     return false;
