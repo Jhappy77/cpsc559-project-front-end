@@ -1,4 +1,4 @@
-import { Flex, VStack, Button, Text, Progress } from "@chakra-ui/react";
+import { Flex, VStack, Button, Text, Progress, UnorderedList } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
@@ -20,6 +20,7 @@ export default function QuestionPage() {
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
+  const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
 
@@ -33,6 +34,7 @@ export default function QuestionPage() {
     setAnswerArr(["red", "blue", "green", "orange"]);
     setShowAnswerButtonClicked(false);
     setTimeExpired(false);
+    setAnswer(undefined);
     // Stops polling for next question 
     if (!isHost){
       clearInterval(pollNextQuestionIntervalID.current);
@@ -53,6 +55,7 @@ export default function QuestionPage() {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
     if (timeExpired && !isHost){
+      setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
       const interval = setInterval(() => {
@@ -83,14 +86,15 @@ export default function QuestionPage() {
   }
 
   const submitAnswer = (event:React.MouseEvent) => {
-    if (answer) {
+    if (answer !== undefined) {
       // Submit answer to backend
       console.log("Player submitted answer");
       dispatch(setQuestionAnswer(answer));
       dispatch(submitQuestion());
       dispatch(setRequestNextQuestion(true));
-      setAnswer(undefined);
+      setAnswered(true);
     } else {
+      alert("Please select one of the choices before submitting");
       console.log("No selected answer to submit");
     }
   }
@@ -120,10 +124,17 @@ export default function QuestionPage() {
       case 2:
         return "green";
       case 3:
-        return "orange"
+        return "orange";
       default:
         return "white"
     }
+  }
+
+  const selectedAnswer = (answer: number | undefined, index: number) => {
+    if (index === answer){
+      return true;
+    }
+    return false;
   }
 
   return (
@@ -147,35 +158,42 @@ export default function QuestionPage() {
             />
             <Answer setAnswer={handleSetAnswer}
               id="0"
-              background="red"
-              opacity={answer === 0 ? "100%" : "50%"}
+              background={answerArr[0]}
+              selected={selectedAnswer(answer, 0)}
+              disabled={answered}
               text={answers?.at(0)} />
             <Answer setAnswer={handleSetAnswer}
               id="1"
-              background="blue"
-              opacity={answer === 1 ? "100%" : "50%"}
+              background={answerArr[1]}
+              selected={selectedAnswer(answer, 1)}
+              disabled={answered}
               text={answers?.at(1)} />
             <Answer setAnswer={handleSetAnswer}
               id="2"
-              background="green"
-              opacity={answer === 2 ? "100%" : "50%"}
+              background={answerArr[2]}
+              selected={selectedAnswer(answer, 2)}
+              disabled={answered}
               text={answers?.at(2)} />
             <Answer setAnswer={handleSetAnswer}
               id="3"
-              background="orange"
-              opacity={answer === 3 ? "100%" : "50%"}
+              background={answerArr[3]}
+              selected={selectedAnswer(answer, 3)}
+              disabled={answered}
               text={answers?.at(3)} />
             {isHost ?
-              <Button onClick={nextQuestion} alignSelf="end" fontWeight="extrabold" shadow="lg" border="4px">Next Question</Button>
+              timeExpired &&
+              <Flex>
+                 <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
+                 {!showAnswerButtonClicked && <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>}
+              </Flex>
             :
+              !timeExpired && !answered && 
               <Button onClick={submitAnswer}
-                isDisabled={answer === undefined}
                 alignSelf="end"
                 fontWeight="extrabold"
                 fontSize="xl"
                 color={getAnswerColor()}
-                shadow="lg"
-                border={answer !== undefined ? "4px" : "0px"}
+                border="4px"
                 borderColor={getAnswerColor()}
               >
                 Submit
