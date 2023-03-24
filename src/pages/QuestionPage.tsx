@@ -133,7 +133,7 @@ export default function QuestionPage() {
       case 3:
         return "orange";
       default:
-        return "white"
+        return ""
     }
   }
 
