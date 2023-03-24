@@ -3,6 +3,7 @@ import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
 import { useEffect, useRef, useState } from "react";
+import GameCode from "../components/GameCode";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { submitQuestion, setQuestionAnswer, submitQuestionExpired } from "../state/questionSlice";
@@ -14,12 +15,14 @@ import Timer from "../components/Timer";
 export default function QuestionPage() {
 
   const { prompt, answers, index, correctAnswer } = useAppSelector(state => state.question);
+  const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const { secondsLeft } = useAppSelector(state => state.time); 
   const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
+  const [requestNextQuestionButtonPressed, setRequestNextQuestionButtonPressed] = useState<boolean>(false);
   const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -35,6 +38,7 @@ export default function QuestionPage() {
     setShowAnswerButtonClicked(false);
     setTimeExpired(false);
     setAnswer(undefined);
+    setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
     if (!isHost){
       clearInterval(pollNextQuestionIntervalID.current);
@@ -101,8 +105,11 @@ export default function QuestionPage() {
 
   const nextQuestion = (event:React.MouseEvent) => {
     // Submit answer to backend
-    console.log("Next question button pressed");
-    dispatch(setRequestNextQuestion(true));
+    if (!requestNextQuestionButtonPressed){
+      console.log("Next question button pressed");
+      dispatch(setRequestNextQuestion(true));
+      setRequestNextQuestionButtonPressed(true);
+    }
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
@@ -150,6 +157,7 @@ export default function QuestionPage() {
         {prompt && answers && index ?
           <VStack>
             <Logo size={["32px", "50px"]} />
+            {isHost && <GameCode id={gameCode}></GameCode>}
             <Timer index={index}/>
             <Question
               id="1"
