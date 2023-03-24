@@ -5,20 +5,31 @@ import { useEffect } from "react";
 import { API_URL } from "../settings";
 import { setGameCode, createGame } from "../state/gameSlice";
 import { joinGameRoomAsHostAction } from "../state/socketActions/joinGameRoomAction";
+// import cookieParser from "cookie-parser";
+
+//import { cookieParser } from "cookie-parser";
 
 export function useCreateGame() {
   const { gameCreationCallTs } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (!gameCreationCallTs) return;
     const generatedGameCode = uuidv4().substring(0,5);
     axios
-      .post(`${API_URL}/games/${generatedGameCode}`)
+      .post(`${API_URL}/games/${generatedGameCode}`, ``,
+        {
+          withCredentials: true,
+          headers: {
+            Cookie: ""
+          }
+        })
       .then(response => {
         const gameCode = response.data.joinCode;
         if (gameCode) {
           dispatch(setGameCode(gameCode));
           dispatch(joinGameRoomAsHostAction(gameCode));
+          // response.cookie('hello');
           console.log("Joined game!");
         } else throw new Error("No game code recieved");
       })
