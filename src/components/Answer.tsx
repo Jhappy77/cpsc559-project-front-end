@@ -1,13 +1,13 @@
 import { Button } from "@chakra-ui/react";
 import { MouseEventHandler } from "react";
 
-export default function Answer(props: { id: string; background: string; text: string | undefined, setAnswer: React.MouseEventHandler<HTMLButtonElement> }) {
+export default function Answer(props: { id: string; background: string; opacity: string; text: string | undefined, setAnswer: React.MouseEventHandler<HTMLButtonElement> }) {
 
   return (
     <Button onClick={props.setAnswer}
-      _focus={{ background: "lightgrey", color: "black" }}
       background={props.background}
       id={props.id}
+      opacity={props.opacity}
       color="white"
       width="100%"
       justifyContent="flex-start"
