@@ -23,7 +23,7 @@ export default function QuestionPage() {
   useSubmitAnswer();
   useNextQuestion();
 
-  const submitAnswer = (event:React.MouseEvent) => {
+  const submitAnswer = (event: React.MouseEvent) => {
     if (answer !== undefined) {
       // Submit answer to backend
       console.log("Player submitted answer");
@@ -36,7 +36,7 @@ export default function QuestionPage() {
     }
   }
 
-  const nextQuestion = (event:React.MouseEvent) => {
+  const nextQuestion = (event: React.MouseEvent) => {
     // Submit answer to backend
     console.log("Next question button pressed");
     // dispatch(incrementQuestionIndex(1));
@@ -108,7 +108,7 @@ export default function QuestionPage() {
               text={answers?.at(3)} />
             {isHost ?
               <Button onClick={nextQuestion} alignSelf="end" fontWeight="extrabold" shadow="lg" border="4px">Next Question</Button>
-            :
+              :
               <Button onClick={submitAnswer}
                 isDisabled={answer === undefined}
                 alignSelf="end"
@@ -121,7 +121,7 @@ export default function QuestionPage() {
               >
                 Submit
               </Button>
-             }
+            }
           </VStack>
           :
           <VStack>
