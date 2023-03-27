@@ -74,57 +74,57 @@ export default function JoinPage() {
           <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8} colorScheme="whiteAlpha" color="white">
             Back
           </Button>
-            <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
-              <FormControl>
-                <Input
-                  fontWeight={"bold"}
-                  value={name}
-                  onChange={handleNameChange}
-                  maxLength={MAX_NAME_LENGTH}
-                  border="2px"
-                  borderColor="white"
-                  focusBorderColor="white"
-                  placeholder="Enter your name here"
-                  _placeholder={{ color: "white" }}
-                  color="white"
-                  fontSize={["lg", "2xl"]}
-                  padding={6}
-                  my={2}
-                  mx={3}
-                  width={["90%", "100%"]}
-                />
-                <Input
-                  fontWeight={"bold"}
-                  value={gameCode}
-                  onChange={handleCodeChange}
-                  maxLength={CODE_LENGTH}
-                  border="2px"
-                  borderColor="white"
-                  focusBorderColor="white"
-                  placeholder="Enter code here"
-                  _placeholder={{ color: "white" }}
-                  fontSize={["lg", "2xl"]}
-                  padding={6}
-                  my={2}
-                  mx={3}
-                  width={["90%", "100%"]}
-                />
+          <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
+            <FormControl>
+              <Input
+                fontWeight={"bold"}
+                value={name}
+                onChange={handleNameChange}
+                maxLength={MAX_NAME_LENGTH}
+                border="2px"
+                borderColor="white"
+                focusBorderColor="white"
+                placeholder="Enter your name here"
+                _placeholder={{ color: "white" }}
+                color="white"
+                fontSize={["lg", "2xl"]}
+                padding={6}
+                my={2}
+                mx={3}
+                width={["90%", "100%"]}
+              />
+              <Input
+                fontWeight={"bold"}
+                value={gameCode}
+                onChange={handleCodeChange}
+                maxLength={CODE_LENGTH}
+                border="2px"
+                borderColor="white"
+                focusBorderColor="white"
+                placeholder="Enter code here"
+                _placeholder={{ color: "white" }}
+                fontSize={["lg", "2xl"]}
+                padding={6}
+                my={2}
+                mx={3}
+                width={["90%", "100%"]}
+              />
               <Button
-                  onClick={handleSubmit}
-                  colorScheme="whiteAlpha"
-                  borderColor="white"
-                  type="submit"
-                  color="white"
-                  fontSize={["lg", "2xl"]}
-                  _hover={{ backgroundColor: "white", color: "black" }}
-                  my={2}
-                  mx={1}
-                  padding={6}
-                >
-                  Submit
-                </Button>
-              </FormControl>
-            </Flex>
+                onClick={handleSubmit}
+                colorScheme="whiteAlpha"
+                borderColor="white"
+                type="submit"
+                color="white"
+                fontSize={["lg", "2xl"]}
+                _hover={{ backgroundColor: "white", color: "black" }}
+                my={2}
+                mx={1}
+                padding={6}
+              >
+                Submit
+              </Button>
+            </FormControl>
+          </Flex>
           <VStack display={hasJoinedGame ? "flex" : "none"} width="100%">
             <Text fontFamily={`'Open Sans', sans-serif`} fontSize="2xl">
               Waiting for host to start the game...

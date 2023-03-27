@@ -1,9 +1,12 @@
 import { Button, Flex, VStack } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function StartPage() {
   const navigate = useNavigate();
+  const hasGameHostCookies = Cookies.get('isHost') !== undefined;
+  console.log('isHost cookie from start page: ' + Cookies.get('isHost'));
 
   return (
     <Flex
@@ -29,6 +32,15 @@ export default function StartPage() {
           >
             JOIN A GAME
           </Button>
+          {hasGameHostCookies && <Button
+            color="white"
+            padding={8}
+            fontSize={["large", "2xl"]}
+            colorScheme="whiteAlpha"
+            onClick={() => navigate("/question")}
+          >
+            REJOIN GAME AS HOST
+          </Button>}
         </VStack>
       </Flex>
     </Flex>
