@@ -1,13 +1,14 @@
 import { Button } from "@chakra-ui/react";
 import { MouseEventHandler } from "react";
 
-export default function Answer(props: { id: string; background: string; opacity: string; text: string | undefined, setAnswer: React.MouseEventHandler<HTMLButtonElement> }) {
+export default function Answer(props: { id: string; background: string; selected: boolean, text: string | undefined, disabled: boolean, setAnswer: React.MouseEventHandler<HTMLButtonElement> }) {
 
   return (
     <Button onClick={props.setAnswer}
       background={props.background}
       id={props.id}
-      opacity={props.opacity}
+      isDisabled={props.disabled}
+      border={props.selected ? "4px": "0px"}
       color="white"
       width="100%"
       justifyContent="flex-start"
