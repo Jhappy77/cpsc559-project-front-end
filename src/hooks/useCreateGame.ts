@@ -32,5 +32,5 @@ export function useCreateGame() {
           console.error(reason);
         }  
       });
-  }, [gameCreationCallTs, dispatch]);
+  }, [gameCreationCallTs]);
 }
