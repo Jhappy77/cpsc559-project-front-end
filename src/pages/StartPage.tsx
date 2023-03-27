@@ -5,8 +5,14 @@ import Cookies from "js-cookie";
 
 export default function StartPage() {
   const navigate = useNavigate();
-  const hasGameHostCookies = Cookies.get('isHost') !== undefined;
+  const hasGameHostCookies = Cookies.get('isHost') === `true`;
   console.log('isHost cookie from start page: ' + Cookies.get('isHost'));
+
+  const RejoinAsHost = () => {
+    // set this property to true in the state
+    // that should then trigger a hook to reset the state back to where it was
+    // navigate to questionPage
+  };
 
   return (
     <Flex
@@ -37,7 +43,7 @@ export default function StartPage() {
             padding={8}
             fontSize={["large", "2xl"]}
             colorScheme="whiteAlpha"
-            onClick={() => navigate("/question")}
+            onClick={RejoinAsHost}
           >
             REJOIN GAME AS HOST
           </Button>}

@@ -26,6 +26,7 @@ export function useStartGame() {
           // Set cookies with game code and player name
           Cookies.set(`gameCode`, `${gameCode}`);
           Cookies.set(`gameStarted`, `${gameStarted}`);
+          Cookies.set(`isHost`, `true`);
           console.log('gameCode cookie: ' + Cookies.get('gameCode'));
         }
       });
