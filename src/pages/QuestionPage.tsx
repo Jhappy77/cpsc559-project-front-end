@@ -24,7 +24,7 @@ export default function QuestionPage() {
   useNextQuestion();
 
   const submitAnswer = (event:React.MouseEvent) => {
-    if (answer) {
+    if (answer !== undefined) {
       // Submit answer to backend
       console.log("Player submitted answer");
       dispatch(setQuestionAnswer(answer));
