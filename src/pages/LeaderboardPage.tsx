@@ -1,23 +1,23 @@
-import {
-  Flex,
-  VStack,
-  Card,
-  Button,
-  Box,
-  Text,
-  TableContainer,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-} from "@chakra-ui/react";
+import { Flex,VStack,Card,Button,Box,Text,TableContainer,Table,TableCaption,
+  Thead,Tr,Th,Tbody,} from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import PlayerScore from "../components/PlayerScore";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 
 export default function LeaderboardPage() {
+  
+  const dispatch = useAppDispatch();
+  const leaders [] : Array<string> = dispatch();
+
+  const handleGetLeader = () => {
+    // Set answer state
+    console.log("Settting answer");
+    console.log(event.currentTarget.id);
+    //console.log((event.target as HTMLButtonElement).getAttribute('id'));
+    setAnswer(Number(event.currentTarget.id));
+  }
+
   return (
     <Flex
       backgroundImage="linear-gradient(to bottom right, green, yellow)"
