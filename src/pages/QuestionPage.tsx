@@ -11,6 +11,7 @@ import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion"
 import Timer from "../components/Timer";
+import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
 
 export default function QuestionPage() {
 
@@ -30,6 +31,8 @@ export default function QuestionPage() {
   usePollForGetQuestion();
   useSubmitAnswer();
   useNextQuestion();
+  // This enables the host to rejoin on reload
+  useRejoinAsHost();
 
   useEffect(() => {
     // Resets flags on page once index changes

@@ -5,12 +5,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface PlayerState {
   name?: string;
   isHost: boolean;
+  rejoinAsHost: boolean;
   // score: number; // example
 }
 
 export const defaultPlayerState: PlayerState = {
   name: `The Champion (a.k.a. Joel)`,
   isHost: false,
+  rejoinAsHost: false,
 };
 
 const playerStateSlice = createSlice({
@@ -25,6 +27,9 @@ const playerStateSlice = createSlice({
     setIsHost: (state: PlayerState, action: PayloadAction<boolean>): void => {
       state.isHost = action.payload;
     },
+    setRejoinAsHost: (state: PlayerState, action: PayloadAction<boolean>): void => {
+      state.rejoinAsHost = action.payload;
+    },
     // Example:
     // setScore: (state: PlayerState, action: PayloadAction<string>): void => {
     //     state.name = action.payload;
@@ -33,6 +38,6 @@ const playerStateSlice = createSlice({
   },
 });
 
-export const { setPlayerName, setIsHost /*setPlayerScore*/ } = playerStateSlice.actions;
+export const { setPlayerName, setIsHost, setRejoinAsHost /*setPlayerScore*/ } = playerStateSlice.actions;
 
 export const playerSliceReducer = playerStateSlice.reducer;

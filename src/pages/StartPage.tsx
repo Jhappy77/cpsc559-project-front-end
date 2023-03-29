@@ -2,16 +2,24 @@ import { Button, Flex, VStack } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useAppDispatch } from "../state/reduxHooks";
+import { setRejoinAsHost } from "../state/playerSlice";
+import { setGameCode, setGameStarted } from "../state/gameSlice";
 
 export default function StartPage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const hasGameHostCookies = Cookies.get('isHost') === `true`;
-  console.log('isHost cookie from start page: ' + Cookies.get('isHost'));
+
+  // Whenever we return to the start page, we need to reset the state
+  // of these values to not trigger hooks prematurely
+  dispatch(setRejoinAsHost(false));
+  dispatch(setGameStarted(false));
+  dispatch(setGameCode(undefined));
 
   const RejoinAsHost = () => {
-    // set this property to true in the state
-    // that should then trigger a hook to reset the state back to where it was
-    // navigate to questionPage
+    dispatch(setRejoinAsHost(true));
+    navigate('/question');
   };
 
   return (
