@@ -28,6 +28,10 @@ const questionStateSlice = createSlice({
         state.submittedAnswerTrue = true;
       }
     },
+    submitQuestionExpired: (state: QuestionState, action: Action): void => {
+      // submit to backend that user could not answer question in allotted time
+      state.submittedAnswerTrue = false;
+    },
     setQuestion: (state: QuestionState, action: PayloadAction<any>): void => {
       state.prompt = action.payload.prompt;
       state.correctAnswer = action.payload.correctAnswerIndex;
@@ -48,6 +52,6 @@ const questionStateSlice = createSlice({
   },
 })
 
-export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex, setSubmittedAnswerTrue } = questionStateSlice.actions;
+export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex, setSubmittedAnswerTrue, submitQuestionExpired } = questionStateSlice.actions;
 
 export const questionSliceReducer = questionStateSlice.reducer;

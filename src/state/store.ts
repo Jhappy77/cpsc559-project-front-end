@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { defaultGameState, gameSliceReducer, GameState } from "./gameSlice";
 import { defaultPlayerState, playerSliceReducer, PlayerState } from "./playerSlice";
 import { defaultQuestionState, questionSliceReducer, QuestionState } from "./questionSlice";
+import { defaultTimeState, timeSliceReducer, TimeState } from "./timeSlice";
 import { defaultLeaderboardState, leaderboardSliceReducer, LeaderboardState } from "./leaderboardSlice";
 import socketMiddleware from "./socketMiddleware";
 
@@ -13,21 +14,24 @@ export interface StoreState {
   player: PlayerState;
   game: GameState;
   question: QuestionState;
+  time: TimeState;
   leaderboard: LeaderboardState;
 }
 
 const defaultStoreState: StoreState = {
   player: defaultPlayerState,
   game: defaultGameState,
-  question: defaultQuestionState, 
-  leaderboard: defaultLeaderboardState
+  question: defaultQuestionState,
+  leaderboard: defaultLeaderboardState,
+  time: defaultTimeState
 };
 
 const reducer = {
   player: playerSliceReducer,
   game: gameSliceReducer,
   question: questionSliceReducer,
-  leaderboard: leaderboardSliceReducer
+  leaderboard: leaderboardSliceReducer,
+  time: timeSliceReducer
 };
 
 export const store = configureStore({ reducer, preloadedState: defaultStoreState, middleware: [socketMiddleware()] });
