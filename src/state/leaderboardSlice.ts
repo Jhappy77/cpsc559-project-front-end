@@ -1,27 +1,34 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-// A slice is an independent part of the state that h
+import { act } from "react-dom/test-utils";
 
 export interface LeaderboardState {
-  leaders?: Array<string>;
-  scores?: Array<number>
+  leaders: string[]
+  scores: number[]
 }
 
-export const defaultPlayerState: LeaderboardState = {
-    leaders:undefined,
-    scores:undefined,
+export const defaultLeaderboardState: LeaderboardState = {
+    leaders: [],
+    scores: [],
 };
 
 const leaderboardStateSlice = createSlice({
   name: `playerSlice`,
-  initialState: defaultPlayerState,
+  initialState: defaultLeaderboardState,
   reducers: {
-    setLeaderboard: (state: LeaderboardState, action: PayloadAction<string | undefined>): void => {
-      
+    setLeaderboard: (state: LeaderboardState, action: PayloadAction<any>): void => {
+      console.log("leaderboard: ", action.payload.leaderboard);
+      action.payload.leaderboard.forEach((element : any) => {
+        const [ player, score ] = element.split(":");
+        console.log("Player and score: ", player, score);
+        state.leaders?.push(player);
+        state.scores?.push(Number(score));
+      });
+      console.log("leaders: ", state.leaders);
+      console.log("scores: ", state.scores);
     }
   },
 });
 
 export const { setLeaderboard } = leaderboardStateSlice.actions;
 
-export const playerSliceReducer = leaderboardStateSlice.reducer;
+export const leaderboardSliceReducer = leaderboardStateSlice.reducer;

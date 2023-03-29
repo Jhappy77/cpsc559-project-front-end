@@ -2,10 +2,11 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_URL } from "../settings";
-import { setQuestion } from "../state/questionSlice";
+import { setLeaderboard } from "../state/leaderboardSlice";
 
-export function usePollForGetQuestion() {
+export function usePollForGetLeaderboard() {
   const { gameCode } = useAppSelector(state => state.game);
+  const { leaders, scores } = useAppSelector(state => state.leaderboard);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -16,12 +17,9 @@ export function usePollForGetQuestion() {
         const { status, data } = response;
         if (status === 200) {
           console.log("status 200 on getting leaderboard");
+          console.log("leaderboard data: ", data);
+          dispatch(setLeaderboard(data));
 
-          // if check next question is true (set from question page)
-          // compare data.index to current index
-          // dispatch(setGotQuestion(true));
-          // dispatch(setQuestion(data));
-          // dispatch(setRequestNextQuestion(false));
         } else {
           throw new Error("No leaderboard data recieved");
         }
@@ -31,6 +29,13 @@ export function usePollForGetQuestion() {
         console.error("Unhandled error in usePollForGetLeaderboard");
         console.error(reason);
       });
-  }, [pollGetQuestionCount]);
+  }, [leaders, scores]);
+
+  useEffect(() => {
+    if (gameStarted) {
+      setStartGameButtonPressed(false); // reset flag
+      navigate("/question");
+    }
+  }, [gameStarted]);
 
 }

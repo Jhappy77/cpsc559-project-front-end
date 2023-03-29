@@ -4,18 +4,23 @@ import Logo from "../components/Logo";
 import PlayerScore from "../components/PlayerScore";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
+import { usePollForGetLeaderboard } from "../hooks/usePollForGetLeaderboard";
+import { setRequestNextQuestion } from "../state/gameSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LeaderboardPage() {
-  
-  const dispatch = useAppDispatch();
-  const leaders [] : Array<string> = dispatch();
 
-  const handleGetLeader = () => {
-    // Set answer state
-    console.log("Settting answer");
-    console.log(event.currentTarget.id);
-    //console.log((event.target as HTMLButtonElement).getAttribute('id'));
-    setAnswer(Number(event.currentTarget.id));
+  const { leaders, scores } = useAppSelector(state => state.leaderboard);
+  const dispatch  = useAppDispatch();
+  const navigate = useNavigate();
+  
+  usePollForGetLeaderboard();
+
+  const nextQuestion = (event:React.MouseEvent) => {
+    // Submit answer to backend
+    console.log("Next question button pressed");
+    dispatch(setRequestNextQuestion(true));
+    navigate("/question");
   }
 
   return (
@@ -47,20 +52,25 @@ export default function LeaderboardPage() {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <PlayerScore name="Jerome" score="25" />
-                    <PlayerScore name="BigDez" score="25" />
-                    <PlayerScore name="Vicalous" score="20" />
-                    <PlayerScore name="Jhappy" score="15" />
-                    <PlayerScore name="sebsucks" score="5" />
-                    <PlayerScore name="npc" score="0" />
+                    <PlayerScore name={leaders?.at(0)} score={scores?.at(0)?.toString()}/>
+                    <PlayerScore name={leaders?.at(1)} score={scores?.at(1)?.toString()}/>
+                    <PlayerScore name={leaders?.at(2)} score={scores?.at(2)?.toString()}/>
+                    <PlayerScore name={leaders?.at(3)} score={scores?.at(3)?.toString()}/>
+                    <PlayerScore name={leaders?.at(4)} score={scores?.at(4)?.toString()}/>
+                    <PlayerScore name={leaders?.at(5)} score={scores?.at(5)?.toString()}/>
+                    <PlayerScore name={leaders?.at(6)} score={scores?.at(6)?.toString()}/>
+                    <PlayerScore name={leaders?.at(7)} score={scores?.at(7)?.toString()}/>
+                    <PlayerScore name={leaders?.at(8)} score={scores?.at(8)?.toString()}/>
+                    <PlayerScore name={leaders?.at(9)} score={scores?.at(9)?.toString()}/>
                   </Tbody>
                 </Table>
               </TableContainer>
             </VStack>
           </Card>
           <Link to="/">
-            <Button color="white" padding={4} fontSize={["sm", "md"]} colorScheme="whiteAlpha">
-              Done
+            <Button color="white" padding={4} fontSize={["sm", "md"]} colorScheme="whiteAlpha"
+                    onClick={nextQuestion}>
+              Next Question
             </Button>
           </Link>
         </VStack>

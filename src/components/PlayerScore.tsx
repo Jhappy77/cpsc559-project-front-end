@@ -1,6 +1,6 @@
 import { Tr, Td } from "@chakra-ui/react";
 
-export default function PlayerScore(props: { name: string; score: string }) {
+export default function PlayerScore(props: { name: string | undefined; score: string | undefined }) {
   return (
     <Tr>
       <Td>{props.name}</Td>

@@ -6,9 +6,12 @@ import { useEffect, useState } from "react";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { submitQuestion, setQuestionAnswer } from "../state/questionSlice";
-import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
+import { setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion"
+import { setLeaderboard } from "../state/leaderboardSlice";
+import { usePollForGetLeaderboard } from "../hooks/usePollForGetLeaderboard";
+import { useNavigate } from "react-router-dom";
 
 export default function QuestionPage() {
 
@@ -16,8 +19,8 @@ export default function QuestionPage() {
   const { gotQuestion } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
-  const [hasCurrentQuestion, setHasCurrentQuestion] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   usePollForGetQuestion();
   useSubmitAnswer();
@@ -38,11 +41,8 @@ export default function QuestionPage() {
 
   const nextQuestion = (event:React.MouseEvent) => {
     // Submit answer to backend
-    console.log("Next question button pressed");
-    // dispatch(incrementQuestionIndex(1));
+    console.log("Leaderboard button pressed");
     dispatch(setRequestNextQuestion(true));
-    // setGotQuestion(false);
-    // setHasCurrentQuestion(false);
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
@@ -107,7 +107,12 @@ export default function QuestionPage() {
               opacity={answer === 3 ? "100%" : "50%"}
               text={answers?.at(3)} />
             {isHost ?
-              <Button onClick={nextQuestion} alignSelf="end" fontWeight="extrabold" shadow="lg" border="4px">Next Question</Button>
+              <Button onClick={() => navigate("/leaderboard")}
+                alignSelf="end" fontWeight="extrabold" 
+                shadow="lg" 
+                border="4px">
+                  Show Leaderboard
+                  </Button>
             :
               <Button onClick={submitAnswer}
                 isDisabled={answer === undefined}
