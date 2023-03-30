@@ -64,7 +64,7 @@ export default function QuestionPage() {
         {gotQuestion && prompt && answers && index ?
           <VStack>
             <Logo size={["32px", "50px"]} />
-            {isHost ?
+            {isHost &&
               <GameCode id={gameCode}></GameCode>
             :
               null
