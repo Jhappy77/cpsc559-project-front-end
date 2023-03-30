@@ -1,12 +1,12 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { API_URL } from "../settings";
 import { setLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 
 export function usePollForGetLeaderboard() {
   const { gameCode } = useAppSelector(state => state.game);
-  const { leaders, scores, requestUpdatedLeaderboard } = useAppSelector(state => state.leaderboard);
+  const { requestUpdatedLeaderboard } = useAppSelector(state => state.leaderboard);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -15,6 +15,7 @@ export function usePollForGetLeaderboard() {
       .get(`${API_URL}/games/leaderboard/${gameCode}`)
       .then(response => {
         const { status, data } = response;
+        console.log("UsePollForGetLeaderboard called");
         if (status === 200) {
           console.log("leaderboard data: ", data);
           dispatch(setLeaderboard(data));

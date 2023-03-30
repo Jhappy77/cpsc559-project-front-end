@@ -58,6 +58,7 @@ export default function QuestionPage() {
       setTimeExpired(true);
       dispatch(resetLeaderboard());
       dispatch(setRequestUpdatedLeaderboard(true));
+      console.log("setRequestUpdatedLeaderboard set to TRUE");
       return;
     }
     setTimeExpired(false);
@@ -117,7 +118,7 @@ export default function QuestionPage() {
       console.log("Next question button pressed");
       dispatch(setRequestNextQuestion(true));
       setRequestNextQuestionButtonPressed(true);
-      console.log("resetting leaderboard in nextQuestion");
+      // reset the leaderboard for the next question
       dispatch(resetLeaderboard());
       dispatch(setRequestUpdatedLeaderboard(false));
       setShowLeaderboardButtonClicked(false);
@@ -127,16 +128,17 @@ export default function QuestionPage() {
   const showQuestion = (event: React.MouseEvent) => {
     if (showLeaderboard) {
       setShowLeaderboardButtonClicked(false);
-      console.log("resetting leaderboard in showQuestion");
       setShowLeaderboardButtonClicked(false);
     }
   }
 
   const getLeaderboard = (event: React.MouseEvent) => {
     // Submit answer to backend
+    // reset the leaderboard if it has not already been reset
+    dispatch(resetLeaderboard());
     if (!showLeaderboard) {
       console.log("Show leaderboard button pressed");
-      //dispatch(setRequestUpdatedLeaderboard(true));
+      dispatch(setRequestUpdatedLeaderboard(true));
       setShowLeaderboardButtonClicked(true);
     }
   }
