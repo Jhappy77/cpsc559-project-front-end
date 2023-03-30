@@ -3,7 +3,7 @@ import useCountDown from '../hooks/useCountDown';
 import { useAppDispatch, useAppSelector } from '../state/reduxHooks';
 import { updateIndex, updateTargetTime, updateSecondsLeft } from '../state/timeSlice';
 
-const TIME_LIMIT_IN_SECONDS = 60;
+const TIME_LIMIT_IN_SECONDS = 10;
 const TIME_LIMIT_IN_MS = TIME_LIMIT_IN_SECONDS * 1000;
 
 export default function Timer(props: {index: number}){
@@ -24,7 +24,7 @@ export default function Timer(props: {index: number}){
 
 
     return (
-        <Card variant={'elevated'} width="100%" align="center" p={2}>
+        <Card variant={'elevated'} width="100%" align="center" p={2} m={2}>
             <p>Time left: <b>{secondsLeft}</b> seconds</p>
             <Progress m={2} height="20px" width="90%" colorScheme="green" hasStripe min={0} max={TIME_LIMIT_IN_SECONDS} value={secondsLeft}></Progress> 
         </Card>
