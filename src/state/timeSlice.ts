@@ -9,7 +9,7 @@ export interface TimeState {
 export const defaultTimeState: TimeState = {
     q_index: 0,
     targetTime: 0,
-    secondsLeft: 60
+    secondsLeft: 0
 }
 
 const timeStateSlice = createSlice({

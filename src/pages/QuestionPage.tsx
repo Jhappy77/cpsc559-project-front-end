@@ -12,8 +12,15 @@ import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion"
 import Timer from "../components/Timer";
 import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
+import Cookies from "js-cookie";
+import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
 
 export default function QuestionPage() {
+
+  usePollForGetQuestion();
+  useSubmitAnswer();
+  useNextQuestion();
+  useRejoinAsHost();
 
   const { prompt, answers, index, correctAnswer } = useAppSelector(state => state.question);
   const { gameCode } = useAppSelector(state => state.game);
@@ -28,20 +35,29 @@ export default function QuestionPage() {
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  usePollForGetQuestion();
-  useSubmitAnswer();
-  useNextQuestion();
-  // This enables the host to rejoin on reload
-  useRejoinAsHost();
+  let prevIndex = index;
+
+  // On refresh: Check for gameCode cookie, if it exists,
+  // attempt to rejoin at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost')) {
+    console.log(`In refresh if: ${secondsLeft}`);
+    dispatch(setRejoinAsHost(true));
+    dispatch(setIsHost(true));
+  }
 
   useEffect(() => {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
     setAnswerArr(["red", "blue", "green", "orange"]);
     setShowAnswerButtonClicked(false);
-    setTimeExpired(false);
+    console.log(`In useEffect index: ${index}`);
+    if (prevIndex !== undefined && index !== undefined) {
+      setTimeExpired(false);
+    }
+    // setTimeExpired(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
+    prevIndex = index;
     // Stops polling for next question 
     if (!isHost) {
       clearInterval(pollNextQuestionIntervalID.current);
@@ -51,7 +67,9 @@ export default function QuestionPage() {
   useEffect(() => {
     // sets timeExpired flag when secondsLeft reaches 0
     // otherwise sets the flag to false
+    console.log(`In useEffect seconds Left: ${secondsLeft}`);
     if (secondsLeft === 0) {
+      console.log(`IF In useEffect seconds Left: ${secondsLeft}`);
       setTimeExpired(true);
       return;
     }
