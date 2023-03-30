@@ -66,8 +66,6 @@ export default function QuestionPage() {
             <Logo size={["32px", "50px"]} />
             {isHost &&
               <GameCode id={gameCode}></GameCode>
-            :
-              null
              }
             <Question
               id="1"
