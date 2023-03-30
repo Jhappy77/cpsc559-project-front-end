@@ -6,11 +6,13 @@ export interface PlayerState {
   name?: string;
   isHost: boolean;
   score: number;
+  score: number;
 }
 
 export const defaultPlayerState: PlayerState = {
   name: `The Champion (a.k.a. Joel)`,
   isHost: false,
+  score: 0,
   score: 0,
 };
 
