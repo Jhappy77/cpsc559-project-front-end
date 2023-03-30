@@ -11,8 +11,8 @@ export default function StartPage() {
   const dispatch = useAppDispatch();
   const hasGameHostCookies = Cookies.get('isHost') === `true`;
 
-  // Whenever we return to the start page, we need to reset the state
-  // of these values to not trigger hooks prematurely
+  // Whenever we return to the start page, we should reset this state
+  // (this helps the cookie logic in particular)
   dispatch(setRejoinAsHost(false));
   dispatch(setGameStarted(false));
   dispatch(setGameCode(undefined));

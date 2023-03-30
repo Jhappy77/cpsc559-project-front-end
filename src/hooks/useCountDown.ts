@@ -1,25 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useCountDown = (targetTime: number) => {
+  const targetDate = new Date(targetTime).getTime();
+  const [countDown, setCountDown] = useState(targetDate - new Date().getTime());
 
-    const targetDate = new Date(targetTime).getTime();
-    console.log(`In useCountdown`);
-    const [countDown, setCountDown] = useState(
-        targetDate - new Date().getTime()
-    );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountDown(targetDate - new Date().getTime());
+    }, 1000);
 
-    useEffect(() => {
-        console.log(`In useCountdown useEffect`);
-        const interval = setInterval(() => {
-            setCountDown(targetDate - new Date().getTime());
-        }, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
 
-        return () => clearInterval(interval);
-
-    }, [targetDate]);
-
-    return Math.max(0, Math.floor((countDown % (1000 * 60)) / 1000)); // return countdown, convert from ms to s
-
-}
+  return Math.max(0, Math.floor((countDown % (1000 * 60)) / 1000)); // return countdown, convert from ms to s
+};
 
 export default useCountDown;

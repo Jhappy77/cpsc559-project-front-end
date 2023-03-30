@@ -5,7 +5,7 @@ import { updateIndex, updateTargetTime, updateSecondsLeft } from '../state/timeS
 import { setRejoinAsHost } from '../state/playerSlice';
 import Cookies from 'js-cookie';
 
-const TIME_LIMIT_IN_SECONDS = 20;
+const TIME_LIMIT_IN_SECONDS = 60;
 const TIME_LIMIT_IN_MS = TIME_LIMIT_IN_SECONDS * 1000;
 
 export default function Timer(props: { index: number }) {
@@ -13,17 +13,15 @@ export default function Timer(props: { index: number }) {
     const index = props.index;
     const { q_index } = useAppSelector(state => state.time);
     let { targetTime, secondsLeft } = useAppSelector(state => state.time);
-    // const { secondsLeft } = useAppSelector(state => state.time);
     const { rejoinAsHost } = useAppSelector(state => state.player);
     let rejoined = rejoinAsHost;
-    // let secondsLeftCookie = Cookies.get('secondsLeft');
-    console.log(`Timer.tsx, Rejoined: ${rejoined}`);
+
     // if new question, start timer by creating new target time
     if (index !== q_index && index !== undefined) {
         const timeNow = new Date().getTime();
         targetTime = timeNow + TIME_LIMIT_IN_MS;
+        // Check if the host has just rejoined the game
         if (rejoined) {
-            console.log(`In rejoinsAsHostTrueTimer, target time: ${targetTime}`);
             dispatch(setRejoinAsHost(false));
             rejoined = false;
             targetTime = timeNow + secondsLeft*1000;
@@ -35,7 +33,6 @@ export default function Timer(props: { index: number }) {
     dispatch(updateSecondsLeft(secondsLeft));
     // Update seconds left cookie
     Cookies.set('secondsLeft', secondsLeft.toString());
-    console.log(`Timer.tsx, seconds left cookie: ${secondsLeft.toString()}`);
 
     return (
         <Card variant={'elevated'} width="100%" align="center" p={2}>

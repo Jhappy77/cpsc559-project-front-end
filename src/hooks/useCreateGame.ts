@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { API_URL } from "../settings";
 import { setGameCode, createGame } from "../state/gameSlice";
 import { joinGameRoomAsHostAction } from "../state/socketActions/joinGameRoomAction";
-import Cookies from "js-cookie";
 
 export function useCreateGame() {
   const { gameCreationCallTs } = useAppSelector(state => state.game);

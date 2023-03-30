@@ -1,4 +1,4 @@
-import { Flex, VStack, Button, Text, Progress, UnorderedList } from "@chakra-ui/react";
+import { Flex, VStack, Button, Text, Progress } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
@@ -21,7 +21,6 @@ export default function QuestionPage() {
   const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const { secondsLeft } = useAppSelector(state => state.time);
-  // const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
@@ -29,8 +28,6 @@ export default function QuestionPage() {
   const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
-
-  let prevIndex = index;
 
   usePollForGetQuestion();
   useSubmitAnswer();
@@ -40,7 +37,6 @@ export default function QuestionPage() {
   // On refresh: Check for gameCode cookie, if it exists,
   // attempt to rejoin at cookie state
   if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost')) {
-    console.log(`In refresh if: ${secondsLeft}`);
     dispatch(setRejoinAsHost(true));
     dispatch(setIsHost(true));
   }
@@ -50,11 +46,8 @@ export default function QuestionPage() {
     console.log("resetting answer colors");
     setAnswerArr(["red", "blue", "green", "orange"]);
     setShowAnswerButtonClicked(false);
-    console.log(`In useEffect index: ${index}`);
-    // setTimeExpired(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
-    prevIndex = index;
     // Stops polling for next question 
     if (!isHost) {
       clearInterval(pollNextQuestionIntervalID.current);
@@ -62,19 +55,9 @@ export default function QuestionPage() {
   }, [index])
 
   useEffect(() => {
-    // sets timeExpired flag when secondsLeft reaches 0
-    // otherwise sets the flag to false
-    console.log(`In useEffect seconds Left: ${secondsLeft}`);
-    if (secondsLeft === 0) {
-      console.log(`IF In useEffect seconds Left: ${secondsLeft}`);
-      return;
-    }
-  }, [secondsLeft])
-
-  useEffect(() => {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
-    if (secondsLeft === 0 && !isHost) {
+    if (!isHost) {
       setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
