@@ -17,16 +17,11 @@ import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
 
 export default function QuestionPage() {
 
-  usePollForGetQuestion();
-  useSubmitAnswer();
-  useNextQuestion();
-  useRejoinAsHost();
-
   const { prompt, answers, index, correctAnswer } = useAppSelector(state => state.question);
   const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const { secondsLeft } = useAppSelector(state => state.time);
-  const [timeExpired, setTimeExpired] = useState<boolean>(false);
+  // const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
@@ -36,6 +31,11 @@ export default function QuestionPage() {
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
 
   let prevIndex = index;
+
+  usePollForGetQuestion();
+  useSubmitAnswer();
+  useNextQuestion();
+  useRejoinAsHost();
 
   // On refresh: Check for gameCode cookie, if it exists,
   // attempt to rejoin at cookie state
@@ -51,9 +51,6 @@ export default function QuestionPage() {
     setAnswerArr(["red", "blue", "green", "orange"]);
     setShowAnswerButtonClicked(false);
     console.log(`In useEffect index: ${index}`);
-    if (prevIndex !== undefined && index !== undefined) {
-      setTimeExpired(false);
-    }
     // setTimeExpired(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
@@ -70,16 +67,14 @@ export default function QuestionPage() {
     console.log(`In useEffect seconds Left: ${secondsLeft}`);
     if (secondsLeft === 0) {
       console.log(`IF In useEffect seconds Left: ${secondsLeft}`);
-      setTimeExpired(true);
       return;
     }
-    setTimeExpired(false);
   }, [secondsLeft])
 
   useEffect(() => {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
-    if (timeExpired && !isHost) {
+    if (secondsLeft === 0 && !isHost) {
       setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
@@ -90,11 +85,11 @@ export default function QuestionPage() {
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [timeExpired])
+  }, [secondsLeft === 0])
 
   const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
-    if (timeExpired && isHost) {
+    if (secondsLeft === 0 && isHost) {
       showAnswer();
       setShowAnswerButtonClicked(true);
     }
@@ -134,7 +129,7 @@ export default function QuestionPage() {
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
-    if (timeExpired) {
+    if (secondsLeft === 0) {
       return;
     }
     // Set answer state
@@ -210,13 +205,13 @@ export default function QuestionPage() {
               disabled={answered}
               text={answers?.at(3)} />
             {isHost ?
-              timeExpired &&
+              secondsLeft === 0 &&
               <Flex>
                 <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
                 {!showAnswerButtonClicked && <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>}
               </Flex>
               :
-              !timeExpired && !answered &&
+              !(secondsLeft === 0) && !answered &&
               <Button onClick={submitAnswer}
                 alignSelf="end"
                 fontWeight="extrabold"
