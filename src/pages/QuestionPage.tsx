@@ -56,7 +56,7 @@ export default function QuestionPage() {
     // otherwise sets the flag to false
     if (secondsLeft === 0) {
       setTimeExpired(true);
-      console.log("setRequestUpdatedLeaderboard set to TRUE");
+      dispatch(setRequestUpdatedLeaderboard(true));
       return;
     }
     setTimeExpired(false);
@@ -133,7 +133,6 @@ export default function QuestionPage() {
     console.log("Show leaderboard button pressed");
     dispatch(setRequestUpdatedLeaderboard(true));
     setShowLeaderboardButtonClicked(true);
-
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
@@ -227,7 +226,7 @@ export default function QuestionPage() {
                     border="4px" m={2}>
                     Show Leaderboard
                   </Button>
-                  {!showAnswerButtonClicked && <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>}
+                  <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>
                 </Flex>
                 <Flex>
                   <Button onClick={showQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Back to Question</Button>
