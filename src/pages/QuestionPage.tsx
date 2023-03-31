@@ -80,7 +80,7 @@ export default function QuestionPage() {
 
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
-    if (correctAnswer !== undefined) {
+    if (correctAnswer !== undefined && secondsLeft === 0) {
       const ansArr = new Array(4).fill("grey");
       const correctAnsColour = answerArr[correctAnswer];
       ansArr[correctAnswer] = correctAnsColour;

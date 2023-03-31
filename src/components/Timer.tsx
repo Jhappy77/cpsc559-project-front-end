@@ -5,7 +5,7 @@ import { updateIndex, updateTargetTime, updateSecondsLeft } from '../state/timeS
 import { setRejoinAsHost } from '../state/playerSlice';
 import Cookies from 'js-cookie';
 
-const TIME_LIMIT_IN_SECONDS = 60;
+const TIME_LIMIT_IN_SECONDS = 20;
 const TIME_LIMIT_IN_MS = TIME_LIMIT_IN_SECONDS * 1000;
 
 export default function Timer(props: { index: number }) {
