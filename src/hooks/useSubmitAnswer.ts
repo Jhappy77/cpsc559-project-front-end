@@ -26,9 +26,8 @@ export function useSubmitAnswer() {
           console.log("Answer submitted successfully");
           dispatch(setGotQuestion(false));
           dispatch(setSubmittedAnswerTrue(undefined));
-          console.log("Previous player score: ", data.score)
-          if(submittedAnswerTrue) {
-            dispatch(setPlayerScore(data.score + 1));
+          if (submittedAnswerTrue) {
+            dispatch(setPlayerScore());
           }
         } else {
           throw new Error("Answer not submitted");

@@ -9,11 +9,15 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { submitQuestion, setQuestionAnswer, submitQuestionExpired } from "../state/questionSlice";
 import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
-import { useNextQuestion } from "../hooks/useNextQuestion"
+import { useNextQuestion } from "../hooks/useNextQuestion";
+import { setRequestUpdatedLeaderboard, resetLeaderboard } from "../state/leaderboardSlice";
+import { useGetLeaderboard } from "../hooks/useGetLeaderboard";
 import Timer from "../components/Timer";
+import Leaderboard from "../components/Leaderboard";
 import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
 import Cookies from "js-cookie";
 import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
+import React from "react";
 
 export default function QuestionPage() {
 
@@ -21,17 +25,20 @@ export default function QuestionPage() {
   const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const { secondsLeft } = useAppSelector(state => state.time);
+  const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
   const [requestNextQuestionButtonPressed, setRequestNextQuestionButtonPressed] = useState<boolean>(false);
   const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
+  const [showLeaderboard, setShowLeaderboardButtonClicked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
 
   usePollForGetQuestion();
   useSubmitAnswer();
   useNextQuestion();
+  useGetLeaderboard();
   useRejoinAsHost();
 
   // On refresh: Check for gameCode cookie, if it exists,
@@ -45,19 +52,31 @@ export default function QuestionPage() {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
     setAnswerArr(["red", "blue", "green", "orange"]);
+    setShowLeaderboardButtonClicked(false);
     setShowAnswerButtonClicked(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
-    if (!isHost) {
+    if (!isHost)  {
       clearInterval(pollNextQuestionIntervalID.current);
     }
   }, [index])
 
   useEffect(() => {
+    // sets timeExpired flag when secondsLeft reaches 0
+    // otherwise sets the flag to false
+    if (secondsLeft === 0) {
+      setTimeExpired(true);
+      dispatch(setRequestUpdatedLeaderboard(true));
+      return;
+    }
+    setTimeExpired(false);
+  }, [secondsLeft])
+
+  useEffect(() => {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
-    if (!isHost) {
+    if (timeExpired && !isHost) {
       setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
@@ -68,11 +87,11 @@ export default function QuestionPage() {
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [secondsLeft === 0])
+  }, [timeExpired])
 
   const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
-    if (secondsLeft === 0 && isHost) {
+    if (timeExpired && isHost) {
       showAnswer();
       setShowAnswerButtonClicked(true);
     }
@@ -80,7 +99,7 @@ export default function QuestionPage() {
 
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
-    if (correctAnswer !== undefined && secondsLeft === 0) {
+    if (correctAnswer !== undefined) {
       const ansArr = new Array(4).fill("grey");
       const correctAnsColour = answerArr[correctAnswer];
       ansArr[correctAnswer] = correctAnsColour;
@@ -108,11 +127,27 @@ export default function QuestionPage() {
       console.log("Next question button pressed");
       dispatch(setRequestNextQuestion(true));
       setRequestNextQuestionButtonPressed(true);
+      setShowLeaderboardButtonClicked(false);
     }
   }
 
+  const showQuestion = (event: React.MouseEvent) => {
+    if (showLeaderboard) {
+      setShowLeaderboardButtonClicked(false);
+    }
+  }
+
+  const getLeaderboard = (event: React.MouseEvent) => {
+    // Submit answer to backend
+    // reset the leaderboard if it has not already been reset
+    dispatch(resetLeaderboard());
+    console.log("Show leaderboard button pressed");
+    dispatch(setRequestUpdatedLeaderboard(true));
+    setShowLeaderboardButtonClicked(true);
+  }
+
   const handleSetAnswer = (event: React.MouseEvent) => {
-    if (secondsLeft === 0) {
+    if (timeExpired) {
       return;
     }
     // Set answer state
@@ -137,7 +172,7 @@ export default function QuestionPage() {
   }
 
   const selectedAnswer = (answer: number | undefined, index: number) => {
-    if (index === answer && !isHost) {
+    if (index === answer && !isHost)  {
       return true;
     }
     return false;
@@ -152,49 +187,65 @@ export default function QuestionPage() {
       textAlign="center"
       justifyContent="center"
     >
-      <Flex alignItems="center" maxW="md" margin="4">
+      <Flex flexDirection="column" alignItems="center" maxW="md" margin="4">
+        <Logo size={["32px", "50px"]} />
+        {isHost && <GameCode id={gameCode}></GameCode>}
         {prompt && answers && index ?
           <VStack>
-            <Logo size={["32px", "50px"]} />
-            {isHost && <GameCode id={gameCode}></GameCode>}
-            <Timer index={index} />
-            <Question
-              id="1"
-              title={`Question ${index ? `#${index}` : ""}`}
-              text={prompt ? prompt : ""}
-            />
-            <Answer setAnswer={handleSetAnswer}
-              id="0"
-              background={answerArr[0]}
-              selected={selectedAnswer(answer, 0)}
-              disabled={answered}
-              text={answers?.at(0)} />
-            <Answer setAnswer={handleSetAnswer}
-              id="1"
-              background={answerArr[1]}
-              selected={selectedAnswer(answer, 1)}
-              disabled={answered}
-              text={answers?.at(1)} />
-            <Answer setAnswer={handleSetAnswer}
-              id="2"
-              background={answerArr[2]}
-              selected={selectedAnswer(answer, 2)}
-              disabled={answered}
-              text={answers?.at(2)} />
-            <Answer setAnswer={handleSetAnswer}
-              id="3"
-              background={answerArr[3]}
-              selected={selectedAnswer(answer, 3)}
-              disabled={answered}
-              text={answers?.at(3)} />
+            <Timer index={index} /> 
+            {showLeaderboard && isHost ?
+              <Leaderboard /> :
+              <VStack>
+                <Question
+                  id="1"
+                  title={`Question ${index ? `#${index}` : ""}`}
+                  text={prompt ? prompt : ""}
+                />
+                <Answer setAnswer={handleSetAnswer}
+                  id="0"
+                  background={answerArr[0]}
+                  selected={selectedAnswer(answer, 0)}
+                  disabled={answered}
+                  text={answers?.at(0)} />
+                <Answer setAnswer={handleSetAnswer}
+                  id="1"
+                  background={answerArr[1]}
+                  selected={selectedAnswer(answer, 1)}
+                  disabled={answered}
+                  text={answers?.at(1)} />
+                <Answer setAnswer={handleSetAnswer}
+                  id="2"
+                  background={answerArr[2]}
+                  selected={selectedAnswer(answer, 2)}
+                  disabled={answered}
+                  text={answers?.at(2)} />
+                <Answer setAnswer={handleSetAnswer}
+                  id="3"
+                  background={answerArr[3]}
+                  selected={selectedAnswer(answer, 3)}
+                  disabled={answered}
+                  text={answers?.at(3)} />
+              </VStack>
+            }
             {isHost ?
-              secondsLeft === 0 &&
-              <Flex>
-                <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
-                {!showAnswerButtonClicked && <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>}
-              </Flex>
+              timeExpired &&
+              <VStack>
+                <Flex>
+                  <Button onClick={getLeaderboard}
+                    fontWeight="extrabold"
+                    shadow="lg"
+                    border="4px" m={2}>
+                    Show Leaderboard
+                  </Button>
+                  <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>
+                </Flex>
+                <Flex>
+                  <Button onClick={showQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Back to Question</Button>
+                  <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
+                </Flex>
+              </VStack>
               :
-              !(secondsLeft === 0) && !answered &&
+              !timeExpired && !answered &&
               <Button onClick={submitAnswer}
                 alignSelf="end"
                 fontWeight="extrabold"
