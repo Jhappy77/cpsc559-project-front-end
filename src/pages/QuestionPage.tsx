@@ -87,7 +87,7 @@ export default function QuestionPage() {
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [secondsLeft === 0])
+  }, [timeExpired])
 
   const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
