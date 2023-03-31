@@ -31,8 +31,8 @@ const playerStateSlice = createSlice({
     setRejoinAsHost: (state: PlayerState, action: PayloadAction<boolean>): void => {
       state.rejoinAsHost = action.payload;
     },
-    setPlayerScore: (state: PlayerState, action: PayloadAction<number>): void => {
-      state.score = action.payload;
+    setPlayerScore: (state: PlayerState): void => {
+      state.score += 1;
     },
   },
 });

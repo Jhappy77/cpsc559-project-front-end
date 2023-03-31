@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { API_URL } from "../settings";
 import { setSubmittedAnswerTrue } from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
-import { setScore } from "../state/playerSlice";
+import { setPlayerScore } from "../state/playerSlice";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
 // need to validate their answer
@@ -27,7 +27,7 @@ export function useSubmitAnswer() {
           dispatch(setGotQuestion(false));
           dispatch(setSubmittedAnswerTrue(undefined));
           if (submittedAnswerTrue) {
-            dispatch(setScore());
+            dispatch(setPlayerScore());
           }
         } else {
           throw new Error("Answer not submitted");
