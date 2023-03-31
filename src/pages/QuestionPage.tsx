@@ -1,4 +1,4 @@
-import { Flex, VStack, Button, Text, Progress, UnorderedList } from "@chakra-ui/react";
+import { Flex, VStack, Button, Text, Progress } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
@@ -14,6 +14,10 @@ import { setRequestUpdatedLeaderboard, resetLeaderboard } from "../state/leaderb
 import { useGetLeaderboard } from "../hooks/useGetLeaderboard";
 import Timer from "../components/Timer";
 import Leaderboard from "../components/Leaderboard";
+import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
+import Cookies from "js-cookie";
+import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
+import React from "react";
 
 export default function QuestionPage() {
 
@@ -35,6 +39,14 @@ export default function QuestionPage() {
   useSubmitAnswer();
   useNextQuestion();
   useGetLeaderboard();
+  useRejoinAsHost();
+
+  // On refresh: Check for gameCode cookie, if it exists,
+  // attempt to rejoin at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost')) {
+    dispatch(setRejoinAsHost(true));
+    dispatch(setIsHost(true));
+  }
 
   useEffect(() => {
     // Resets flags on page once index changes
@@ -42,11 +54,10 @@ export default function QuestionPage() {
     setAnswerArr(["red", "blue", "green", "orange"]);
     setShowLeaderboardButtonClicked(false);
     setShowAnswerButtonClicked(false);
-    setTimeExpired(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
-    if (!isHost) {
+    if (!isHost)  {
       clearInterval(pollNextQuestionIntervalID.current);
     }
   }, [index])
@@ -76,7 +87,7 @@ export default function QuestionPage() {
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [timeExpired])
+  }, [secondsLeft === 0])
 
   const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
@@ -161,7 +172,7 @@ export default function QuestionPage() {
   }
 
   const selectedAnswer = (answer: number | undefined, index: number) => {
-    if (index === answer && !isHost) {
+    if (index === answer && !isHost)  {
       return true;
     }
     return false;

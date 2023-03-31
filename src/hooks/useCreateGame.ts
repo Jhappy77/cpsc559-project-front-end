@@ -9,9 +9,10 @@ import { joinGameRoomAsHostAction } from "../state/socketActions/joinGameRoomAct
 export function useCreateGame() {
   const { gameCreationCallTs } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (!gameCreationCallTs) return;
-    const generatedGameCode = uuidv4().substring(0,5);
+    const generatedGameCode = uuidv4().substring(0, 5);
     axios
       .post(`${API_URL}/games/${generatedGameCode}`)
       .then(response => {
@@ -30,7 +31,7 @@ export function useCreateGame() {
         else {
           console.error("Unhandled error in useCreateGame");
           console.error(reason);
-        }  
+        }
       });
   }, [gameCreationCallTs]);
 }

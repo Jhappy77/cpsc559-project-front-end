@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../settings";
@@ -21,6 +22,10 @@ export function useStartGame() {
         console.log(response);
         if (status_code === 200) {
           dispatch(setGameStarted(true));
+
+          // Set cookies for 'game code' and 'isHost'
+          Cookies.set(`gameCode`, `${gameCode}`);
+          Cookies.set(`isHost`, `true`);
         }
       });
     }
