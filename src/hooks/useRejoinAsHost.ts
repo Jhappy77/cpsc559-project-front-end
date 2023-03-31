@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { useEffect, useState } from "react";
 import { setGameCode, setGameStarted, setHasJoinedGame } from "../state/gameSlice";
+import { resetLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 import Cookies from "js-cookie";
 import { setIsHost } from "../state/playerSlice";
 import { updateSecondsLeft } from "../state/timeSlice";
@@ -24,6 +25,8 @@ export function useRejoinAsHost() {
       dispatch(setGameCode(gameCodeCookie));
       dispatch(setGameStarted(true));
       dispatch(setHasJoinedGame(true));
+      dispatch(resetLeaderboard());
+      dispatch(setRequestUpdatedLeaderboard(false));
       // Reset the secondsLeft from cookies if we have it
       const secondsLeftCookie = Cookies.get("secondsLeft");
       if (secondsLeftCookie !== undefined) {
