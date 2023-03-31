@@ -1,4 +1,4 @@
-import { Flex, VStack, Button, Text, Progress, UnorderedList } from "@chakra-ui/react";
+import { Flex, VStack, Button, Text, Progress } from "@chakra-ui/react";
 import Logo from "../components/Logo";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
@@ -11,14 +11,16 @@ import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion"
 import Timer from "../components/Timer";
+import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
+import Cookies from "js-cookie";
+import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
 
 export default function QuestionPage() {
 
   const { prompt, answers, index, correctAnswer } = useAppSelector(state => state.question);
   const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
-  const { secondsLeft } = useAppSelector(state => state.time); 
-  const [timeExpired, setTimeExpired] = useState<boolean>(false);
+  const { secondsLeft } = useAppSelector(state => state.time);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
@@ -30,35 +32,32 @@ export default function QuestionPage() {
   usePollForGetQuestion();
   useSubmitAnswer();
   useNextQuestion();
+  useRejoinAsHost();
 
-  useEffect( () => {
+  // On refresh: Check for gameCode cookie, if it exists,
+  // attempt to rejoin at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost')) {
+    dispatch(setRejoinAsHost(true));
+    dispatch(setIsHost(true));
+  }
+
+  useEffect(() => {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
     setAnswerArr(["red", "blue", "green", "orange"]);
     setShowAnswerButtonClicked(false);
-    setTimeExpired(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
-    if (!isHost){
+    if (!isHost) {
       clearInterval(pollNextQuestionIntervalID.current);
     }
   }, [index])
 
-  useEffect( () => {
-    // sets timeExpired flag when secondsLeft reaches 0
-    // otherwise sets the flag to false
-    if (secondsLeft === 0){
-      setTimeExpired(true);
-      return;
-    }
-    setTimeExpired(false);
-  }, [secondsLeft])
-
-  useEffect( () => {
+  useEffect(() => {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
-    if (timeExpired && !isHost){
+    if (!isHost) {
       setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
@@ -69,11 +68,11 @@ export default function QuestionPage() {
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [timeExpired])
+  }, [secondsLeft === 0])
 
-  const showAnswerHost = (event:React.MouseEvent) => {
+  const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
-    if (timeExpired && isHost){
+    if (secondsLeft === 0 && isHost) {
       showAnswer();
       setShowAnswerButtonClicked(true);
     }
@@ -81,7 +80,7 @@ export default function QuestionPage() {
 
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
-    if (correctAnswer !== undefined){
+    if (correctAnswer !== undefined && secondsLeft === 0) {
       const ansArr = new Array(4).fill("grey");
       const correctAnsColour = answerArr[correctAnswer];
       ansArr[correctAnswer] = correctAnsColour;
@@ -89,7 +88,7 @@ export default function QuestionPage() {
     }
   }
 
-  const submitAnswer = (event:React.MouseEvent) => {
+  const submitAnswer = (event: React.MouseEvent) => {
     if (answer !== undefined) {
       // Submit answer to backend
       console.log("Player submitted answer");
@@ -103,9 +102,9 @@ export default function QuestionPage() {
     }
   }
 
-  const nextQuestion = (event:React.MouseEvent) => {
+  const nextQuestion = (event: React.MouseEvent) => {
     // Submit answer to backend
-    if (!requestNextQuestionButtonPressed){
+    if (!requestNextQuestionButtonPressed) {
       console.log("Next question button pressed");
       dispatch(setRequestNextQuestion(true));
       setRequestNextQuestionButtonPressed(true);
@@ -113,7 +112,7 @@ export default function QuestionPage() {
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
-    if (timeExpired){
+    if (secondsLeft === 0) {
       return;
     }
     // Set answer state
@@ -138,7 +137,7 @@ export default function QuestionPage() {
   }
 
   const selectedAnswer = (answer: number | undefined, index: number) => {
-    if (index === answer && !isHost){
+    if (index === answer && !isHost) {
       return true;
     }
     return false;
@@ -158,7 +157,7 @@ export default function QuestionPage() {
           <VStack>
             <Logo size={["32px", "50px"]} />
             {isHost && <GameCode id={gameCode}></GameCode>}
-            <Timer index={index}/>
+            <Timer index={index} />
             <Question
               id="1"
               title={`Question ${index ? `#${index}` : ""}`}
@@ -189,13 +188,13 @@ export default function QuestionPage() {
               disabled={answered}
               text={answers?.at(3)} />
             {isHost ?
-              timeExpired &&
+              secondsLeft === 0 &&
               <Flex>
-                 <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
-                 {!showAnswerButtonClicked && <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>}
+                <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
+                {!showAnswerButtonClicked && <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>}
               </Flex>
-            :
-              !timeExpired && !answered && 
+              :
+              !(secondsLeft === 0) && !answered &&
               <Button onClick={submitAnswer}
                 alignSelf="end"
                 fontWeight="extrabold"
@@ -206,7 +205,7 @@ export default function QuestionPage() {
               >
                 Submit
               </Button>
-             }
+            }
           </VStack>
           :
           <VStack>
