@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { API_URL } from "../settings";
 import { setLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 
-export function usePollForGetLeaderboard() {
+export function useGetLeaderboard() {
   const { gameCode } = useAppSelector(state => state.game);
   const { requestUpdatedLeaderboard } = useAppSelector(state => state.leaderboard);
   const dispatch = useAppDispatch();

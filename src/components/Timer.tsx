@@ -3,7 +3,7 @@ import useCountDown from '../hooks/useCountDown';
 import { useAppDispatch, useAppSelector } from '../state/reduxHooks';
 import { updateIndex, updateTargetTime, updateSecondsLeft } from '../state/timeSlice';
 
-const TIME_LIMIT_IN_SECONDS = 10;
+const TIME_LIMIT_IN_SECONDS = 20;
 const TIME_LIMIT_IN_MS = TIME_LIMIT_IN_SECONDS * 1000;
 
 export default function Timer(props: {index: number}){

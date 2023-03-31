@@ -11,7 +11,7 @@ import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion";
 import { setRequestUpdatedLeaderboard, resetLeaderboard } from "../state/leaderboardSlice";
-import { usePollForGetLeaderboard } from "../hooks/usePollForGetLeaderboard";
+import { useGetLeaderboard } from "../hooks/useGetLeaderboard";
 import Timer from "../components/Timer";
 import Leaderboard from "../components/Leaderboard";
 
@@ -34,7 +34,7 @@ export default function QuestionPage() {
   usePollForGetQuestion();
   useSubmitAnswer();
   useNextQuestion();
-  usePollForGetLeaderboard();
+  useGetLeaderboard();
 
   useEffect(() => {
     // Resets flags on page once index changes
@@ -56,8 +56,6 @@ export default function QuestionPage() {
     // otherwise sets the flag to false
     if (secondsLeft === 0) {
       setTimeExpired(true);
-      dispatch(resetLeaderboard());
-      dispatch(setRequestUpdatedLeaderboard(true));
       console.log("setRequestUpdatedLeaderboard set to TRUE");
       return;
     }
@@ -118,16 +116,12 @@ export default function QuestionPage() {
       console.log("Next question button pressed");
       dispatch(setRequestNextQuestion(true));
       setRequestNextQuestionButtonPressed(true);
-      // reset the leaderboard for the next question
-      dispatch(resetLeaderboard());
-      dispatch(setRequestUpdatedLeaderboard(false));
       setShowLeaderboardButtonClicked(false);
     }
   }
 
   const showQuestion = (event: React.MouseEvent) => {
     if (showLeaderboard) {
-      setShowLeaderboardButtonClicked(false);
       setShowLeaderboardButtonClicked(false);
     }
   }
@@ -136,11 +130,10 @@ export default function QuestionPage() {
     // Submit answer to backend
     // reset the leaderboard if it has not already been reset
     dispatch(resetLeaderboard());
-    if (!showLeaderboard) {
-      console.log("Show leaderboard button pressed");
-      dispatch(setRequestUpdatedLeaderboard(true));
-      setShowLeaderboardButtonClicked(true);
-    }
+    console.log("Show leaderboard button pressed");
+    dispatch(setRequestUpdatedLeaderboard(true));
+    setShowLeaderboardButtonClicked(true);
+
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {

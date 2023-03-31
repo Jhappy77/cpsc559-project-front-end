@@ -22,8 +22,8 @@ const leaderboardStateSlice = createSlice({
       action.payload.leaderboard.forEach((element : any) => {
         const [ player, score ] = element.split(":");
         console.log("Player and score: ", player, score);
-        state.leaders?.push(player);
-        state.scores?.push(score);
+        state.leaders.push(player);
+        state.scores.push(score);
       });
       state.requestUpdatedLeaderboard = false;
       console.log("leaders: ", state.leaders);

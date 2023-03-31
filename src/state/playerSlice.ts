@@ -9,7 +9,7 @@ export interface PlayerState {
 }
 
 export const defaultPlayerState: PlayerState = {
-  name: `The Champion (a.k.a. Joel)`,
+  name: "",
   isHost: false,
   score: 0,
 };
