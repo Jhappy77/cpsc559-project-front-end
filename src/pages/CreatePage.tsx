@@ -8,6 +8,8 @@ import { setPlayerName, setIsHost } from "../state/playerSlice";
 import { createGame, setStartGameButtonPressed, setHasJoinedGame } from "../state/gameSlice";
 import { useCreateGame } from "../hooks/useCreateGame";
 import { useStartGame } from "../hooks/useStartGame";
+import { useGetGamePlayers } from "../hooks/useGetGamePlayers";
+import PlayersCard from "../components/PlayersCard";
 
 const MAX_NAME_LENGTH = 15;
 
@@ -20,6 +22,7 @@ export default function CreatePage() {
 
   useCreateGame();
   useStartGame();
+  useGetGamePlayers();
   const { gameCode } = useAppSelector(state => state.game);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,8 +53,9 @@ export default function CreatePage() {
       alignItems="center"
       textAlign="center"
       justifyContent="center"
+      maxWidth="100%"
     >
-      <Flex alignItems="center" justifyContent="center">
+      <Flex alignItems="center" justifyContent="center" maxWidth="100%" maxHeight='calc(85vh)'>
         <VStack>
           <Logo size={["64px", "100px"]} />
           <Button
@@ -101,36 +105,43 @@ export default function CreatePage() {
             </Flex>
           )}
           {displayGameCodeBlock && (
-            <Card justifyContent="center" textAlign="center" bg="white" color="black" padding={4} margin={4}>
-              {gameCode ? (
-                <VStack>
-                  <Text fontSize={["lg", "xl"]}>Generated Game Code:</Text>
-                  <Text fontSize={["xl", "2xl"]} fontWeight="bold">
-                    {gameCode}
-                  </Text>
-                  <Text fontSize={["lg", "xl"]}>Enter this game code to join!</Text>
-                  <Button
-                    fontSize={["lg", "xl"]}
-                    margin={8}
-                    bg="black"
-                    color="white"
-                    _hover={{ color: "black", backgroundColor: "grey" }}
-                    onClick={e => {
-                      onStartGame(e);
-                    }}
-                  >
-                    Start Game
-                  </Button>
-                </VStack>
-              ) : (
-                <VStack>
-                  <Text fontSize={["sm", "md"]} margin={1} fontStyle="italic">
-                    Waiting for game code...
-                  </Text>
-                  <Progress height="20px" width="100%" colorScheme="green" isIndeterminate />
-                </VStack>
+            <Flex flexDirection="column" maxWidth={["100%", "80%"]} maxHeight='calc(75vh)'>
+              <Card justifyContent="center" textAlign="center" bg="white" color="black" padding={4} margin={4}>
+                {gameCode ? (
+                  <VStack>
+                    <Text fontSize={["lg", "xl"]}>Generated Game Code:</Text>
+                    <Text fontSize={["xl", "2xl"]} fontWeight="bold">
+                      {gameCode}
+                    </Text>
+                    <Text fontSize={["lg", "xl"]}>Enter this game code to join!</Text>
+                  </VStack>
+                ) : (
+                  <VStack>
+                    <Text fontSize={["sm", "md"]} margin={1} fontStyle="italic">
+                      Waiting for game code...
+                    </Text>
+                    <Progress height="20px" width="100%" colorScheme="green" isIndeterminate />
+                  </VStack>
+                )}
+              </Card>
+              {gameCode && (
+                <PlayersCard />
               )}
-            </Card>
+              {gameCode && (
+                <Button
+                fontSize={["lg", "xl"]}
+                margin={8}
+                bg="black"
+                color="white"
+                _hover={{ color: "black", backgroundColor: "grey" }}
+                onClick={e => {
+                  onStartGame(e);
+                }}
+              >
+                Start Game
+              </Button>
+              )}
+            </Flex>
           )}
         </VStack>
       </Flex>

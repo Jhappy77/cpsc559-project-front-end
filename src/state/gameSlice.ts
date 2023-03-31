@@ -11,6 +11,7 @@ export interface GameState {
   pollGetQuestionCount: number;
   gotQuestion: boolean;
   requestNextQuestion: boolean;
+  players: Array<string>;
 }
 
 export const defaultGameState: GameState = {
@@ -21,6 +22,7 @@ export const defaultGameState: GameState = {
   pollGetQuestionCount: 0,
   gotQuestion: false,
   requestNextQuestion: false,
+  players: []
 };
 
 const gameStateSlice = createSlice({
@@ -61,6 +63,9 @@ const gameStateSlice = createSlice({
     setRequestNextQuestion: (state: GameState, action: PayloadAction<boolean>): void => {
       state.requestNextQuestion = action.payload;
     },
+    setPlayers: (state: GameState, action: PayloadAction<Array<string>>): void => {
+      state.players = action.payload;
+    }
   },
 });
 
@@ -74,7 +79,8 @@ export const {
   setStartGameButtonPressed,
   setGotQuestion,
   incrementPollGetQuestionCount,
-  setRequestNextQuestion
+  setRequestNextQuestion,
+  setPlayers
 } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;
