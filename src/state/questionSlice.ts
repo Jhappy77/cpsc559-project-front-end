@@ -1,7 +1,8 @@
 import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { stat } from "fs";
 
 export interface QuestionState {
-  submittedAnswerTrue?: boolean;
+  questionScore?: number;
   answer?: number;
   correctAnswer?: number;
   prompt?: string;
@@ -10,27 +11,27 @@ export interface QuestionState {
 }
 
 export const defaultQuestionState: QuestionState = {
-  submittedAnswerTrue: undefined
+  questionScore: undefined
 };
 
 const questionStateSlice = createSlice({
   name: "codeSlice",
   initialState: defaultQuestionState,
   reducers: {
-    submitQuestion: (state: QuestionState, action: Action): void => {
+    submitQuestion: (state: QuestionState, action: PayloadAction<number>): void => {
       // Updating this timestamp tells useSubmitAnswer if
       console.log(`in submitQuestion slice, ${state.answer}`);
       if (state.answer === undefined) {
         return;
       }
-      state.submittedAnswerTrue = false;
+      state.questionScore = 0;
       if(state.answer === state.correctAnswer) {
-        state.submittedAnswerTrue = true;
+        state.questionScore = action.payload;
       }
     },
     submitQuestionExpired: (state: QuestionState, action: Action): void => {
       // submit to backend that user could not answer question in allotted time
-      state.submittedAnswerTrue = false;
+      state.questionScore = 0;
     },
     setQuestion: (state: QuestionState, action: PayloadAction<any>): void => {
       state.prompt = action.payload.prompt;
@@ -46,12 +47,12 @@ const questionStateSlice = createSlice({
         state.index = state.index + action.payload;
       }
     },
-    setSubmittedAnswerTrue: (state: QuestionState, action: PayloadAction<boolean | undefined>): void => {
-      state.submittedAnswerTrue = action.payload;
+    resetQuestionScore: (state: QuestionState, action: Action): void => {
+      state.questionScore = undefined;
     }
   },
 })
 
-export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex, setSubmittedAnswerTrue, submitQuestionExpired } = questionStateSlice.actions;
+export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex, resetQuestionScore, submitQuestionExpired } = questionStateSlice.actions;
 
 export const questionSliceReducer = questionStateSlice.reducer;

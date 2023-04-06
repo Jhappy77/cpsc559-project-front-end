@@ -26,6 +26,8 @@ const leaderboardStateSlice = createSlice({
         state.scores.push(score);
       });
       state.requestUpdatedLeaderboard = false;
+      state.leaders.reverse();
+      state.scores.reverse();
       console.log("leaders: ", state.leaders);
       console.log("scores: ", state.scores);
     },

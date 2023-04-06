@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import GameCode from "../components/GameCode";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import { submitQuestion, setQuestionAnswer, submitQuestionExpired } from "../state/questionSlice";
+import { submitQuestion, setQuestionAnswer, submitQuestionExpired, resetQuestionScore } from "../state/questionSlice";
 import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion";
@@ -80,6 +80,7 @@ export default function QuestionPage() {
       setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
+      dispatch(resetQuestionScore());
       const interval = setInterval(() => {
         console.log("requesting next question")
         dispatch(setGotQuestion(false));
@@ -112,7 +113,7 @@ export default function QuestionPage() {
       // Submit answer to backend
       console.log("Player submitted answer");
       dispatch(setQuestionAnswer(answer));
-      dispatch(submitQuestion());
+      dispatch(submitQuestion(secondsLeft));
       dispatch(setRequestNextQuestion(true));
       setAnswered(true);
     } else {
