@@ -2,14 +2,12 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
-import { submitQuestion } from "../state/questionSlice";
 import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
 // need to validate their answer
 export function useNextQuestion() {
-  const { gameCode, gotQuestion, requestNextQuestion } = useAppSelector(state => state.game);
-  const { index } = useAppSelector(state => state.question);
+  const { gameCode, requestNextQuestion } = useAppSelector(state => state.game);
   const { name, isHost } = useAppSelector(state => state.player);
   const dispatch = useAppDispatch();
   useEffect(() => {

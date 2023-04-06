@@ -2,32 +2,32 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import axios from "axios";
 import { useEffect } from "react";
 import { API_URL } from "../settings";
-import { setSubmittedAnswerTrue } from "../state/questionSlice";
+import { resetQuestionScore} from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 import { setPlayerScore } from "../state/playerSlice";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
 // need to validate their answer
 export function useSubmitAnswer() {
-  const { submittedAnswerTrue } = useAppSelector(state => state.question);
+  const { questionScore } = useAppSelector(state => state.question);
   const { name } = useAppSelector(state => state.player);
   const dispatch = useAppDispatch();
   useEffect(() => {
     console.log("in useSubmitAnswer useEffect");
-    if (submittedAnswerTrue === undefined) return;
+    if (questionScore === undefined) return;
     axios
       .put(`${API_URL}/players/${name}`,
         {
-          "correctAnswer": submittedAnswerTrue
+          "correctAnswer": questionScore
         })
       .then(response => {
         const { status, data } = response;
         if (status === 200) {
           console.log("Answer submitted successfully");
           dispatch(setGotQuestion(false));
-          dispatch(setSubmittedAnswerTrue(undefined));
-          if (submittedAnswerTrue) {
-            dispatch(setPlayerScore());
+          dispatch(resetQuestionScore());
+          if (questionScore !== undefined && questionScore > 0) {
+            dispatch(setPlayerScore(questionScore));
           }
         } else {
           throw new Error("Answer not submitted");
@@ -39,5 +39,5 @@ export function useSubmitAnswer() {
         console.error("Unhandled error in useSubmitAnswer");
         console.error(reason);
       });
-  }, [submittedAnswerTrue, dispatch]);
+  }, [questionScore, dispatch]);
 }
