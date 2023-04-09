@@ -29,7 +29,6 @@ export default function QuestionPage() {
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerFlag, setShowAnswer] = useState<boolean>(false);
-  const [requestNextQuestionButtonPressed, setRequestNextQuestionButtonPressed] = useState<boolean>(false);
   const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -55,7 +54,6 @@ export default function QuestionPage() {
     setShowLeaderboard(false);
     setShowAnswer(false);
     setAnswer(undefined);
-    setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
     if (!isHost)  {
       clearInterval(pollNextQuestionIntervalID.current);
@@ -90,14 +88,6 @@ export default function QuestionPage() {
     }
   }, [timeExpired])
 
-  const showAnswerHost = (event: React.MouseEvent) => {
-    // Host can click a button that will show the answer once time has expired
-    if (timeExpired && isHost) {
-      showAnswer();
-      setShowAnswer(true);
-    }
-  }
-
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
     if (correctAnswer !== undefined) {
@@ -126,7 +116,6 @@ export default function QuestionPage() {
     // Submit answer to backend
       console.log("Next question button pressed");
       dispatch(setRequestNextQuestion(true));
-      setRequestNextQuestionButtonPressed(true);
       setShowLeaderboard(false);
   }
 
