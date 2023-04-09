@@ -3,26 +3,28 @@ import { useEffect, useState } from "react";
 import { setGameCode, setGameStarted, setHasJoinedGame } from "../state/gameSlice";
 import { resetLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 import Cookies from "js-cookie";
-import { setIsHost } from "../state/playerSlice";
+import { setIsHost, setPlayerName } from "../state/playerSlice";
 import { updateSecondsLeft } from "../state/timeSlice";
 
 const TIME_LIMIT_IN_SECONDS = 60;
 
-export function useRejoinAsHost() {
-  const { rejoinAsHost } = useAppSelector(state => state.player);
+export function useRejoinAsPlayer() {
+  const { rejoinAsPlayer } = useAppSelector(state => state.player);
   const { gameCode } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();
-  const [hostRejoinTrigger, setHostRejoinTrigger] = useState(false);
+  const [playerRejoinTrigger, setPlayerRejoinTrigger] = useState(false);
 
-  const toggleHostRejoinTrigger = () => {
-    setHostRejoinTrigger(!hostRejoinTrigger);
+  const togglePlayerRejoinTrigger = () => {
+    setPlayerRejoinTrigger(!playerRejoinTrigger);
   };
 
   useEffect(() => {
     const gameCodeCookie = Cookies.get("gameCode");
-    if (gameCodeCookie !== undefined && rejoinAsHost) {
-      dispatch(setIsHost(true));
+    const nameCookie = Cookies.get("name");
+    if (gameCodeCookie !== undefined && nameCookie !== undefined) {
+      dispatch(setIsHost(false));
       dispatch(setGameCode(gameCodeCookie));
+      dispatch(setPlayerName(nameCookie));
       dispatch(setGameStarted(true));
       dispatch(setHasJoinedGame(true));
       dispatch(resetLeaderboard());
@@ -32,16 +34,16 @@ export function useRejoinAsHost() {
       if (secondsLeftCookie !== undefined) {
         const secondsLeft = Number(secondsLeftCookie);
         dispatch(updateSecondsLeft(secondsLeft));
-        console.log(`useRejoinAsHost: COOKIE updating seconds left COOKIE: ${secondsLeftCookie}`);
+        console.log(`useRejoinAdPlayer: COOKIE updating seconds left COOKIE: ${secondsLeftCookie}`);
       }
     } else {
-      console.log("useRejoinAsHost: No cookie found for game code!");
+      console.log("useRejoinAsPlayer: No cookie found for game code!");
     }
-  }, [hostRejoinTrigger]);
+  }, [playerRejoinTrigger]);
 
   useEffect(() => {
-    if (rejoinAsHost && !gameCode) {
-      toggleHostRejoinTrigger();
+    if (rejoinAsPlayer && !gameCode) {
+      togglePlayerRejoinTrigger();
     }
-  }, [rejoinAsHost]);
+  }, [rejoinAsPlayer]);
 }

@@ -23,9 +23,10 @@ export default function JoinPage() {
 
   // Clear all ccookies if we are joining as a player. This is neccessary
   // to not fuck with the state
-  Cookies.remove('isHost');
-  Cookies.remove('gameCode');
-  Cookies.remove('secondsLeft');
+  // Cookies.remove('isHost');
+  // Cookies.remove('gameCode');
+  // Cookies.remove('secondsLeft');
+  // console.log(`Cleared cookies from join page`);
 
   useCreatePlayer();
   usePollForGameStart();

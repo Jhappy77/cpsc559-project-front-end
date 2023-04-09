@@ -15,8 +15,9 @@ import { useGetLeaderboard } from "../hooks/useGetLeaderboard";
 import Timer from "../components/Timer";
 import Leaderboard from "../components/Leaderboard";
 import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
+import { useRejoinAsPlayer } from "../hooks/useRejoinAsPlayer";
 import Cookies from "js-cookie";
-import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
+import { setIsHost, setRejoinAsHost, setRejoinAsPlayer } from "../state/playerSlice";
 import React from "react";
 
 export default function QuestionPage() {
@@ -25,7 +26,7 @@ export default function QuestionPage() {
   const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const { secondsLeft } = useAppSelector(state => state.time);
-  const [timeExpired, setTimeExpired] = useState<boolean>(false);
+  // const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
@@ -40,24 +41,43 @@ export default function QuestionPage() {
   useNextQuestion();
   useGetLeaderboard();
   useRejoinAsHost();
+  useRejoinAsPlayer();
 
   // On refresh: Check for gameCode cookie, if it exists,
-  // attempt to rejoin at cookie state
-  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost')) {
+  // attempt to rejoin as a host at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost') === `true`) {
     dispatch(setRejoinAsHost(true));
     dispatch(setIsHost(true));
+    console.log(`QuesstionPage: setting rejoin as host to true`);
+  }
+
+  // On refresh: Check for gameCode cookie, if it exists,
+  // attempt to rejoin as a host at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost') === `false`) {
+    dispatch(setRejoinAsPlayer(true));
+    dispatch(setIsHost(false));
+    console.log(`QuestionPage: setting rejoin as player to true`);
   }
 
   useEffect(() => {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
-    setAnswerArr(["red", "blue", "green", "orange"]);
+    const indexCookie = Cookies.get('index');
+    // && indexCookie !== undefined && Number(indexCookie) + 1 === index
+    if (!isHost && secondsLeft === 0) {
+      showAnswer();
+      // setTimeExpired(true);
+    } else {
+      setAnswerArr(["red", "blue", "green", "orange"]);
+    }
+   // setAnswerArr(["red", "blue", "green", "orange"]);
+    console.log(`QuestionPage: Resetting answer array`);
     setShowLeaderboardButtonClicked(false);
     setShowAnswerButtonClicked(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
-    if (!isHost)  {
+    if (!isHost && secondsLeft > 0)  {
       clearInterval(pollNextQuestionIntervalID.current);
     }
   }, [index])
@@ -66,33 +86,36 @@ export default function QuestionPage() {
     // sets timeExpired flag when secondsLeft reaches 0
     // otherwise sets the flag to false
     if (secondsLeft === 0) {
-      setTimeExpired(true);
+      console.log(`QuestionPage: Setting time expired to true`);
+      // setTimeExpired(true);
       dispatch(setRequestUpdatedLeaderboard(true));
       return;
     }
-    setTimeExpired(false);
+    console.log(`QuestionPage: Setting time expired to false`);
+    // setTimeExpired(false);
   }, [secondsLeft])
 
   useEffect(() => {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
-    if (timeExpired && !isHost) {
+    if (secondsLeft === 0 && !isHost) {
       setAnswered(false);
       showAnswer();
+      console.log(`QuestionPage: timeExpired true condition`);
       dispatch(submitQuestionExpired());
       dispatch(resetQuestionScore());
       const interval = setInterval(() => {
-        console.log("requesting next question")
         dispatch(setGotQuestion(false));
       }, 2000);
+      console.log("QuestionPage: Setting got question to false");
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [timeExpired])
+  }, [secondsLeft === 0])
 
   const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
-    if (timeExpired && isHost) {
+    if (secondsLeft === 0 && isHost) {
       showAnswer();
       setShowAnswerButtonClicked(true);
     }
@@ -101,6 +124,8 @@ export default function QuestionPage() {
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
     if (correctAnswer !== undefined) {
+      // setAnswerArr(["red", "blue", "green", "orange"]);
+      console.log(`QuestionPage: correctAnswer == true, set array`)
       const ansArr = new Array(4).fill("grey");
       const correctAnsColour = answerArr[correctAnswer];
       ansArr[correctAnswer] = correctAnsColour;
@@ -148,13 +173,14 @@ export default function QuestionPage() {
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
-    if (timeExpired) {
+    if (secondsLeft === 0) {
       return;
     }
     // Set answer state
     console.log("Settting answer");
     console.log(event.currentTarget.id);
     setAnswer(Number(event.currentTarget.id));
+
   }
 
   const getAnswerColor = () => {
@@ -229,7 +255,7 @@ export default function QuestionPage() {
               </VStack>
             }
             {isHost ?
-              timeExpired &&
+              secondsLeft === 0 &&
               <VStack>
                 <Flex>
                   <Button onClick={getLeaderboard}
@@ -246,7 +272,7 @@ export default function QuestionPage() {
                 </Flex>
               </VStack>
               :
-              !timeExpired && !answered &&
+              !(secondsLeft === 0) && !answered &&
               <Button onClick={submitAnswer}
                 alignSelf="end"
                 fontWeight="extrabold"

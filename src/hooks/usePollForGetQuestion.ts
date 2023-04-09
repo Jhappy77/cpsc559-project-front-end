@@ -3,16 +3,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_URL } from "../settings";
 import { setQuestion } from "../state/questionSlice";
-import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice"
+import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice";
+import Cookies from "js-cookie";
 
 export function usePollForGetQuestion() {
-  const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount, requestNextQuestion } = useAppSelector(state => state.game);
+  const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount, requestNextQuestion } =
+    useAppSelector(state => state.game);
   const { index } = useAppSelector(state => state.question);
   const dispatch = useAppDispatch();
   const [pollTrigger, setPollTrigger] = useState(false);
   let pollGetQuestionTimeout: ReturnType<typeof setTimeout>;
 
-  const togglePollTrigger = () => { setPollTrigger(!pollTrigger) }
+  const togglePollTrigger = () => {
+    setPollTrigger(!pollTrigger);
+  };
 
   useEffect(() => {
     dispatch(incrementPollGetQuestionCount(1));
@@ -24,7 +28,7 @@ export function usePollForGetQuestion() {
       clearTimeout(pollGetQuestionTimeout);
       pollGetQuestionTimeout = setTimeout(togglePollTrigger, 1000);
     }
-  }, [pollTrigger, gotQuestion]);
+  }, [pollTrigger]);
 
   useEffect(() => {
     if (!gameCode || !gameStarted || !hasJoinedGame) return;
@@ -34,7 +38,7 @@ export function usePollForGetQuestion() {
         const { status, data } = response;
         if (status === 200) {
           console.log("status 200 on usePollForGetQuestion");
-          if (requestNextQuestion && index && (index - 1) === data.index) {
+          if (requestNextQuestion && index && index - 1 === data.index) {
             console.log("Already answered this question");
             return;
           }
@@ -43,7 +47,8 @@ export function usePollForGetQuestion() {
           dispatch(setGotQuestion(true));
           dispatch(setQuestion(data));
           dispatch(setRequestNextQuestion(false));
-          console.log(`Got question data`);
+          Cookies.set("index", `${data.index}`);
+          console.log(`Got question data, set cookie index: ${Cookies.get("index")}`);
         } else {
           throw new Error("No question data recieved");
         }
