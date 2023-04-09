@@ -1,6 +1,6 @@
 import { Button, Flex, VStack, Input, Progress, Text, FormControl } from "@chakra-ui/react";
 import Logo from "../components/Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useCreatePlayer } from "../hooks/useCreatePlayer";
@@ -8,7 +8,7 @@ import { usePollForGameStart } from "../hooks/usePollForGameStart";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
 import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
-import Cookies from "js-cookie";
+import { useClearCookies } from "../hooks/useClearCookies";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
@@ -19,13 +19,11 @@ export default function JoinPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { hasJoinedGame } = useAppSelector(state => state.game);
+  const { hasJoinedGame} = useAppSelector(state => state.game);
 
   // Clear all ccookies if we are joining as a player. This is neccessary
   // to not fuck with the state
-  Cookies.remove('isHost');
-  Cookies.remove('gameCode');
-  Cookies.remove('secondsLeft');
+  useClearCookies();
 
   useCreatePlayer();
   usePollForGameStart();
@@ -54,17 +52,14 @@ export default function JoinPage() {
     setName(event.target.value);
   };
 
-  const handleBack = () => {
+  const resetStates = () => {
     // Reset the state when we leave the page
     setCode("");
     setName("");
     dispatch(setHasJoinedGame(false));
     dispatch(setPlayerName(undefined));
     dispatch(setGameCode(undefined));
-
-    // Go back to home
-    navigate("/");
-  };
+  }
 
   return (
     <Flex
@@ -136,7 +131,7 @@ export default function JoinPage() {
             <Text fontFamily={`'Open Sans', sans-serif`} fontSize="2xl">
               Waiting for host to start the game...
             </Text>
-            <Progress height="32px" width="100%" colorScheme="whiteAlpha" isIndeterminate />
+            <Progress height="32px" width="100%" colorScheme="green" isIndeterminate />
           </VStack>
         </VStack>
       </Flex>

@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import GameCode from "../components/GameCode";
 import { usePollForGetQuestion } from "../hooks/usePollForGetQuestion";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import { submitQuestion, setQuestionAnswer, submitQuestionExpired, resetQuestionScore } from "../state/questionSlice";
-import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
+import { submitQuestion, setQuestionAnswer, submitQuestionExpired, resetQuestionScore, resetQuestionState } from "../state/questionSlice";
+import { setGotQuestion, setRequestNextQuestion, resetGameState } from "../state/gameSlice";
 import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 import { useNextQuestion } from "../hooks/useNextQuestion";
 import { setRequestUpdatedLeaderboard, resetLeaderboard } from "../state/leaderboardSlice";
@@ -19,6 +19,9 @@ import Cookies from "js-cookie";
 import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useClearCookies } from "../hooks/useClearCookies";
+import { resetPlayerState } from "../state/playerSlice";
+import { resetTimeState } from "../state/timeSlice";
 
 export default function QuestionPage() {
   const { prompt, answers, index, correctAnswer } = useAppSelector(state => state.question);
@@ -32,6 +35,7 @@ export default function QuestionPage() {
   const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
   const [onLastQuestion, setOnLastQuestion] = useState<boolean>(false);
+  const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -51,20 +55,14 @@ export default function QuestionPage() {
 
   useEffect(() => {
     // Resets flags on page once index changes
-    console.log("resetting answer colors");
-    setAnswerArr(["red", "blue", "green", "orange"]);
-    setShowLeaderboard(false);
-    setShowAnswer(false);
-    setAnswer(undefined);
-    // Stops polling for next question
-    if (!isHost) {
-      clearInterval(pollNextQuestionIntervalID.current);
-    }
+    resetFlags()
+
     if (index === 12) {
       setOnLastQuestion(true);
     } else {
       setOnLastQuestion(false);
     }
+
   }, [index]);
 
   useEffect(() => {
@@ -86,6 +84,9 @@ export default function QuestionPage() {
       showAnswer();
       dispatch(submitQuestionExpired());
       dispatch(resetQuestionScore());
+      if (onLastQuestion){
+        setShowGameOver(true);
+      }
       const interval = setInterval(() => {
         console.log("requesting next question");
         dispatch(setGotQuestion(false));
@@ -94,6 +95,19 @@ export default function QuestionPage() {
       return () => clearInterval(interval);
     }
   }, [timeExpired]);
+
+  const resetFlags = () => {
+    console.log("resetting answer colors");
+    setAnswerArr(["red", "blue", "green", "orange"]);
+    setShowLeaderboard(false);
+    setShowAnswer(false);
+    setAnswer(undefined);
+    setShowGameOver(false);
+    // Stops polling for next question
+    if (!isHost) {
+      clearInterval(pollNextQuestionIntervalID.current);
+    }
+  }
 
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
@@ -152,6 +166,9 @@ export default function QuestionPage() {
       getLeaderboard();
       setShowAnswer(false);
       setShowLeaderboard(true);
+      if (onLastQuestion){
+        setShowGameOver(true);
+      }
     } else {
       // grabs next question
       nextQuestion();
@@ -192,6 +209,20 @@ export default function QuestionPage() {
     return false;
   };
 
+  const endGame = () => {
+    useClearCookies();
+    resetFlags();
+
+    console.log("Resetting state in redux");
+    dispatch(resetGameState());
+    dispatch(resetLeaderboard());
+    dispatch(resetPlayerState());
+    dispatch(resetQuestionState());
+    dispatch(resetTimeState());
+
+    navigate("/");
+  }
+
   return (
     <Flex
       backgroundImage="linear-gradient(to bottom right, green, yellow)"
@@ -206,21 +237,13 @@ export default function QuestionPage() {
         {isHost && <GameCode id={gameCode}></GameCode>}
         {prompt && answers && index ? (
           <VStack>
-            {(() => {
-              if (
-                (onLastQuestion && timeExpired && showLeaderboard && isHost) ||
-                (onLastQuestion && timeExpired && !isHost)
-              ) {
-                return (
-                  <Card variant={"elevated"} width="100%" align="center" p={2} m={2}>
-                    <p><i><b>Game&rsquo;s Over.</b></i></p>
+            {showGameOver?
+              (<Card variant={"elevated"} width="100%" align="center" p={2} m={2}>
+                    <p>Game&rsquo;s Over</p>
                     <p><i><b>Thanks for playing!</b></i></p>
-                  </Card>
-                );
-              } else {
-                return <Timer index={index} />;
-              }
-            })()}
+              </Card>):
+              (<Timer index={index} />)
+            }
             {showLeaderboard && isHost ? (
               <Leaderboard />
             ) : (
@@ -261,10 +284,10 @@ export default function QuestionPage() {
               </VStack>
             )}
             {(() => {
-              if ((isHost && timeExpired && onLastQuestion && showLeaderboard) || (!isHost && timeExpired && onLastQuestion)) {
+              if (showGameOver) {
                 return (
                   <Button
-                    onClick={() => navigate("/")}
+                    onClick={endGame}
                     alignSelf="center"
                     fontWeight="extrabold"
                     shadow="lg"
