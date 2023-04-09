@@ -34,12 +34,6 @@ export function useRejoinAsHost() {
         dispatch(updateSecondsLeft(secondsLeft));
         console.log(`useRejoinAsHost: COOKIE updating seconds left COOKIE: ${secondsLeftCookie}`);
       }
-      const indexCookie = Cookies.get("index");
-      if (indexCookie !== undefined) {
-        const index = Number(indexCookie);
-        dispatch(updateIndex(index));
-        console.log(`useRejoinAsHost: INDEX COOKIE UPDATED TO: ${index}`);
-      }
     } else {
       console.log("useRejoinAsHost: No cookie found for game code!");
     }

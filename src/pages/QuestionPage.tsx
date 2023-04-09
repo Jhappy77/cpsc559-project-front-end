@@ -96,7 +96,7 @@ export default function QuestionPage() {
     if (secondsLeft === 0) {
       console.log(`QuestionPage: Setting time expired to true`);
       setTimeExpired(true);
-      showAnswer();
+      if(!isHost) showAnswer();
       dispatch(setRequestUpdatedLeaderboard(true));
       return;
     }
