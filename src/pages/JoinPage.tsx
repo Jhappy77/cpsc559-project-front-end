@@ -81,7 +81,7 @@ export default function JoinPage() {
           <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8} colorScheme="whiteAlpha" color="white">
             Back
           </Button>
-          <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>
+          <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"} maxWidth="80%">
             <FormControl>
               <Input
                 fontWeight={"bold"}
