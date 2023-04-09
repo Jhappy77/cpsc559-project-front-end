@@ -28,10 +28,10 @@ export default function QuestionPage() {
   const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
-  const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
+  const [showAnswerFlag, setShowAnswer] = useState<boolean>(false);
   const [requestNextQuestionButtonPressed, setRequestNextQuestionButtonPressed] = useState<boolean>(false);
   const [answered, setAnswered] = useState<boolean>(false); // flag to indicate if user answered already or not
-  const [showLeaderboard, setShowLeaderboardButtonClicked] = useState<boolean>(false);
+  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
 
@@ -52,8 +52,8 @@ export default function QuestionPage() {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
     setAnswerArr(["red", "blue", "green", "orange"]);
-    setShowLeaderboardButtonClicked(false);
-    setShowAnswerButtonClicked(false);
+    setShowLeaderboard(false);
+    setShowAnswer(false);
     setAnswer(undefined);
     setRequestNextQuestionButtonPressed(false);
     // Stops polling for next question 
@@ -94,7 +94,7 @@ export default function QuestionPage() {
     // Host can click a button that will show the answer once time has expired
     if (timeExpired && isHost) {
       showAnswer();
-      setShowAnswerButtonClicked(true);
+      setShowAnswer(true);
     }
   }
 
@@ -122,29 +122,46 @@ export default function QuestionPage() {
     }
   }
 
-  const nextQuestion = (event: React.MouseEvent) => {
+  const nextQuestion = () => {
     // Submit answer to backend
-    if (!requestNextQuestionButtonPressed) {
       console.log("Next question button pressed");
       dispatch(setRequestNextQuestion(true));
       setRequestNextQuestionButtonPressed(true);
-      setShowLeaderboardButtonClicked(false);
-    }
+      setShowLeaderboard(false);
   }
 
-  const showQuestion = (event: React.MouseEvent) => {
+  const showQuestion = () => {
     if (showLeaderboard) {
-      setShowLeaderboardButtonClicked(false);
+      setShowLeaderboard(false);
     }
   }
 
-  const getLeaderboard = (event: React.MouseEvent) => {
+  const getLeaderboard = () => {
     // Submit answer to backend
     // reset the leaderboard if it has not already been reset
     dispatch(resetLeaderboard());
     console.log("Show leaderboard button pressed");
     dispatch(setRequestUpdatedLeaderboard(true));
-    setShowLeaderboardButtonClicked(true);
+    setShowLeaderboard(true);
+  }
+
+  const getPageState = (event: React.MouseEvent) =>
+  {
+    // determine what page is shown
+    if(timeExpired && !showAnswerFlag && !showLeaderboard) {
+      setShowAnswer(true);
+      showAnswer();
+    }
+    else if(timeExpired && !showLeaderboard && showAnswerFlag) {
+      getLeaderboard();
+      setShowAnswer(false);
+      setShowLeaderboard(true);
+    }
+    else {
+      nextQuestion();
+      setShowLeaderboard(false);
+      showQuestion();
+    }
   }
 
   const handleSetAnswer = (event: React.MouseEvent) => {
@@ -230,21 +247,13 @@ export default function QuestionPage() {
             }
             {isHost ?
               timeExpired &&
-              <VStack>
-                <Flex>
-                  <Button onClick={getLeaderboard}
-                    fontWeight="extrabold"
-                    shadow="lg"
-                    border="4px" m={2}>
-                    Show Leaderboard
-                  </Button>
-                  <Button onClick={showAnswerHost} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Show Answer </Button>
-                </Flex>
-                <Flex>
-                  <Button onClick={showQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Back to Question</Button>
-                  <Button onClick={nextQuestion} fontWeight="extrabold" shadow="lg" border="4px" m={2}>Next Question</Button>
-                </Flex>
-              </VStack>
+                <Button onClick={getPageState}
+                  alignSelf="end"
+                  fontWeight="extrabold"
+                  shadow="lg"
+                  border="4px" m={2}>
+                  Next
+                </Button>
               :
               !timeExpired && !answered &&
               <Button onClick={submitAnswer}
