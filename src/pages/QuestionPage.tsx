@@ -63,14 +63,16 @@ export default function QuestionPage() {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
     const indexCookie = Cookies.get('index');
+    // if indexCookie exists and is equal to the incoming index
+      // Set showAnswer
     // && indexCookie !== undefined && Number(indexCookie) + 1 === index
-    if (!isHost && secondsLeft === 0) {
-      showAnswer();
-      // setTimeExpired(true);
-    } else {
-      setAnswerArr(["red", "blue", "green", "orange"]);
-    }
-   // setAnswerArr(["red", "blue", "green", "orange"]);
+    // if (!isHost && secondsLeft === 0) {
+    //   showAnswer();
+    //   // setTimeExpired(true);
+    // } else {
+    //   setAnswerArr(["red", "blue", "green", "orange"]);
+    // }
+    setAnswerArr(["red", "blue", "green", "orange"]);
     console.log(`QuestionPage: Resetting answer array`);
     setShowLeaderboardButtonClicked(false);
     setShowAnswerButtonClicked(false);

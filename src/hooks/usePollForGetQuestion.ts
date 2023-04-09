@@ -28,7 +28,7 @@ export function usePollForGetQuestion() {
       clearTimeout(pollGetQuestionTimeout);
       pollGetQuestionTimeout = setTimeout(togglePollTrigger, 1000);
     }
-  }, [pollTrigger]);
+  }, [pollTrigger, gotQuestion]);
 
   useEffect(() => {
     if (!gameCode || !gameStarted || !hasJoinedGame) return;
@@ -63,6 +63,7 @@ export function usePollForGetQuestion() {
   useEffect(() => {
     if (!gotQuestion && hasJoinedGame && gameStarted) {
       // Start polling for game started on server
+      console.log(`gotQuestion hook`);
       togglePollTrigger();
     }
   }, [gotQuestion]);
