@@ -26,7 +26,7 @@ export default function QuestionPage() {
   const { gameCode } = useAppSelector(state => state.game);
   const { isHost } = useAppSelector(state => state.player);
   const { secondsLeft } = useAppSelector(state => state.time);
-  // const [timeExpired, setTimeExpired] = useState<boolean>(false);
+  const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [answer, setAnswer] = useState<number | undefined>(undefined);
   const [answerArr, setAnswerArr] = useState<Array<string>>(["red", "blue", "green", "orange"]);
   const [showAnswerButtonClicked, setShowAnswerButtonClicked] = useState<boolean>(false);
@@ -35,6 +35,7 @@ export default function QuestionPage() {
   const [showLeaderboard, setShowLeaderboardButtonClicked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
+  const { rejoinAsHost, rejoinAsPlayer } = useAppSelector(state => state.player);
 
   usePollForGetQuestion();
   useSubmitAnswer();
@@ -66,13 +67,14 @@ export default function QuestionPage() {
     // if indexCookie exists and is equal to the incoming index
       // Set showAnswer
     // && indexCookie !== undefined && Number(indexCookie) + 1 === index
-    // if (!isHost && secondsLeft === 0) {
-    //   showAnswer();
-    //   // setTimeExpired(true);
-    // } else {
-    //   setAnswerArr(["red", "blue", "green", "orange"]);
-    // }
     setAnswerArr(["red", "blue", "green", "orange"]);
+    if (!isHost && secondsLeft === 0) {
+      showAnswer();
+      // setTimeExpired(true);
+    } else {
+      setAnswerArr(["red", "blue", "green", "orange"]);
+    }
+    // setAnswerArr(["red", "blue", "green", "orange"]);
     console.log(`QuestionPage: Resetting answer array`);
     setShowLeaderboardButtonClicked(false);
     setShowAnswerButtonClicked(false);
@@ -89,10 +91,12 @@ export default function QuestionPage() {
     // otherwise sets the flag to false
     if (secondsLeft === 0) {
       console.log(`QuestionPage: Setting time expired to true`);
-      // setTimeExpired(true);
+      setTimeExpired(true);
+      showAnswer();
       dispatch(setRequestUpdatedLeaderboard(true));
       return;
     }
+    setAnswerArr(["red", "blue", "green", "orange"]);
     console.log(`QuestionPage: Setting time expired to false`);
     // setTimeExpired(false);
   }, [secondsLeft])
@@ -113,7 +117,7 @@ export default function QuestionPage() {
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
-  }, [secondsLeft === 0])
+  }, [timeExpired])
 
   const showAnswerHost = (event: React.MouseEvent) => {
     // Host can click a button that will show the answer once time has expired
