@@ -47,7 +47,6 @@ export function usePollForGetQuestion() {
           dispatch(setGotQuestion(true));
           dispatch(setQuestion(data));
           dispatch(setRequestNextQuestion(false));
-          Cookies.set("index", `${data.index}`);
           console.log(`Got question data, set cookie index: ${Cookies.get("index")}`);
         } else {
           throw new Error("No question data recieved");

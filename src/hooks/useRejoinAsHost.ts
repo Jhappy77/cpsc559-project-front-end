@@ -4,7 +4,7 @@ import { setGameCode, setGameStarted, setHasJoinedGame } from "../state/gameSlic
 import { resetLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 import Cookies from "js-cookie";
 import { setIsHost } from "../state/playerSlice";
-import { updateSecondsLeft } from "../state/timeSlice";
+import { updateSecondsLeft, updateIndex  } from "../state/timeSlice";
 
 const TIME_LIMIT_IN_SECONDS = 60;
 
@@ -33,6 +33,12 @@ export function useRejoinAsHost() {
         const secondsLeft = Number(secondsLeftCookie);
         dispatch(updateSecondsLeft(secondsLeft));
         console.log(`useRejoinAsHost: COOKIE updating seconds left COOKIE: ${secondsLeftCookie}`);
+      }
+      const indexCookie = Cookies.get("index");
+      if (indexCookie !== undefined) {
+        const index = Number(indexCookie);
+        dispatch(updateIndex(index));
+        console.log(`useRejoinAsHost: INDEX COOKIE UPDATED TO: ${index}`);
       }
     } else {
       console.log("useRejoinAsHost: No cookie found for game code!");

@@ -64,6 +64,10 @@ export default function QuestionPage() {
     // Resets flags on page once index changes
     console.log("resetting answer colors");
     const indexCookie = Cookies.get('index');
+    // If the player rejoined the game on a new question
+    // if (!isHost && indexCookie !== undefined && Number(indexCookie) + 1 === index) {
+    //   // dispatch(set)
+    // }
     // if indexCookie exists and is equal to the incoming index
       // Set showAnswer
     // && indexCookie !== undefined && Number(indexCookie) + 1 === index
