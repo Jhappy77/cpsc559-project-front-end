@@ -3,7 +3,7 @@ import baxios from "../baxios";
 import { useEffect } from "react";
 import { getProxyUrl } from "../settings";
 import { setHasJoinedGame } from "../state/gameSlice";
-import Cookies from "js-cookie";;
+import Cookies from "js-cookie";
 
 export function useCreatePlayer() {
   const { name } = useAppSelector(state => state.player);
