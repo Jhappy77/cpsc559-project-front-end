@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import baxios from "../baxios";
 import { useEffect } from "react";
 import { getProxyUrl } from "../settings";
-import { resetQuestionScore} from "../state/questionSlice";
+import { resetQuestionScore } from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 import { setPlayerScore } from "../state/playerSlice";
 
@@ -10,18 +10,19 @@ import { setPlayerScore } from "../state/playerSlice";
 // need to validate their answer
 export function useSubmitAnswer() {
   const { questionScore } = useAppSelector(state => state.question);
+  const { gameCode } = useAppSelector(state => state.game);
   const { name } = useAppSelector(state => state.player);
   const dispatch = useAppDispatch();
   useEffect(() => {
     console.log("in useSubmitAnswer useEffect");
-    if (questionScore === undefined) return;
+    if (questionScore === undefined || gameCode === undefined || gameCode === "" || name === undefined || name === "")
+      return;
     baxios
-      .put(`${getProxyUrl()}/players/${name}`,
-        {
-          "correctAnswer": questionScore
-        })
+      .put(`${getProxyUrl()}/players/${gameCode}/${name}`, {
+        correctAnswer: questionScore,
+      })
       .then(response => {
-        const { status, data } = response;
+        const { status } = response;
         if (status === 200) {
           console.log("Answer submitted successfully");
           dispatch(setGotQuestion(false));
