@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setHasJoinedGame } from "../state/gameSlice";
 import Cookies from "js-cookie";
 
@@ -11,8 +11,8 @@ export function useCreatePlayer() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (!name || !gameCode || name === "" || gameCode === "") return;
-    axios
-      .post(`${API_URL}/players`, {
+    baxios
+      .post(`${getProxyUrl()}/players`, {
         name: name,
         joinCode: gameCode,
       })
