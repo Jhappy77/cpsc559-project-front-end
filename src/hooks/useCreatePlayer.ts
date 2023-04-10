@@ -10,7 +10,7 @@ export function useCreatePlayer() {
     const { gameCode, hasJoinedGame } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
     useEffect(() => {
-        if (!name || !gameCode || name === "" || gameCode === "") return;
+        if (!name || !gameCode || name === "" || gameCode === "" || hasJoinedGame) return;
         baxios
             .post(`${getProxyUrl()}/players`,
                 {
