@@ -39,9 +39,15 @@ const playerStateSlice = createSlice({
     setPlayerScore: (state: PlayerState, action: PayloadAction<number>): void => {
       state.score += action.payload;
     },
+    resetPlayerState: (state: PlayerState, action: PayloadAction): void => {
+      state.name = "";
+      state.isHost = false;
+      state.rejoinAsHost = false;
+      state.score = 0;
+    }
   },
 });
 
-export const { setPlayerName, setIsHost, setRejoinAsHost, setPlayerScore, setRejoinAsPlayer } = playerStateSlice.actions;
+export const { setPlayerName, setIsHost, setRejoinAsHost, setPlayerScore, resetPlayerState, setRejoinAsPlayer } = playerStateSlice.actions;
 
 export const playerSliceReducer = playerStateSlice.reducer;
