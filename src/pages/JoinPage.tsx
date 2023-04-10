@@ -8,7 +8,6 @@ import { usePollForGameStart } from "../hooks/usePollForGameStart";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
 import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
-import { useClearCookies } from "../hooks/useClearCookies";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
@@ -20,10 +19,6 @@ export default function JoinPage() {
   const dispatch = useAppDispatch();
 
   const { hasJoinedGame} = useAppSelector(state => state.game);
-
-  // Clear all ccookies if we are joining as a player. This is neccessary
-  // to not fuck with the state
-  useClearCookies();
 
   useCreatePlayer();
   usePollForGameStart();

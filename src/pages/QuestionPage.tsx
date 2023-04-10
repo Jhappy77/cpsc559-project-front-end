@@ -125,13 +125,6 @@ export default function QuestionPage() {
     }
   }
 
-  const showAnswerHost = (event: React.MouseEvent) => {
-    // Host can click a button that will show the answer once time has expired
-    if (secondsLeft === 0 && isHost) {
-      showAnswer();
-    }
-  }
-
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
     if (correctAnswer !== undefined) {
@@ -205,7 +198,7 @@ export default function QuestionPage() {
       return;
     }
     // Set answer state
-    console.log("Settting answer");
+    console.log("Setting answer");
     console.log(event.currentTarget.id);
     setAnswer(Number(event.currentTarget.id));
   };

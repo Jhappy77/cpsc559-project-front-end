@@ -17,7 +17,7 @@ export function useCreatePlayer() {
         joinCode: gameCode,
       })
       .then(response => {
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 203) {
           dispatch(setHasJoinedGame(true));
           // Set player cookies
           Cookies.set(`gameCode`, `${gameCode}`);
