@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 
 export function useGetLeaderboard() {
@@ -11,8 +11,8 @@ export function useGetLeaderboard() {
 
   useEffect(() => {
     if (!requestUpdatedLeaderboard) return;
-    axios
-      .get(`${API_URL}/games/leaderboard/${gameCode}`)
+    baxios
+      .get(`${getProxyUrl()}/games/leaderboard/${gameCode}`)
       .then(response => {
         const { status, data } = response;
         console.log("UsePollForGetLeaderboard called");

@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect, useState } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setQuestion } from "../state/questionSlice";
 import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice"
 
@@ -28,8 +28,8 @@ export function usePollForGetQuestion() {
 
   useEffect(() => {
     if (!gameCode || !gameStarted || !hasJoinedGame) return;
-    axios
-      .get(`${API_URL}/games/question/${gameCode}`)
+    baxios
+      .get(`${getProxyUrl()}/games/question/${gameCode}`)
       .then(response => {
         const { status, data } = response;
         if (status === 200) {

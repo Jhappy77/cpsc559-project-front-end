@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { resetQuestionScore} from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 import { setPlayerScore } from "../state/playerSlice";
@@ -15,8 +15,8 @@ export function useSubmitAnswer() {
   useEffect(() => {
     console.log("in useSubmitAnswer useEffect");
     if (questionScore === undefined) return;
-    axios
-      .put(`${API_URL}/players/${name}`,
+    baxios
+      .put(`${getProxyUrl()}/players/${name}`,
         {
           "correctAnswer": questionScore
         })

@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setGameStarted, setStartGameButtonPressed } from "../state/gameSlice";
 
 export function useStartGame() {
@@ -13,10 +13,10 @@ export function useStartGame() {
 
   useEffect(() => {
     if (startGameButtonPressed) {
-      const start_game_endpoint = `${API_URL}/games/${gameCode}`;
+      const start_game_endpoint = `${getProxyUrl()}/games/${gameCode}`;
 
       console.log(`Calling ${start_game_endpoint}`);
-      axios.put(start_game_endpoint).then(response => {
+      baxios.put(start_game_endpoint).then(response => {
         const status_code = response.status;
         console.log(`Call to ${start_game_endpoint} response:`);
         console.log(response);
