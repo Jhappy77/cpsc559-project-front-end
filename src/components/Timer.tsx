@@ -32,8 +32,6 @@ export default function Timer(props: { index: number }) {
                 // targetTime = timeNow + TIME_LIMIT_IN_MS;
                 targetTime = timeNow + secondsLeft * 1000;
             }
-            dispatch(setRejoinAsHost(false));
-            dispatch(setRejoinAsPlayer(false));
         }
         dispatch(updateTargetTime(targetTime));
         dispatch(updateIndex(index));

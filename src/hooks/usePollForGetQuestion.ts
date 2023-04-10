@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../settings";
 import { setQuestion } from "../state/questionSlice";
 import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice";
-import Cookies from "js-cookie";
 
 export function usePollForGetQuestion() {
   const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount, requestNextQuestion } =

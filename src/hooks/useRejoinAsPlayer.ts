@@ -25,8 +25,6 @@ export function useRejoinAsPlayer() {
       dispatch(setPlayerName(nameCookie));
       dispatch(setGameStarted(true));
       dispatch(setHasJoinedGame(true));
-      dispatch(resetLeaderboard());
-      dispatch(setRequestUpdatedLeaderboard(false));
       // Reset the secondsLeft state from cookies if we have it
       const secondsLeftCookie = Cookies.get("secondsLeft");
       if (secondsLeftCookie !== undefined) {
