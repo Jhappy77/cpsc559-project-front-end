@@ -15,8 +15,9 @@ import { useGetLeaderboard } from "../hooks/useGetLeaderboard";
 import Timer from "../components/Timer";
 import Leaderboard from "../components/Leaderboard";
 import { useRejoinAsHost } from "../hooks/useRejoinAsHost";
+import { useRejoinAsPlayer } from "../hooks/useRejoinAsPlayer";
 import Cookies from "js-cookie";
-import { setIsHost, setRejoinAsHost } from "../state/playerSlice";
+import { setIsHost, setRejoinAsHost, setRejoinAsPlayer } from "../state/playerSlice";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useClearCookies } from "../hooks/useClearCookies";
@@ -45,17 +46,30 @@ export default function QuestionPage() {
   useNextQuestion();
   useGetLeaderboard();
   useRejoinAsHost();
+  useRejoinAsPlayer();
 
   // On refresh: Check for gameCode cookie, if it exists,
-  // attempt to rejoin at cookie state
-  if (gameCode === undefined && Cookies.get("gameCode") && Cookies.get("isHost")) {
+  // attempt to rejoin as a host at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost') === `true`) {
     dispatch(setRejoinAsHost(true));
     dispatch(setIsHost(true));
+  }
+
+  // On refresh: Check for gameCode cookie, if it exists,
+  // attempt to rejoin as a player at cookie state
+  if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost') === `false`) {
+    dispatch(setRejoinAsPlayer(true));
+    dispatch(setIsHost(false));
   }
 
   useEffect(() => {
     // Resets flags on page once index changes
     resetFlags()
+
+    setAnswerArr(["red", "blue", "green", "orange"]);
+    if (!isHost && secondsLeft === 0) {
+      showAnswer();
+    }
 
     if (index === 12) {
       setOnLastQuestion(true);
@@ -70,16 +84,18 @@ export default function QuestionPage() {
     // otherwise sets the flag to false
     if (secondsLeft === 0) {
       setTimeExpired(true);
+      if(!isHost) showAnswer();
       dispatch(setRequestUpdatedLeaderboard(true));
       return;
     }
     setTimeExpired(false);
+    setAnswerArr(["red", "blue", "green", "orange"]);
   }, [secondsLeft]);
 
   useEffect(() => {
     // if timeExpired and user is not host, show the correct answer
     // and set the interval to poll for the next question from host
-    if (timeExpired && !isHost) {
+    if (secondsLeft === 0 && !isHost) {
       setAnswered(false);
       showAnswer();
       dispatch(submitQuestionExpired());
@@ -178,11 +194,11 @@ export default function QuestionPage() {
   };
 
   const handleSetAnswer = (event: React.MouseEvent) => {
-    if (timeExpired) {
+    if (secondsLeft === 0) {
       return;
     }
     // Set answer state
-    console.log("Settting answer");
+    console.log("Setting answer");
     console.log(event.currentTarget.id);
     setAnswer(Number(event.currentTarget.id));
   };

@@ -3,13 +3,24 @@ import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useAppDispatch } from "../state/reduxHooks";
-import { setRejoinAsHost } from "../state/playerSlice";
+import { setRejoinAsHost, setRejoinAsPlayer } from "../state/playerSlice";
 import { setGameCode, setGameStarted } from "../state/gameSlice";
 
 export default function StartPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const hasGameHostCookies = Cookies.get('isHost') === `true`;
+
+  // check if we have host or player cookies stored
+  const getIsHost = () => {
+    const isHost = Cookies.get('isHost');
+    if (isHost === `true`) {
+      return true;
+    } else if (isHost === `false`) {
+      return false;
+    }
+    return undefined;
+  };
+  const hasGameHostCookies = getIsHost();
 
   // Whenever we return to the start page, we should reset this state
   // (this helps the cookie logic in particular)
@@ -19,6 +30,11 @@ export default function StartPage() {
 
   const RejoinAsHost = () => {
     dispatch(setRejoinAsHost(true));
+    navigate('/question');
+  };
+
+  const RejoinAsPlayer = () => {
+    dispatch(setRejoinAsPlayer(true));
     navigate('/question');
   };
 
@@ -46,7 +62,7 @@ export default function StartPage() {
           >
             JOIN A GAME
           </Button>
-          {hasGameHostCookies && <Button
+          {hasGameHostCookies !== undefined && hasGameHostCookies === true && <Button
             color="white"
             padding={8}
             fontSize={["large", "2xl"]}
@@ -54,6 +70,15 @@ export default function StartPage() {
             onClick={RejoinAsHost}
           >
             REJOIN GAME AS HOST
+          </Button>}
+          {hasGameHostCookies !== undefined && hasGameHostCookies === false && <Button
+            color="white"
+            padding={8}
+            fontSize={["large", "2xl"]}
+            colorScheme="whiteAlpha"
+            onClick={RejoinAsPlayer}
+          >
+            REJOIN GAME AS PLAYER
           </Button>}
         </VStack>
       </Flex>
