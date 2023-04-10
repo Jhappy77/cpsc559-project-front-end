@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setGotQuestion, setRequestNextQuestion } from "../state/gameSlice";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
@@ -13,8 +13,8 @@ export function useNextQuestion() {
   useEffect(() => {
     console.log("in useNextQuestion useEffect");
     if (gameCode === undefined || !isHost || !requestNextQuestion) return;
-    axios
-      .put(`${API_URL}/games/question/${gameCode}`, {})
+    baxios
+      .put(`${getProxyUrl()}/games/question/${gameCode}`, {})
       .then(response => {
         const { status } = response;
         if (status === 200) {
