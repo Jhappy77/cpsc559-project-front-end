@@ -3,6 +3,7 @@ import baxios from "../baxios";
 import { useEffect } from "react";
 import { getProxyUrl } from "../settings";
 import { setHasJoinedGame } from "../state/gameSlice";
+import Cookies from "js-cookie";;
 
 export function useCreatePlayer() {
   const { name } = useAppSelector(state => state.player);
@@ -18,6 +19,10 @@ export function useCreatePlayer() {
       .then(response => {
         if (response.status === 201) {
           dispatch(setHasJoinedGame(true));
+          // Set player cookies
+          Cookies.set(`gameCode`, `${gameCode}`);
+          Cookies.set(`isHost`, `false`);
+          Cookies.set(`name`, `${name}`);
         } else if (response.status === 203) {
           dispatch(setHasJoinedGame(false));
           alert("This game has already begun, please try again with a different game.");

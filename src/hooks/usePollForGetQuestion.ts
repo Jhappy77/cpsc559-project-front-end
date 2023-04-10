@@ -3,16 +3,19 @@ import baxios from "../baxios";
 import { useEffect, useState } from "react";
 import { getProxyUrl } from "../settings";
 import { setQuestion } from "../state/questionSlice";
-import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice"
+import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice";
 
 export function usePollForGetQuestion() {
-  const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount, requestNextQuestion } = useAppSelector(state => state.game);
+  const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount, requestNextQuestion } =
+    useAppSelector(state => state.game);
   const { index } = useAppSelector(state => state.question);
   const dispatch = useAppDispatch();
   const [pollTrigger, setPollTrigger] = useState(false);
   let pollGetQuestionTimeout: ReturnType<typeof setTimeout>;
 
-  const togglePollTrigger = () => { setPollTrigger(!pollTrigger) }
+  const togglePollTrigger = () => {
+    setPollTrigger(!pollTrigger);
+  };
 
   useEffect(() => {
     dispatch(incrementPollGetQuestionCount(1));
@@ -34,7 +37,7 @@ export function usePollForGetQuestion() {
         const { status, data } = response;
         if (status === 200) {
           console.log("status 200 on usePollForGetQuestion");
-          if (requestNextQuestion && index && (index - 1) === data.index) {
+          if (requestNextQuestion && index && index - 1 === data.index) {
             console.log("Already answered this question");
             return;
           }
