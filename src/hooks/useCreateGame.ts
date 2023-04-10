@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import baxios from '../baxios';
 import { useEffect } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setGameCode, createGame } from "../state/gameSlice";
 import { joinGameRoomAsHostAction } from "../state/socketActions/joinGameRoomAction";
 
@@ -13,8 +14,8 @@ export function useCreateGame() {
   useEffect(() => {
     if (!gameCreationCallTs) return;
     const generatedGameCode = uuidv4().substring(0, 5);
-    axios
-      .post(`${API_URL}/games/${generatedGameCode}`)
+    baxios
+      .post(`${getProxyUrl()}/games/${generatedGameCode}`)
       .then(response => {
         const gameCode = response.data.joinCode;
         if (gameCode) {

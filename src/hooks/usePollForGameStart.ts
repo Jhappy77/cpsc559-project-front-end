@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setGameStarted, incrementPollGetGameCount } from "../state/gameSlice"
 
 export function usePollForGameStart() {
@@ -28,8 +28,8 @@ export function usePollForGameStart() {
 
     useEffect(() => {
         if (!hasJoinedGame || !gameCode) return;
-        axios
-            .get(`${API_URL}/games/${gameCode}`)
+        baxios
+            .get(`${getProxyUrl()}/games/${gameCode}`)
             .then(response => {
                 const { status, data } = response;
                 console.log(data.started);
