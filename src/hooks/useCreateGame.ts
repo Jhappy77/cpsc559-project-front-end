@@ -14,7 +14,6 @@ export function useCreateGame() {
   useEffect(() => {
     if (!gameCreationCallTs) return;
     const generatedGameCode = uuidv4().substring(0, 5);
-    console.log(getProxyUrl());
     baxios
       .post(`${getProxyUrl()}/games/${generatedGameCode}`)
       .then(response => {
