@@ -23,12 +23,20 @@ export default function JoinPage() {
 
   // Clear all ccookies if we are joining as a player. This is neccessary
   // to not fuck with the state
-  Cookies.remove('isHost');
-  Cookies.remove('gameCode');
-  Cookies.remove('secondsLeft');
+  Cookies.remove("isHost");
+  Cookies.remove("gameCode");
+  Cookies.remove("secondsLeft");
 
   useCreatePlayer();
   usePollForGameStart();
+
+  const checkValidGameCode = (gameCode: string) => {
+    let modifiedGameCode = gameCode.trim();
+    if (modifiedGameCode.length !== 5 || !/^[a-zA-Z0-9]+$/.test(modifiedGameCode)) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
     if (name?.length == 0) {
@@ -36,7 +44,7 @@ export default function JoinPage() {
       return;
     }
 
-    if (gameCode && gameCode.length < CODE_LENGTH) {
+    if ((gameCode && gameCode.length < CODE_LENGTH) || !gameCode || !checkValidGameCode(gameCode)) {
       alert("Please enter a valid code.");
       return;
     }
@@ -78,7 +86,13 @@ export default function JoinPage() {
       <Flex alignItems="center" justifyContent="center">
         <VStack>
           <Logo size={["64px", "100px"]} />
-          <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8} colorScheme="whiteAlpha" color="white">
+          <Button
+            leftIcon={<FaArrowLeft />}
+            onClick={() => navigate("/")}
+            marginBottom={8}
+            colorScheme="whiteAlpha"
+            color="white"
+          >
             Back
           </Button>
           <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"}>

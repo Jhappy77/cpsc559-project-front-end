@@ -24,14 +24,10 @@ export function useCreateGame() {
         } else throw new Error("No game code recieved");
       })
       .catch((reason: AxiosError) => {
-        if (reason.response?.status === 466) {
-          console.log("466 error");
-          dispatch(createGame());
-        }
-        else {
-          console.error("Unhandled error in useCreateGame");
-          console.error(reason);
-        }
+        console.error("error in useCreateGame");
+        console.error(reason);
+        // Keep trying to create a game until successful
+        dispatch(createGame());
       });
   }, [gameCreationCallTs]);
 }

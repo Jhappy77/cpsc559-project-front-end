@@ -5,13 +5,17 @@ import { API_URL } from "../settings";
 import { resetQuestionScore} from "../state/questionSlice";
 import { setGotQuestion } from "../state/gameSlice";
 import { setPlayerScore } from "../state/playerSlice";
+import { useState } from "react";
 
 // when someone submits an answer, dispatch an action that triggers a timestamp
 // need to validate their answer
 export function useSubmitAnswer() {
   const { questionScore } = useAppSelector(state => state.question);
   const { name } = useAppSelector(state => state.player);
+  const [ toggleSubmitAnswer, setToggleSubmitAnswer ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+
+
   useEffect(() => {
     console.log("in useSubmitAnswer useEffect");
     if (questionScore === undefined) return;
@@ -36,8 +40,10 @@ export function useSubmitAnswer() {
       })
       .catch(reason => {
         // TODO: Handle errors better
-        console.error("Unhandled error in useSubmitAnswer");
+        console.error("Error in useSubmitAnswer");
         console.error(reason);
+        // try again to resubmit answer
+        setToggleSubmitAnswer(!toggleSubmitAnswer);
       });
-  }, [questionScore, dispatch]);
+  }, [questionScore, toggleSubmitAnswer, dispatch]);
 }

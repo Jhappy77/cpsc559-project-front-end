@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../settings";
-import { setGameStarted, incrementPollGetGameCount } from "../state/gameSlice"
+import { setGameStarted, incrementPollGetGameCount, setHasJoinedGame } from "../state/gameSlice"
 
 export function usePollForGameStart() {
     const { hasJoinedGame, gameCode, pollGetGameCount, gameStarted } = useAppSelector(state => state.game);
@@ -36,11 +36,19 @@ export function usePollForGameStart() {
                 if (status === 200) {
                     dispatch(setGameStarted(data.started));
                 }
+                else if (status === 444 || status === 454){
+                    alert("Game no longer exists. Please enter a different game code.");
+                    // return user to join screen to re-enter information
+                    dispatch(setHasJoinedGame(false));
+                }
                 console.log(`API Call to: /games/${gameCode}, response: ${status}`);
             })
             .catch(reason => {
-                console.error("Unhandled error in useGetGame");
+                console.error("Error in useGetGame");
                 console.error(reason);
+                alert("Something went wrong on our end :( \nPlease re-enter game info.");
+                // return user to join screen to re-enter information
+                dispatch(setHasJoinedGame(false));
             });
     }, [pollGetGameCount]);
 
