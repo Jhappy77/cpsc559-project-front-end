@@ -29,7 +29,7 @@ export default function JoinPage() {
   usePollForGameStart();
 
   const checkValidGameCode = (gameCode: string) => {
-    let modifiedGameCode = gameCode.trim();
+    const modifiedGameCode = gameCode.trim();
     if (modifiedGameCode.length !== 5 || !/^[a-zA-Z0-9]+$/.test(modifiedGameCode)) {
       return false;
     }

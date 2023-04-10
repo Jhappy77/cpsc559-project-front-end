@@ -36,19 +36,23 @@ export function usePollForGameStart() {
                 if (status === 200) {
                     dispatch(setGameStarted(data.started));
                 }
-                else if (status === 444 || status === 454){
+                console.log(`API Call to: /games/${gameCode}, response: ${status}`);
+            })
+            .catch(reason => {
+                const status = reason.response.status;
+
+                if (status === 444 || status === 454){
                     alert("Game no longer exists. Please enter a different game code.");
                     // return user to join screen to re-enter information
                     dispatch(setHasJoinedGame(false));
                 }
-                console.log(`API Call to: /games/${gameCode}, response: ${status}`);
-            })
-            .catch(reason => {
-                console.error("Error in useGetGame");
-                console.error(reason);
-                alert("Something went wrong on our end :( \nPlease re-enter game info.");
-                // return user to join screen to re-enter information
-                dispatch(setHasJoinedGame(false));
+                else {
+                    console.error("Error in useGetGame");
+                    console.error(reason);
+                    alert("Something went wrong on our end :( \nPlease re-enter game info.");
+                    // return user to join screen to re-enter information
+                    dispatch(setHasJoinedGame(false));
+                }
             });
     }, [pollGetGameCount]);
 
