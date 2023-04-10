@@ -15,7 +15,6 @@ export default function Leaderboard() {
                 </Box>
                 <TableContainer width={["sm", "md"]} margin="10">
                     <Table width={["sm", "md"]} variant="striped" colorScheme="green" size="sm">
-                        <TableCaption>Thanks for playing Bahoot!</TableCaption>
                         <Thead>
                             <Tr>
                                 <Th>Player name</Th>

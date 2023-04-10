@@ -11,7 +11,7 @@ export interface QuestionState {
 }
 
 export const defaultQuestionState: QuestionState = {
-  questionScore: undefined
+  questionScore: undefined,
 };
 
 const questionStateSlice = createSlice({
@@ -25,7 +25,7 @@ const questionStateSlice = createSlice({
         return;
       }
       state.questionScore = 0;
-      if(state.answer === state.correctAnswer) {
+      if (state.answer === state.correctAnswer) {
         state.questionScore = action.payload;
       }
     },
@@ -39,20 +39,36 @@ const questionStateSlice = createSlice({
       state.answers = action.payload.answers;
       state.index = action.payload.index + 1;
     },
-    setQuestionAnswer:(state: QuestionState, action: PayloadAction<number | undefined>): void => {
+    setQuestionAnswer: (state: QuestionState, action: PayloadAction<number | undefined>): void => {
       state.answer = action.payload;
     },
-    incrementQuestionIndex:(state: QuestionState, action: PayloadAction<number>): void => {
+    incrementQuestionIndex: (state: QuestionState, action: PayloadAction<number>): void => {
       if (state.index !== undefined) {
         state.index = state.index + action.payload;
       }
     },
     resetQuestionScore: (state: QuestionState, action: Action): void => {
       state.questionScore = undefined;
-    }
+    },
+    resetQuestionState: (state: QuestionState, action: Action): void => {
+      state.questionScore = undefined;
+      state.answer = undefined;
+      state.correctAnswer = undefined;
+      state.prompt = undefined;
+      state.answers = undefined;
+      state.index =undefined;
+    },
   },
-})
+});
 
-export const { submitQuestion, setQuestion, setQuestionAnswer, incrementQuestionIndex, resetQuestionScore, submitQuestionExpired } = questionStateSlice.actions;
+export const {
+  submitQuestion,
+  setQuestion,
+  setQuestionAnswer,
+  incrementQuestionIndex,
+  resetQuestionScore,
+  submitQuestionExpired,
+  resetQuestionState,
+} = questionStateSlice.actions;
 
 export const questionSliceReducer = questionStateSlice.reducer;
