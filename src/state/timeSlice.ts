@@ -25,9 +25,14 @@ const timeStateSlice = createSlice({
     updateSecondsLeft: (state: TimeState, action: PayloadAction<number>): void => {
       state.secondsLeft = action.payload;
     },
+    resetTimeState: (state: TimeState, action: Action): void => {
+      state.q_index = 0;
+      state.targetTime = 0;
+      state.secondsLeft = 20;
+    }
   },
 });
 
-export const { updateIndex, updateTargetTime, updateSecondsLeft } = timeStateSlice.actions;
+export const { updateIndex, updateTargetTime, updateSecondsLeft, resetTimeState } = timeStateSlice.actions;
 
 export const timeSliceReducer = timeStateSlice.reducer;

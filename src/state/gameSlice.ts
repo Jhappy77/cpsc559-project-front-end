@@ -65,6 +65,16 @@ const gameStateSlice = createSlice({
     },
     setPlayers: (state: GameState, action: PayloadAction<Array<string>>): void => {
       state.players = action.payload;
+    },
+    resetGameState: (state: GameState, action: Action): void => {
+      state.pollGetGameCount = 0;
+      state.hasJoinedGame = false;
+      state.gameStarted = false;
+      state.startGameButtonPressed = false;
+      state.pollGetQuestionCount = 0;
+      state.gotQuestion = false;
+      state.requestNextQuestion = false;
+      state.players = [];
     }
   },
 });
@@ -80,7 +90,8 @@ export const {
   setGotQuestion,
   incrementPollGetQuestionCount,
   setRequestNextQuestion,
-  setPlayers
+  setPlayers,
+  resetGameState
 } = gameStateSlice.actions;
 
 export const gameSliceReducer = gameStateSlice.reducer;

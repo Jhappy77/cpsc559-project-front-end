@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
-import axios from "axios";
+import baxios from "../baxios";
 import { useEffect, useState } from "react";
-import { API_URL } from "../settings";
+import { getProxyUrl } from "../settings";
 import { setPlayers } from "../state/gameSlice";
 
 export function useGetGamePlayers() {
@@ -15,8 +15,8 @@ export function useGetGamePlayers() {
         const interval = setInterval(() => {
             if (!gameCode) return;
             if (gameCreationCallTs === undefined) return;
-            axios
-              .get(`${API_URL}/games/players/${gameCode}`)
+            baxios
+              .get(`${getProxyUrl()}/games/players/${gameCode}`)
               .then(response => {
                 const playerArr = new Array(response.data.length);
                 for (let i=0; i < response.data.length; i++){

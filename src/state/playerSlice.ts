@@ -6,6 +6,7 @@ export interface PlayerState {
   name?: string;
   isHost: boolean;
   rejoinAsHost: boolean;
+  rejoinAsPlayer: boolean;
   score: number;
 }
 
@@ -13,6 +14,7 @@ export const defaultPlayerState: PlayerState = {
   name: "",
   isHost: false,
   rejoinAsHost: false,
+  rejoinAsPlayer: false,
   score: 0,
 };
 
@@ -31,12 +33,21 @@ const playerStateSlice = createSlice({
     setRejoinAsHost: (state: PlayerState, action: PayloadAction<boolean>): void => {
       state.rejoinAsHost = action.payload;
     },
+    setRejoinAsPlayer: (state: PlayerState, action: PayloadAction<boolean>): void => {
+      state.rejoinAsPlayer = action.payload;
+    },
     setPlayerScore: (state: PlayerState, action: PayloadAction<number>): void => {
       state.score += action.payload;
     },
+    resetPlayerState: (state: PlayerState, action: PayloadAction): void => {
+      state.name = "";
+      state.isHost = false;
+      state.rejoinAsHost = false;
+      state.score = 0;
+    }
   },
 });
 
-export const { setPlayerName, setIsHost, setRejoinAsHost, setPlayerScore } = playerStateSlice.actions;
+export const { setPlayerName, setIsHost, setRejoinAsHost, setPlayerScore, resetPlayerState, setRejoinAsPlayer } = playerStateSlice.actions;
 
 export const playerSliceReducer = playerStateSlice.reducer;
