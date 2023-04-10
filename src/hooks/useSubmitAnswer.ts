@@ -16,13 +16,15 @@ export function useSubmitAnswer() {
   const [ toggleSubmitAnswer, setToggleSubmitAnswer ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-
+  // submits an answer to the database if the required fields are defined in the question state
+  // add the question score to the correct answer to update the players score dependent on the time
+  // that they answer the question in
   useEffect(() => {
     console.log("in useSubmitAnswer useEffect");
     if (questionScore === undefined || gameCode === undefined || gameCode === "" || name === undefined || name === "")
       return;
     baxios
-      .put(`${getProxyUrl()}/players/${gameCode}/${name}`, {
+      .put(`${getProxyUrl()}/players/${gameCode}/${name}`, {  
         correctAnswer: questionScore,
       })
       .then(response => {
@@ -40,7 +42,7 @@ export function useSubmitAnswer() {
         console.log(`API PUT Call to: /players/${name}, response: ${status}`);
       })
       .catch(reason => {
-        // TODO: Handle errors better
+        // catch error in submit answer hook
         console.error("Error in useSubmitAnswer");
         console.error(reason);
         // try again to resubmit answer

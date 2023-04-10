@@ -1,5 +1,8 @@
 import { Button } from "@chakra-ui/react";
 
+// Answer used to display the answer options for each question
+// this component is used to give the functionality for the questions to
+// be dynamic and to have their selection submitted
 export default function Answer(props: { id: string; background: string; selected: boolean, text: string | undefined, disabled: boolean, setAnswer: React.MouseEventHandler<HTMLButtonElement> }) {
 
   return (

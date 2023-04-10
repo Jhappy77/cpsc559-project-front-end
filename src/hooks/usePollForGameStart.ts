@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getProxyUrl } from "../settings";
 import { setGameStarted, incrementPollGetGameCount, setHasJoinedGame } from "../state/gameSlice"
 
+// poll for the start of the game from the host page
 export function usePollForGameStart() {
     const { hasJoinedGame, gameCode, pollGetGameCount, gameStarted } = useAppSelector(state => state.game);
     const dispatch = useAppDispatch();
@@ -12,6 +13,7 @@ export function usePollForGameStart() {
     const [pollTrigger, setPollTrigger] = useState(false);
     let pollStartGameTimeout: ReturnType<typeof setTimeout>;
 
+    // keep polling for game start until the game is started
     const togglePollTrigger = () => { setPollTrigger(!pollTrigger) }
     useEffect(() => {
         dispatch(incrementPollGetGameCount(1));
@@ -26,6 +28,7 @@ export function usePollForGameStart() {
         }
     }, [pollTrigger, gameStarted]);
 
+    // set the game started to true after the host has started it 
     useEffect(() => {
         if (!hasJoinedGame || !gameCode) return;
         baxios

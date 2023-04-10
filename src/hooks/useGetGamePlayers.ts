@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getProxyUrl } from "../settings";
 import { setPlayers } from "../state/gameSlice";
 
+// poll to get the players for a game
+// used when displaying all the players on the host page before the game has started
 export function useGetGamePlayers() {
   const { gameCode, gameCreationCallTs, gameStarted } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();

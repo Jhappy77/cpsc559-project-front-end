@@ -8,6 +8,7 @@ import { updateSecondsLeft, updateIndex } from "../state/timeSlice";
 
 const TIME_LIMIT_IN_SECONDS = 60;
 
+// polled to allow the host to rejoin the game if they lose connection or refresh their page
 export function useRejoinAsHost() {
   const { rejoinAsHost } = useAppSelector(state => state.player);
   const { gameCode } = useAppSelector(state => state.game);
@@ -18,9 +19,11 @@ export function useRejoinAsHost() {
     setHostRejoinTrigger(!hostRejoinTrigger);
   };
 
+  // called when the host needs to rejoin the game via cookies
   useEffect(() => {
     const gameCodeCookie = Cookies.get("gameCode");
     if (gameCodeCookie !== undefined && rejoinAsHost) {
+      // reset the fields from the game, quesiton and leaderboard state
       dispatch(setIsHost(true));
       dispatch(setGameCode(gameCodeCookie));
       dispatch(setGameStarted(true));

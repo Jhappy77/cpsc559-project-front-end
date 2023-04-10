@@ -10,6 +10,7 @@ import socketMiddleware from "./socketMiddleware";
 
 // Divide the store into logical segments, where state in 1 segment does not directly rely on value
 // of state in another segment
+// gets the stores for all states in the application
 export interface StoreState {
   player: PlayerState;
   game: GameState;
@@ -18,6 +19,7 @@ export interface StoreState {
   leaderboard: LeaderboardState;
 }
 
+// default store states
 const defaultStoreState: StoreState = {
   player: defaultPlayerState,
   game: defaultGameState,
@@ -26,6 +28,7 @@ const defaultStoreState: StoreState = {
   time: defaultTimeState
 };
 
+// reducers for the store states
 const reducer = {
   player: playerSliceReducer,
   game: gameSliceReducer,

@@ -28,16 +28,19 @@ export default function StartPage() {
   dispatch(setGameStarted(false));
   dispatch(setGameCode(undefined));
 
+  // displayed if the host needs to rejoin the game via cookies
   const RejoinAsHost = () => {
     dispatch(setRejoinAsHost(true));
     navigate('/question');
   };
 
+  // displayed if the player needs to rejoin the game via cookies
   const RejoinAsPlayer = () => {
     dispatch(setRejoinAsPlayer(true));
     navigate('/question');
   };
 
+  // elements displayed on the startup page of the Bahoot application
   return (
     <Flex
       backgroundImage="linear-gradient(to bottom right, green, yellow)"

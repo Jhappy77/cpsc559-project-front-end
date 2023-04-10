@@ -13,6 +13,7 @@ import { useClearCookies } from "../hooks/useClearCookies";
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
 
+// creates the components and functionality for the join page
 export default function JoinPage() {
   const [gameCode, setCode] = useState<string | undefined>(undefined);
   const [name, setName] = useState<string | undefined>(undefined);
@@ -21,7 +22,9 @@ export default function JoinPage() {
 
   const { hasJoinedGame } = useAppSelector(state => state.game);
 
+  // create a player when they join the game
   useCreatePlayer();
+  // continue to poll for game start until host has started the game
   usePollForGameStart();
 
   const checkValidGameCode = (gameCode: string) => {
@@ -32,6 +35,7 @@ export default function JoinPage() {
     return true;
   };
 
+  // handle joining a game when the player submits their name
   const handleSubmit = () => {
     if (name?.length == 0) {
       alert("Please enter a name.");
@@ -48,14 +52,17 @@ export default function JoinPage() {
     dispatch(setGameCode(gameCode));
   };
 
+  // update code fields when user enters text
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);
   };
 
+  // update name fields when user enters text
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
+  // reset the game states when the player leaves the page
   const resetStates = () => {
     // Reset the state when we leave the page
     setCode("");
