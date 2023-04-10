@@ -10,12 +10,12 @@ export default function StartPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  // check if we have host or player cookies stored
   const getIsHost = () => {
     const isHost = Cookies.get('isHost');
     if (isHost === `true`) {
       return true;
     } else if (isHost === `false`) {
-      console.log('startPage: not a host');
       return false;
     }
     return undefined;

@@ -49,37 +49,21 @@ export default function QuestionPage() {
   if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost') === `true`) {
     dispatch(setRejoinAsHost(true));
     dispatch(setIsHost(true));
-    console.log(`QuesstionPage: setting rejoin as host to true`);
   }
 
   // On refresh: Check for gameCode cookie, if it exists,
-  // attempt to rejoin as a host at cookie state
+  // attempt to rejoin as a player at cookie state
   if (gameCode === undefined && Cookies.get('gameCode') && Cookies.get('isHost') === `false`) {
     dispatch(setRejoinAsPlayer(true));
     dispatch(setIsHost(false));
-    console.log(`QuestionPage: setting rejoin as player to true`);
   }
 
   useEffect(() => {
     // Resets flags on page once index changes
-    console.log("resetting answer colors");
-    const indexCookie = Cookies.get('index');
-    // If the player rejoined the game on a new question
-    // if (!isHost && indexCookie !== undefined && Number(indexCookie) + 1 === index) {
-    //   // dispatch(set)
-    // }
-    // if indexCookie exists and is equal to the incoming index
-      // Set showAnswer
-    // && indexCookie !== undefined && Number(indexCookie) + 1 === index
     setAnswerArr(["red", "blue", "green", "orange"]);
     if (!isHost && secondsLeft === 0) {
       showAnswer();
-      // setTimeExpired(true);
-    } else {
-      setAnswerArr(["red", "blue", "green", "orange"]);
     }
-    // setAnswerArr(["red", "blue", "green", "orange"]);
-    console.log(`QuestionPage: Resetting answer array`);
     setShowLeaderboardButtonClicked(false);
     setShowAnswerButtonClicked(false);
     setAnswer(undefined);
@@ -94,7 +78,6 @@ export default function QuestionPage() {
     // sets timeExpired flag when secondsLeft reaches 0
     // otherwise sets the flag to false
     if (secondsLeft === 0) {
-      console.log(`QuestionPage: Setting time expired to true`);
       setTimeExpired(true);
       if(!isHost) showAnswer();
       dispatch(setRequestUpdatedLeaderboard(true));
@@ -111,13 +94,11 @@ export default function QuestionPage() {
     if (secondsLeft === 0 && !isHost) {
       setAnswered(false);
       showAnswer();
-      console.log(`QuestionPage: timeExpired true condition`);
       dispatch(submitQuestionExpired());
       dispatch(resetQuestionScore());
       const interval = setInterval(() => {
         dispatch(setGotQuestion(false));
       }, 2000);
-      console.log("QuestionPage: Setting got question to false");
       pollNextQuestionIntervalID.current = interval
       return () => clearInterval(interval);
     }
@@ -135,7 +116,6 @@ export default function QuestionPage() {
     // shows the correct answer by greying out incorrect answers
     if (correctAnswer !== undefined) {
       // setAnswerArr(["red", "blue", "green", "orange"]);
-      console.log(`QuestionPage: correctAnswer == true, set array`)
       const ansArr = new Array(4).fill("grey");
       const correctAnsColour = answerArr[correctAnswer];
       ansArr[correctAnswer] = correctAnsColour;

@@ -22,7 +22,6 @@ export function useCreatePlayer() {
           Cookies.set(`gameCode`, `${gameCode}`);
           Cookies.set(`isHost`, `false`);
           Cookies.set(`name`, `${name}`);
-          console.log(`joined game, set cookies`);
         } else {
           dispatch(setHasJoinedGame(false));
         }
