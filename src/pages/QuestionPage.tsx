@@ -35,7 +35,6 @@ export default function QuestionPage() {
   const [showLeaderboard, setShowLeaderboardButtonClicked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
-  const { rejoinAsHost, rejoinAsPlayer } = useAppSelector(state => state.player);
 
   usePollForGetQuestion();
   useSubmitAnswer();
@@ -83,9 +82,8 @@ export default function QuestionPage() {
       dispatch(setRequestUpdatedLeaderboard(true));
       return;
     }
+    setTimeExpired(false);
     setAnswerArr(["red", "blue", "green", "orange"]);
-    console.log(`QuestionPage: Setting time expired to false`);
-    // setTimeExpired(false);
   }, [secondsLeft])
 
   useEffect(() => {
@@ -115,7 +113,6 @@ export default function QuestionPage() {
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
     if (correctAnswer !== undefined) {
-      // setAnswerArr(["red", "blue", "green", "orange"]);
       const ansArr = new Array(4).fill("grey");
       const correctAnsColour = answerArr[correctAnswer];
       ansArr[correctAnswer] = correctAnsColour;
@@ -245,7 +242,7 @@ export default function QuestionPage() {
               </VStack>
             }
             {isHost ?
-              secondsLeft === 0 &&
+              timeExpired &&
               <VStack>
                 <Flex>
                   <Button onClick={getLeaderboard}

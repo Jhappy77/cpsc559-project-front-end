@@ -6,8 +6,6 @@ import Cookies from "js-cookie";
 import { setIsHost, setPlayerName } from "../state/playerSlice";
 import { updateSecondsLeft } from "../state/timeSlice";
 
-const TIME_LIMIT_IN_SECONDS = 60;
-
 export function useRejoinAsPlayer() {
   const { rejoinAsPlayer } = useAppSelector(state => state.player);
   const { gameCode } = useAppSelector(state => state.game);
@@ -29,15 +27,14 @@ export function useRejoinAsPlayer() {
       dispatch(setHasJoinedGame(true));
       dispatch(resetLeaderboard());
       dispatch(setRequestUpdatedLeaderboard(false));
-      // Reset the secondsLeft from cookies if we have it
+      // Reset the secondsLeft state from cookies if we have it
       const secondsLeftCookie = Cookies.get("secondsLeft");
       if (secondsLeftCookie !== undefined) {
         const secondsLeft = Number(secondsLeftCookie);
         dispatch(updateSecondsLeft(secondsLeft));
-        console.log(`useRejoinAdPlayer: COOKIE updating seconds left COOKIE: ${secondsLeftCookie}`);
       }
     } else {
-      console.log("useRejoinAsPlayer: No cookie found for game code!");
+      console.log("Unable to rejoin as player");
     }
   }, [playerRejoinTrigger]);
 

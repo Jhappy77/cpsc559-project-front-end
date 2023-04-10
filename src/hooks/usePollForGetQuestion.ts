@@ -47,7 +47,7 @@ export function usePollForGetQuestion() {
           dispatch(setGotQuestion(true));
           dispatch(setQuestion(data));
           dispatch(setRequestNextQuestion(false));
-          console.log(`Got question data, set cookie index: ${Cookies.get("index")}`);
+          console.log(`Got question data`);
         } else {
           throw new Error("No question data recieved");
         }
@@ -62,7 +62,6 @@ export function usePollForGetQuestion() {
   useEffect(() => {
     if (!gotQuestion && hasJoinedGame && gameStarted) {
       // Start polling for game started on server
-      console.log(`gotQuestion hook`);
       togglePollTrigger();
     }
   }, [gotQuestion]);
