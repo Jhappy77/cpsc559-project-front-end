@@ -1,5 +1,7 @@
+// Uncomment for testing
+// const proxyOne = 'http://localhost:3005';
 const proxyOne = 'https://559proxy.vercel.app';
-const proxyTwo = 'https://559proxy-2.vercel.app';
+const proxyTwo = 'https://proxy2.herokuapp.com';
 const PROXY_URL_OPTIONS = [proxyOne, proxyTwo];
 let currentProxyIndex = 0;
 
