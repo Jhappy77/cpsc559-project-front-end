@@ -64,7 +64,7 @@ const questionStateSlice = createSlice({
       state.correctAnswer = undefined;
       state.prompt = undefined;
       state.answers = undefined;
-      state.index =undefined;
+      state.index = undefined;
     },
   },
 });
