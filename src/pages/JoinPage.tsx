@@ -21,10 +21,6 @@ export default function JoinPage() {
 
   const { hasJoinedGame } = useAppSelector(state => state.game);
 
-  // Clear all ccookies if we are joining as a player. This is neccessary
-  // to not fuck with the state
-  useClearCookies();
-
   useCreatePlayer();
   usePollForGameStart();
 
