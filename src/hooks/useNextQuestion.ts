@@ -12,7 +12,7 @@ export function useNextQuestion() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     console.log("in useNextQuestion useEffect");
-    if (gameCode === undefined || !requestNextQuestion) {
+    if (gameCode === undefined || !requestNextQuestion || !isHost) {
       // Toggle this flag back off so that it can be toggled again
       // on the question page
       dispatch(setRequestNextQuestion(false));
