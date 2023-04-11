@@ -10,7 +10,7 @@ export function useGetLeaderboard() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!requestUpdatedLeaderboard) return;
+    if (!requestUpdatedLeaderboard || gameCode === undefined || gameCode === "") return;
     baxios
       .get(`${getProxyUrl()}/games/leaderboard/${gameCode}`)
       .then(response => {
@@ -30,5 +30,4 @@ export function useGetLeaderboard() {
         console.error(reason);
       });
   }, [requestUpdatedLeaderboard]);
-
 }
