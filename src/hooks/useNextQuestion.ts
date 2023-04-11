@@ -12,7 +12,12 @@ export function useNextQuestion() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     console.log("in useNextQuestion useEffect");
-    if (gameCode === undefined || !isHost || !requestNextQuestion) return;
+    if (gameCode === undefined || !requestNextQuestion) {
+      // Toggle this flag back off so that it can be toggled again
+      // on the question page
+      dispatch(setRequestNextQuestion(false));
+      return;
+    }
     baxios
       .put(`${getProxyUrl()}/games/question/${gameCode}`, {})
       .then(response => {
