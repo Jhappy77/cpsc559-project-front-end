@@ -19,7 +19,7 @@ export function useRejoinAsPlayer() {
   useEffect(() => {
     const gameCodeCookie = Cookies.get("gameCode");
     const nameCookie = Cookies.get("name");
-    if (gameCodeCookie !== undefined && nameCookie !== undefined) {
+    if (gameCodeCookie !== undefined && nameCookie !== undefined && rejoinAsPlayer) {
       dispatch(setIsHost(false));
       dispatch(setGameCode(gameCodeCookie));
       dispatch(setPlayerName(nameCookie));
