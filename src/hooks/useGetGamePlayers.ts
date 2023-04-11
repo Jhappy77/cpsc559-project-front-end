@@ -15,6 +15,7 @@ export function useGetGamePlayers() {
         const interval = setInterval(() => {
             if (!gameCode) return;
             if (gameCreationCallTs === undefined) return;
+            console.log('Calling with ' + getProxyUrl());
             baxios
               .get(`${getProxyUrl()}/games/players/${gameCode}`)
               .then(response => {
