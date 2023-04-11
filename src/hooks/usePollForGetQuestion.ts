@@ -5,6 +5,8 @@ import { getProxyUrl } from "../settings";
 import { setQuestion } from "../state/questionSlice";
 import { setGotQuestion, incrementPollGetQuestionCount, setRequestNextQuestion } from "../state/gameSlice";
 
+// called on the question page to continually poll for a new question
+// both the players and host polls for questions
 export function usePollForGetQuestion() {
   const { gameCode, gameStarted, hasJoinedGame, gotQuestion, pollGetQuestionCount, requestNextQuestion } =
     useAppSelector(state => state.game);
@@ -17,6 +19,7 @@ export function usePollForGetQuestion() {
     setPollTrigger(!pollTrigger);
   };
 
+  // poll for start game if it has not yet started
   useEffect(() => {
     dispatch(incrementPollGetQuestionCount(1));
     if (gotQuestion) {
@@ -29,6 +32,7 @@ export function usePollForGetQuestion() {
     }
   }, [pollTrigger, gotQuestion]);
 
+  // poll for the current game question to be displayed for players and on the host
   useEffect(() => {
     if (!gameCode || !gameStarted || !hasJoinedGame) return;
     baxios

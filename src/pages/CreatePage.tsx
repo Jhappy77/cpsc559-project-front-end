@@ -13,6 +13,7 @@ import PlayersCard from "../components/PlayersCard";
 
 const MAX_NAME_LENGTH = 15;
 
+// page for creating a new game as the host
 export default function CreatePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -20,15 +21,19 @@ export default function CreatePage() {
   const [displayCreateGameBlock, setDisplayCreateGameBlock] = useState(true);
   const [displayGameCodeBlock, setDisplayGameCodeBlock] = useState(false);
 
+  // poll to create game, start game and get game players on the create page until the
+  // game is started
   useCreateGame();
   useStartGame();
   useGetGamePlayers();
   const { gameCode } = useAppSelector(state => state.game);
 
+  // changed the html element text values when a user enters a name
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
+  // handles the host creating a new game
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setPlayerName(name));
@@ -39,12 +44,14 @@ export default function CreatePage() {
     setDisplayGameCodeBlock(true);
   };
 
+  // handles the host starting the game
   const onStartGame = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (gameCode) {
       dispatch(setStartGameButtonPressed(true));
     }
   };
 
+  // page elements
   return (
     <Flex
       backgroundImage="linear-gradient(to bottom right, green, yellow)"

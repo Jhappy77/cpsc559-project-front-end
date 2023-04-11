@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 
+// clears the cookies from the game's browser
 export function useClearCookies() {
     // Removes cookies
     Cookies.remove('secondsLeft');

@@ -24,6 +24,7 @@ import { useClearCookies } from "../hooks/useClearCookies";
 import { resetPlayerState } from "../state/playerSlice";
 import { resetTimeState } from "../state/timeSlice";
 
+// question page on both the host and player screens
 export default function QuestionPage() {
   const { prompt, answers, index, correctAnswer } = useAppSelector(state => state.question);
   const { gameCode } = useAppSelector(state => state.game);
@@ -41,6 +42,7 @@ export default function QuestionPage() {
   const navigate = useNavigate();
   const pollNextQuestionIntervalID = useRef<NodeJS.Timeout | undefined>(undefined);
 
+  // continue to poll for the next question, leaderboard, submitted answers and rejoining cookies
   usePollForGetQuestion();
   useSubmitAnswer();
   useNextQuestion();
@@ -125,6 +127,7 @@ export default function QuestionPage() {
     }
   }
 
+  // highlight the answer in the list of questions 
   const showAnswer = () => {
     // shows the correct answer by greying out incorrect answers
     if (correctAnswer !== undefined) {
@@ -135,6 +138,7 @@ export default function QuestionPage() {
     }
   };
 
+  // submit answer to the server
   const submitAnswer = (event: React.MouseEvent) => {
     if (answer !== undefined) {
       // Submit answer to backend
@@ -149,6 +153,7 @@ export default function QuestionPage() {
     }
   };
 
+  // poll for next question when the host decides to
   const nextQuestion = () => {
     // Submit answer to backend
     console.log("Next question button pressed");
@@ -156,12 +161,14 @@ export default function QuestionPage() {
     setShowLeaderboard(false);
   };
 
+  // show the question for the players and host
   const showQuestion = () => {
     if (showLeaderboard) {
       setShowLeaderboard(false);
     }
   };
 
+  // dispatch the hook to get the leaderboard
   const getLeaderboard = () => {
     // Submit answer to backend
     // reset the leaderboard if it has not already been reset
@@ -171,6 +178,7 @@ export default function QuestionPage() {
     setShowLeaderboard(true);
   };
 
+  // check the page state to see what the host should be showing on their screen
   const getPageState = (event: React.MouseEvent) => {
     // determine what page is shown
     if (timeExpired && !showAnswerFlag && !showLeaderboard) {
@@ -193,6 +201,7 @@ export default function QuestionPage() {
     }
   };
 
+  // handles setting the answer for the question
   const handleSetAnswer = (event: React.MouseEvent) => {
     if (secondsLeft === 0) {
       return;
@@ -203,6 +212,7 @@ export default function QuestionPage() {
     setAnswer(Number(event.currentTarget.id));
   };
 
+  // colour codes the answers in the question component
   const getAnswerColor = () => {
     switch (answer) {
       case 0:
@@ -225,6 +235,7 @@ export default function QuestionPage() {
     return false;
   };
 
+  // ends the game after the questions run out
   const endGame = () => {
     useClearCookies();
     resetFlags();

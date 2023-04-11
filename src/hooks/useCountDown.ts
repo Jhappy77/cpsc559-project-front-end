@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// count down used in the timer
 const useCountDown = (targetTime: number) => {
   const targetDate = new Date(targetTime).getTime();
   const [countDown, setCountDown] = useState(targetDate - new Date().getTime());

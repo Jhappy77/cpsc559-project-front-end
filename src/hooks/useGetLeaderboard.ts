@@ -4,11 +4,14 @@ import { useEffect } from "react";
 import { getProxyUrl } from "../settings";
 import { setLeaderboard, setRequestUpdatedLeaderboard } from "../state/leaderboardSlice";
 
+// polls for the leaderboard after the host moves to the next question
 export function useGetLeaderboard() {
   const { gameCode } = useAppSelector(state => state.game);
   const { requestUpdatedLeaderboard } = useAppSelector(state => state.leaderboard);
   const dispatch = useAppDispatch();
 
+  // only poll for a new leaderboard if the leaderboard is requested
+  // it will poll up to the top 10 players in a game based on their score
   useEffect(() => {
     if (!requestUpdatedLeaderboard || gameCode === undefined || gameCode === "") return;
     baxios

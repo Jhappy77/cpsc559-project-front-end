@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { setIsHost, setPlayerName } from "../state/playerSlice";
 import { updateSecondsLeft } from "../state/timeSlice";
 
+// used to poll to rejoin the game as a player after the client has lost connection or refreshed their page
 export function useRejoinAsPlayer() {
   const { rejoinAsPlayer } = useAppSelector(state => state.player);
   const { gameCode } = useAppSelector(state => state.game);
@@ -16,6 +17,7 @@ export function useRejoinAsPlayer() {
     setPlayerRejoinTrigger(!playerRejoinTrigger);
   };
 
+  // gets the proper fields for the players to rejoin the same game with their score
   useEffect(() => {
     const gameCodeCookie = Cookies.get("gameCode");
     const nameCookie = Cookies.get("name");

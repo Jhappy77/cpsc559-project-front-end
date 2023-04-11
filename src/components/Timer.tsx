@@ -5,9 +5,12 @@ import { updateIndex, updateTargetTime, updateSecondsLeft } from '../state/timeS
 import { setRejoinAsHost, setRejoinAsPlayer } from '../state/playerSlice';
 import Cookies from 'js-cookie';
 
+// time limit for each question
 const TIME_LIMIT_IN_SECONDS = 12;
 const TIME_LIMIT_IN_MS = TIME_LIMIT_IN_SECONDS * 1000;
 
+// Timer displayed on each players and hosts screen
+// the timer holds true to the TIME_LIMIT_IN_SECONDS so that every player gets the same amount of time
 export default function Timer(props: { index: number }) {
     const dispatch = useAppDispatch();
     const index = props.index;

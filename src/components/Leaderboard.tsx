@@ -2,6 +2,8 @@ import { Text, VStack, Card, Box, Table, TableContainer, TableCaption, Thead, Tr
 import PlayerScore from "./PlayerScore";
 import { useAppSelector } from "../state/reduxHooks";
 
+// component to display the leaderboard after each question is answered
+// there is room for up to 10 players and their scores to appear on the page
 export default function Leaderboard() {
     const { leaders, scores } = useAppSelector(state => state.leaderboard);
 

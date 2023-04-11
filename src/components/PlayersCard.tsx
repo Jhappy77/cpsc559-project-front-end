@@ -16,6 +16,7 @@ const scrollBarCSS = {
   },
 };
 
+// displayers the players that joined the game on the start page
 const PlayersCard = () => {
   const { players } = useAppSelector(state => state.game);
 

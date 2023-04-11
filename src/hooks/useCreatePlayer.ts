@@ -5,10 +5,13 @@ import { getProxyUrl } from "../settings";
 import { setHasJoinedGame } from "../state/gameSlice";
 import Cookies from "js-cookie";
 
+// add a player to the database for the game that they have joined
 export function useCreatePlayer() {
   const { name } = useAppSelector(state => state.player);
   const { gameCode, hasJoinedGame } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();
+
+  // make sure that all the player fields are filled in before creating a new player
   useEffect(() => {
     if (!name || !gameCode || name === "" || gameCode === "" || hasJoinedGame) return;
     baxios
@@ -34,11 +37,13 @@ export function useCreatePlayer() {
       .catch(reason => {
         const status = reason.response.status;
         if (status === 409){
+            // catch error if a player with the same name already exists
             dispatch(setHasJoinedGame(false));
             alert("A user with this name already exists in the game, please try again with a new name!");
             return;
         }
         else if (status === 444){
+          // catch error if the game code entered does not exist
             dispatch(setHasJoinedGame(false));
             alert("The game code you entered does not exist. Please enter a valid game code.");
             return;
