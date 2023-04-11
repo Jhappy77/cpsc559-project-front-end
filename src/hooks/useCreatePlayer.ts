@@ -26,7 +26,9 @@ export function useCreatePlayer() {
         } else if (response.status === 203) {
           dispatch(setHasJoinedGame(false));
           alert("This game has already begun, please try again with a different game.");
-        } 
+        } else {
+          dispatch(setHasJoinedGame(false));
+        }
         console.log(`API Call to: /players, response: ${response.status}`);
       })
       .catch(reason => {
