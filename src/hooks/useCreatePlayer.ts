@@ -7,10 +7,10 @@ import Cookies from "js-cookie";
 
 export function useCreatePlayer() {
   const { name } = useAppSelector(state => state.player);
-  const { gameCode } = useAppSelector(state => state.game);
+  const { gameCode, hasJoinedGame } = useAppSelector(state => state.game);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (!name || !gameCode || name === "" || gameCode === "") return;
+    if (!name || !gameCode || name === "" || gameCode === "" || hasJoinedGame) return;
     baxios
       .post(`${getProxyUrl()}/players`, {
         name: name,
@@ -32,9 +32,22 @@ export function useCreatePlayer() {
         console.log(`API Call to: /players, response: ${response.status}`);
       })
       .catch(reason => {
-        console.error("Unhandled error in useCreatePlayer");
-        console.error(reason);
-        alert("A user with this name already exists, please try again with a new name!");
+        const status = reason.response.status;
+        if (status === 409){
+            dispatch(setHasJoinedGame(false));
+            alert("A user with this name already exists in the game, please try again with a new name!");
+            return;
+        }
+        else if (status === 444){
+            dispatch(setHasJoinedGame(false));
+            alert("The game code you entered does not exist. Please enter a valid game code.");
+            return;
+        }
+        else {
+            console.error("Error in useCreatePlayer");
+            console.error(reason);
+            dispatch(setHasJoinedGame(false));
+        }
       });
-  }, [name]);
+  }, [name, gameCode]);
 }

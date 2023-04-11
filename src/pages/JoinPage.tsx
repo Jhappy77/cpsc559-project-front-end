@@ -8,6 +8,7 @@ import { usePollForGameStart } from "../hooks/usePollForGameStart";
 import { useAppDispatch, useAppSelector } from "../state/reduxHooks";
 import { setPlayerName } from "../state/playerSlice";
 import { setGameCode, setHasJoinedGame } from "../state/gameSlice";
+import { useClearCookies } from "../hooks/useClearCookies";
 
 const CODE_LENGTH = 5;
 const MAX_NAME_LENGTH = 15;
@@ -18,10 +19,18 @@ export default function JoinPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { hasJoinedGame} = useAppSelector(state => state.game);
+  const { hasJoinedGame } = useAppSelector(state => state.game);
 
   useCreatePlayer();
   usePollForGameStart();
+
+  const checkValidGameCode = (gameCode: string) => {
+    const modifiedGameCode = gameCode.trim();
+    if (modifiedGameCode.length !== 5 || !/^[a-zA-Z0-9]+$/.test(modifiedGameCode)) {
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
     if (name?.length == 0) {
@@ -29,7 +38,7 @@ export default function JoinPage() {
       return;
     }
 
-    if (gameCode && gameCode.length < CODE_LENGTH) {
+    if ((gameCode && gameCode.length < CODE_LENGTH) || !gameCode || !checkValidGameCode(gameCode)) {
       alert("Please enter a valid code.");
       return;
     }
@@ -68,7 +77,13 @@ export default function JoinPage() {
       <Flex alignItems="center" justifyContent="center">
         <VStack>
           <Logo size={["64px", "100px"]} />
-          <Button leftIcon={<FaArrowLeft />} onClick={() => navigate("/")} marginBottom={8} colorScheme="whiteAlpha" color="white">
+          <Button
+            leftIcon={<FaArrowLeft />}
+            onClick={() => navigate("/")}
+            marginBottom={8}
+            colorScheme="whiteAlpha"
+            color="white"
+          >
             Back
           </Button>
           <Flex alignItems="center" justifyContent="center" display={hasJoinedGame ? "none" : "flex"} maxWidth="80%">
